@@ -1,6 +1,6 @@
 """Runnable offline lifecycle and Qt UI checks; never opens a physical serial port.
 
-Run: QT_QPA_PLATFORM=offscreen python test_dashboard.py
+Run: QT_QPA_PLATFORM=offscreen python -m tests.bench.test_dashboard
 """
 import csv
 import json
@@ -16,8 +16,11 @@ from unittest.mock import patch
 os.environ.setdefault('QT_QPA_PLATFORM', 'offscreen')
 from PySide6.QtWidgets import QApplication, QFileDialog
 from PySide6.QtGui import QColor, QPalette
-from motor_dashboard import Dashboard, ROOT
-from motor_session import DemoSerial, MotorSession, fault_text, validate_test
+from im6014_bench.dashboard import Dashboard, ROOT
+from im6014_bench.session import DemoSerial, MotorSession, fault_text, validate_test
+
+OUTPUT = ROOT / 'results/bench'
+OUTPUT.mkdir(parents=True, exist_ok=True)
 
 checks = []
 
@@ -89,7 +92,7 @@ for change in [dict(rpm=0), dict(rpm=-1), dict(kp=0), dict(kp=.001), dict(durati
     fails(lambda: validate_test(dict(base, kind='Position', **change)))
 passed('test input boundaries, nonfinite rejection, simultaneous/unknown fault decoding')
 
-with patch('motor_session.DemoSerial', TrackedDemo), patch('motor_session.serial.Serial') as real_serial:
+with patch('im6014_bench.session.DemoSerial', TrackedDemo), patch('im6014_bench.session.serial.Serial') as real_serial:
     session = MotorSession()
     try:
         assert session.snapshot()['state'] == 'Disconnected' and not real_serial.called
@@ -252,7 +255,7 @@ with patch('motor_session.DemoSerial', TrackedDemo), patch('motor_session.serial
     finally:
         assert session.close()
 
-with patch('motor_session.serial.Serial') as serial_constructor:
+with patch('im6014_bench.session.serial.Serial') as serial_constructor:
     serial_constructor.return_value.is_open = False
     serial_constructor.return_value.open.side_effect = OSError('permission denied')
     session = MotorSession()
@@ -305,7 +308,7 @@ try:
     window.run_button.click()
     ui_wait(lambda: window.session.snapshot()['state'] == 'Testing')
     ui_wait(lambda: window.session.snapshot()['latest']['rpm'] > 3)
-    window.grab().save(str(ROOT / 'dashboard_preview.png'))
+    window.grab().save(str(OUTPUT / 'dashboard_preview.png'))
     window.stop_button.click()
     ui_wait(lambda: window.session.snapshot()['state'] == 'Stopped · re-check required')
     assert not window.run_button.isEnabled()
@@ -346,7 +349,7 @@ try:
     for widget in (window.banner, window.source_badge):
         assert widget.palette().color(QPalette.ColorRole.WindowText).name() == '#273747'
     assert window.fields['rpm'].foreground(1).color().name() == '#edf2f7'
-    window.grab().save(str(ROOT / 'dashboard_dark_preview.png'))
+    window.grab().save(str(OUTPUT / 'dashboard_dark_preview.png'))
     ui_wait(lambda: window.session.snapshot()['state'] == 'Ready · Stop', timeout=4)
     window.session._set(state='Fault — disarmed', reason='Offline contrast check')
     window.refresh()
@@ -418,5 +421,5 @@ try:
 finally:
     light_window.close()
 passed('light-theme real-hardware badge and status banner contrast; starts disconnected')
-(ROOT / 'dashboard_test_results.json').write_text(json.dumps(dict(motor_io_performed=False, checks=checks), indent=2) + '\n')
+(OUTPUT / 'dashboard_test_results.json').write_text(json.dumps(dict(motor_io_performed=False, checks=checks), indent=2) + '\n')
 print(f'{len(checks)} grouped checks passed. No real motor I/O.', flush=True)

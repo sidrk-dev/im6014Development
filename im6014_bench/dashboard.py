@@ -17,10 +17,10 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBo
                               QVBoxLayout, QWidget)
 from serial.tools import list_ports
 
-from motor_session import MotorSession, fault_text
-from spin_5rpm import PORT, POSITION_MIN, POSITION_MAX, RPM_MIN, RPM_MAX
+from .session import MotorSession, fault_text
+from .motor import PORT, POSITION_MIN, POSITION_MAX, RPM_MIN, RPM_MAX
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 METRICS = {'Speed (rpm)': 'rpm', 'Torque (Nm)': 'torque_nm', 'Position (degrees)': 'position_rad',
            'Bus voltage (V)': 'voltage', 'Driver temperature (°C)': 'driver_c',
            'Winding temperature (°C)': 'winding_c', 'Reply time (ms)': 'rtt_ms'}
@@ -124,7 +124,7 @@ class Dashboard(QMainWindow):
         right.addTab(self._diagnostics(), 'Diagnose')
         manual = QTextBrowser()
         manual.setOpenExternalLinks(True)
-        manual.setMarkdown((ROOT / 'USER_MANUAL.md').read_text() if (ROOT / 'USER_MANUAL.md').exists() else 'User manual is being prepared.')
+        manual.setMarkdown((ROOT / 'docs/bench/user-manual.md').read_text() if (ROOT / 'docs/bench/user-manual.md').exists() else 'User manual is being prepared.')
         right.addTab(manual, 'User manual')
         top.addWidget(right)
         top.setSizes([415, 785])

@@ -1,0 +1,25 @@
+{
+  "verdict": "PASS for local dataset upload preflight",
+  "report": {
+    "ok": true,
+    "error": null,
+    "sessions": 1,
+    "episodes": 1,
+    "frames": 90,
+    "files": 5,
+    "bytes": 31743,
+    "state_dim": 2,
+    "action_dim": 2,
+    "fps": 30,
+    "video_keys": [
+      "observation.images.overhead"
+    ],
+    "notes": []
+  },
+  "decoded_video_frames": 90,
+  "malformed_width_rejected": "Directory 'dataset_fixture': data/chunk-000/episode_000000.parquet has 1 action values per frame; meta/info.json says 2.",
+  "restored_dataset_passes": true,
+  "cloud_uploads": 0,
+  "purpose": "Synthetic calibration fixture for format validation; not a task-training dataset",
+  "alignment": "capture image/state before applying same-row absolute logical target for 1/30 second"
+}

@@ -1,0 +1,17 @@
+name: Bug report
+description: Report a reproducible software or simulation failure.
+body:
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction and expected result
+      description: Include command, build/profile, and what happened.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Version and evidence
+      description: Include commit and sanitized output. Omit credentials and private hardware records.
+    validations:
+      required: true

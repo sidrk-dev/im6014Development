@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mujoco model="illustrative_rolling_contact_arm">
+  <compiler angle="radian" autolimits="true" />
+  <option timestep="0.0003333333333333333" gravity="0 -9.81 0" integrator="implicitfast" iterations="100" tolerance="1e-10" />
+  <visual>
+    <global offwidth="960" offheight="640" />
+  </visual>
+  <default>
+    <joint axis="0 0 1" damping="0.03" armature="0.0001" />
+    <geom friction="0.6 0.01 0.001" rgba=".4 .5 .6 1" />
+  </default>
+  <worldbody>
+    <light pos="0 0 2.5" dir="0 0 -1" directional="true" />
+    <camera name="inspection" pos=".28 0 2.2" xyaxes="1 0 0 0 1 0" fovy="48" />
+    <geom type="plane" size="2 2 .01" pos="0 0 .7" rgba=".07 .09 .13 1" contype="0" conaffinity="0" />
+    <body name="base_link" pos="0 0 0.8">
+      <geom name="shoulder_proximal_wheel" type="cylinder" pos="0 0 0" size="0.05 0.012" rgba=".55 .61 .68 1" mass="0" />
+      <body name="shoulder_carrier" pos="0 0 0">
+        <inertial pos="0.05 0 -0.03" mass=".025" diaginertia=".00001 .00004 .00004" />
+        <joint name="shoulder_a" type="hinge" range="-0.6 0.6" />
+        <geom type="capsule" fromto="0 0 -0.035 0.1 0 -0.035" size=".008" rgba=".8 .8 .82 1" contype="0" conaffinity="0" mass="0" />
+        <body name="shoulder_link" pos="0.1 0 0">
+          <joint name="shoulder_b" type="hinge" range="-0.6 0.6" />
+          <inertial pos="0.1344 0 0" mass="0.7" diaginertia="0.0004 0.006 0.006" />
+          <geom name="shoulder_distal_wheel" type="cylinder" size="0.05 0.012" rgba="0.13 0.65 0.91 1" mass="0" />
+          <geom name="shoulder_beam" type="capsule" fromto="0 0 0.025 0.32 0 0.025" size=".016" rgba="0.13 0.65 0.91 1" mass="0" />
+          <geom type="capsule" fromto="0 0 0.014 0.0425 0 0.014" size=".003" rgba="1 1 1 1" mass="0" contype="0" conaffinity="0" />
+          <site name="shoulder_center" size=".004" />
+          <geom name="elbow_proximal_wheel" type="cylinder" pos="0.32 0 0" size="0.04 0.012" rgba=".55 .61 .68 1" mass="0" />
+          <body name="elbow_carrier" pos="0.32 0 0">
+            <inertial pos="0.04 0 -0.03" mass=".025" diaginertia=".00001 .00004 .00004" />
+            <joint name="elbow_a" type="hinge" range="-0.7 0.7" />
+            <geom type="capsule" fromto="0 0 -0.035 0.08 0 -0.035" size=".008" rgba=".8 .8 .82 1" contype="0" conaffinity="0" mass="0" />
+            <body name="elbow_link" pos="0.08 0 0">
+              <joint name="elbow_b" type="hinge" range="-0.7 0.7" />
+              <inertial pos="0.1176 0 0" mass="0.4" diaginertia="0.0004 0.003 0.003" />
+              <geom name="elbow_distal_wheel" type="cylinder" size="0.04 0.012" rgba="0.96 0.56 0.18 1" mass="0" />
+              <geom name="elbow_beam" type="capsule" fromto="0 0 0.025 0.28 0 0.025" size=".016" rgba="0.96 0.56 0.18 1" mass="0" />
+              <geom type="capsule" fromto="0 0 0.014 0.034 0 0.014" size=".003" rgba="1 1 1 1" mass="0" contype="0" conaffinity="0" />
+              <site name="elbow_center" size=".004" />
+              <site name="tool" pos="0.28 0 0.025" size=".018" rgba=".9 .2 .3 1" />
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <equality>
+    <joint name="shoulder_rolling" joint1="shoulder_b" joint2="shoulder_a" polycoef="0 1 0 0 0" solref=".002 1" solimp=".9999 .9999 .001" />
+    <joint name="elbow_rolling" joint1="elbow_b" joint2="elbow_a" polycoef="0 1 0 0 0" solref=".002 1" solimp=".9999 .9999 .001" />
+  </equality>
+  <tendon>
+    <fixed name="shoulder_bend">
+      <joint joint="shoulder_a" coef="1" />
+      <joint joint="shoulder_b" coef="1" />
+    </fixed>
+    <fixed name="elbow_bend">
+      <joint joint="elbow_a" coef="1" />
+      <joint joint="elbow_b" coef="1" />
+    </fixed>
+  </tendon>
+  <actuator>
+    <position name="shoulder_target" tendon="shoulder_bend" kp="120" kv="12" ctrlrange="-1.2 1.2" forcerange="-25 25" />
+    <position name="elbow_target" tendon="elbow_bend" kp="120" kv="12" ctrlrange="-1.4 1.4" forcerange="-25 25" />
+  </actuator>
+  <contact>
+    <exclude body1="base_link" body2="shoulder_link" />
+    <exclude body1="shoulder_link" body2="elbow_link" />
+  </contact>
+</mujoco>

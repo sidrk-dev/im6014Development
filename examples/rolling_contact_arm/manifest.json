@@ -1,0 +1,54 @@
+{
+  "illustrative_only": true,
+  "model_revision": "circular-sample-v1",
+  "plane": "XY",
+  "joint_axis": "+Z",
+  "gravity": [
+    0,
+    -9.81,
+    0
+  ],
+  "base": [
+    0.0,
+    0.0,
+    0.8
+  ],
+  "joints": [
+    {
+      "name": "shoulder",
+      "proximal_radius": 0.05,
+      "distal_radius": 0.05,
+      "bend_limit": 1.2,
+      "link_length": 0.32,
+      "link_mass": 0.7
+    },
+    {
+      "name": "elbow",
+      "proximal_radius": 0.04,
+      "distal_radius": 0.04,
+      "bend_limit": 1.4,
+      "link_length": 0.28,
+      "link_mass": 0.4
+    }
+  ],
+  "logical_coordinates": [
+    "shoulder_bend",
+    "elbow_bend"
+  ],
+  "internal_coordinates": [
+    "shoulder_a",
+    "shoulder_b",
+    "elbow_a",
+    "elbow_b"
+  ],
+  "carrier_mass_kg_each": 0.025,
+  "units": "meters, kilograms, radians, seconds",
+  "mechanism": "Ideal external circular rolling, constrained center spacing, zero slip",
+  "not_modeled": [
+    "surface slip",
+    "tendon compliance",
+    "backlash",
+    "actual motor transmission",
+    "user final CAD"
+  ]
+}

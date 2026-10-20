@@ -2,7 +2,7 @@
 import math
 import struct
 
-import spin_5rpm as s
+from im6014_bench import motor as s
 
 
 def must_fail(call):

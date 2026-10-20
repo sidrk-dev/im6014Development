@@ -1,0 +1,63 @@
+{
+  "verdict": "PASS for local installed SDK contract and simulation adapter only",
+  "dreamlabs_client_version": "1.0.3",
+  "single_arm": true,
+  "logical_width": 2,
+  "camera_count": 1,
+  "gripper": false,
+  "training_mode": "joint actions, use_eef=False",
+  "mocked": "credentials resolution and Transport.request only; no hosted model",
+  "wire_observation_keys": [
+    "prompt",
+    "video.overhead",
+    "state.right_arm"
+  ],
+  "public_action_key": "per_key.action.arm",
+  "jpeg_size": [
+    320,
+    240
+  ],
+  "simulated_seconds_from_sdk_chunk": 0.10000000000000042,
+  "camera_rerendered_after_motion": true,
+  "final_measured_logical_bends": [
+    0.049428375248755596,
+    0.09863901540025141
+  ],
+  "negative_checks": [
+    "SDK rejects wrong observation width before transport",
+    "SDK rejects malformed action shape",
+    "SDK rejects malformed action shape",
+    "SDK rejects malformed action shape",
+    "SDK rejects malformed action shape",
+    "SDK rejects malformed action shape",
+    "adapter rejects nonfinite or out-of-range chunk atomically",
+    "adapter rejects nonfinite or out-of-range chunk atomically",
+    "adapter rejects nonfinite or out-of-range chunk atomically",
+    "adapter rejects nonfinite or out-of-range chunk atomically",
+    "adapter rejects nonfinite or out-of-range chunk atomically"
+  ],
+  "session_continuation_and_reset": true,
+  "dream_stock_ik_sample_urdf_rejected": "arm file /home/sid/Documents/code/im6014Development/examples/rolling_contact_arm/arm.urdf: joint 'shoulder_b' between 'base_link' and 'tool' is revolute with a mimic; the chain takes fixed joints, revolute and prismatic joints with limits, and continuous joints, none with a mimic",
+  "hosted_calls": 0,
+  "hosted_model_behavior_verified": false,
+  "request_example": {
+    "checkpoint": "offline-contract-fixture",
+    "session_id": null,
+    "reset": false,
+    "observation": {
+      "prompt": "Move the sample arm toward the marker",
+      "video.overhead": [
+        "<base64 JPEG from MuJoCo camera>"
+      ],
+      "state.right_arm": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "sha256": {
+    "dream_bridge.py": "0bfc63d890b0b00def6828e110813b0a5fef57fdd7160481edd7e44e59012491",
+    "verify_dream.py": "ca139593a91c4506a6eba69429a69ec5f9d035b5e56cee47c8f59c80b073cf3d",
+    "dream_embodiment.json": "df075d26b29e9831c59d06cc042ecf08f1afaec286b469ef45d0274672e4510a"
+  }
+}

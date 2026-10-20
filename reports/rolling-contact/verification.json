@@ -1,0 +1,172 @@
+{
+  "scope": "illustrative ideal circular rolling; no hardware or learned policy validation",
+  "versions": {
+    "mujoco": "3.16.0",
+    "yourdfpy": "0.0.60",
+    "numpy": "2.5.4",
+    "Pillow": "13.0.0"
+  },
+  "model_counts": {
+    "internal_coordinates": 4,
+    "rolling_equalities": 2,
+    "logical_actuators": 2
+  },
+  "geometry": {
+    "poses": 625,
+    "max_errors": {
+      "mujoco_position_m": 5.551115123125783e-16,
+      "urdf_position_m": 3.3766115072321297e-16,
+      "orientation_rad": 4.440892098500626e-16,
+      "jacobian_error": 1.205842578566596e-10,
+      "contact_gap_m": 8.326672684688674e-17,
+      "contact_slip_m_s": 6.206335383118183e-17,
+      "roundtrip_rad": 0.0
+    }
+  },
+  "actuation": {
+    "position_and_velocity_transmission": "q=a+b",
+    "virtual_work_error_w": 1.7763568394002505e-15,
+    "logical_torque_units": "Nm; one actuator force applied to both internal hinges"
+  },
+  "urdf_import": {
+    "direct_import_nq": 4,
+    "direct_import_neq": 2,
+    "direct_import_nu": 0,
+    "mimic_preserved": true,
+    "added": "logical-bend actuators, contact exclusions, solver settings, tool site; no added equality constraints"
+  },
+  "urdf_imported_geometry": {
+    "poses": 625,
+    "max_errors": {
+      "mujoco_position_m": 5.551115123125783e-16,
+      "urdf_position_m": 3.3766115072321297e-16,
+      "orientation_rad": 4.440892098500626e-16,
+      "jacobian_error": 1.205842578566596e-10,
+      "contact_gap_m": 8.326672684688674e-17,
+      "contact_slip_m_s": 6.206335383118183e-17,
+      "roundtrip_rad": 0.0
+    }
+  },
+  "native_dynamics": {
+    "simulated_seconds": 8.000000000004514,
+    "steps": 24000,
+    "metrics_checked_every_step": true,
+    "maxima": {
+      "coupling_rad": 0.00011746500635918198,
+      "contact_slip_m_s": 0.00201387259685416,
+      "contact_gap_m": 6.938893903907228e-17,
+      "tool_reference_error_m": 9.902918181584103e-06,
+      "tracking_rad": 0.0738273099283446,
+      "actuator_force_nm": 4.7099396149974835,
+      "actual_contacts": 0
+    },
+    "warning_counts": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "load": "gravity -Y, 2N downward load during seconds 3-4, antagonistic hinge torque during seconds 5-5.4"
+  },
+  "urdf_imported_dynamics": {
+    "simulated_seconds": 8.000000000004514,
+    "steps": 24000,
+    "metrics_checked_every_step": true,
+    "maxima": {
+      "coupling_rad": 0.00011746500635920724,
+      "contact_slip_m_s": 0.0020138725968560614,
+      "contact_gap_m": 6.938893903907228e-17,
+      "tool_reference_error_m": 9.902918181586028e-06,
+      "tracking_rad": 0.0738273099283446,
+      "actuator_force_nm": 4.709939614997483,
+      "actual_contacts": 0
+    },
+    "warning_counts": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "load": "gravity -Y, 2N downward load during seconds 3-4, antagonistic hinge torque during seconds 5-5.4"
+  },
+  "unequal_radius_geometry": {
+    "poses": 625,
+    "max_errors": {
+      "mujoco_position_m": 3.510833468576701e-16,
+      "urdf_position_m": 3.3766115072321297e-16,
+      "orientation_rad": 8.881784197001252e-16,
+      "jacobian_error": 1.322299769679347e-10,
+      "contact_gap_m": 5.551115123125783e-17,
+      "contact_slip_m_s": 6.206335383118183e-17,
+      "roundtrip_rad": 2.220446049250313e-16
+    }
+  },
+  "remove_constraints": {
+    "simulated_seconds": 0.9999999999999564,
+    "steps": 3000,
+    "metrics_checked_every_step": true,
+    "maxima": {
+      "coupling_rad": 1.640564638487145,
+      "contact_slip_m_s": 1.3077060764260033,
+      "contact_gap_m": 6.938893903907228e-17,
+      "tool_reference_error_m": 0.12803721630549073,
+      "tracking_rad": 0.07875418405789722,
+      "actuator_force_nm": 14.816467406059601,
+      "actual_contacts": 0
+    },
+    "warning_counts": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "load": "gravity -Y and constant antagonistic hinge torque"
+  },
+  "reverse_constraint": {
+    "simulated_seconds": 0.9999999999999564,
+    "steps": 3000,
+    "metrics_checked_every_step": true,
+    "maxima": {
+      "coupling_rad": 1.68686841759017,
+      "contact_slip_m_s": 1.4271330938213125,
+      "contact_gap_m": 6.938893903907228e-17,
+      "tool_reference_error_m": 0.13059631168947936,
+      "tracking_rad": 0.5694499768351644,
+      "actuator_force_nm": 25.0,
+      "actual_contacts": 0
+    },
+    "warning_counts": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "load": "gravity -Y and constant antagonistic hinge torque"
+  },
+  "adapter_invalid_targets_rejected": 5,
+  "render": {
+    "gif_frames": 100,
+    "backend": "MuJoCo offscreen renderer",
+    "source": "recorded dynamic simulation qpos"
+  },
+  "sha256": {
+    "arm.xml": "6c7b29b15403a51581a213a83766140ce58635cbcafa797e95d913e1babff957",
+    "arm.urdf": "76a98842dab463730957cc26c8886914153ede073ec216d02c24e4182a80331f",
+    "manifest.json": "41e6c811745fa9fbb55febad2a8791b5e38f5903b97950a3552984c3e1d2858a",
+    "model.py": "678c1e5840d16a027edc187f1fe6e55f6777eacd5ffbfe6998a24c892e4701c8",
+    "verify.py": "2c92b9f6937b133ced6d30ac5e87a24a96f94c3223d5e3d5e44cc317c8efc1c9"
+  },
+  "verdict": "PASS"
+}

@@ -1,0 +1,17 @@
+name: Milestone work package
+description: Scope work against the canonical roadmap.
+body:
+  - type: input
+    id: gates
+    attributes:
+      label: Active gate IDs
+      placeholder: SA01, SA02
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Behavior and acceptance evidence
+      description: Name build/profile, dependencies, bounded change, and passing result. The repository ledger stays authoritative.
+    validations:
+      required: true

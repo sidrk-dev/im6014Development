@@ -1,0 +1,26 @@
+{
+  "scope": "Repository organization only; no physical I/O or hosted Dream calls",
+  "bench_groups_before": 18,
+  "bench_groups_after": 18,
+  "bench_checks_identical": true,
+  "function_and_class_ast_equivalence": true,
+  "dashboard_ast_exception": "manual resource path only",
+  "launcher_from_tmp_rendered": true,
+  "launcher_real_serial_constructors": 0,
+  "fresh_source_checkout": {
+    "bench": "PASS",
+    "simulation": "PASS",
+    "sdk_mocked_transport": "PASS",
+    "dataset_preflight": "PASS"
+  },
+  "active_gates": 21,
+  "future_gates": 19,
+  "legacy_ids_archived_and_mapped": 195,
+  "old_milestone_statuses_advanced": false,
+  "local_archives_preserved": true,
+  "independent_controller_checkout_unchanged": true,
+  "graphics_local": "EGL passed; OSMesa library unavailable locally; CI installs it",
+  "github_ci": "Runs on publication; inspect the linked pull request checks for hosted results",
+  "independent_review": "PASS; three planning omissions corrected and independently read back",
+  "current_portable_links": 53
+}

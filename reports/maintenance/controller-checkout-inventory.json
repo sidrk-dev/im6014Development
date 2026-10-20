@@ -1,0 +1,7 @@
+{
+  "scope": "Historical independent development checkout, unchanged by cleanup",
+  "source": ".worktrees/controller-c07-c10/docs/milestones.tsv",
+  "sha256": "8daf4caa50571cd2eaf2354ab68e22d4a079673d5c4e2a3fee90635aaa1d4323",
+  "not_part_of_public_clone": true,
+  "reconciliation_gate": "SA04"
+}

@@ -1,0 +1,10 @@
+{
+  "state": {"arm": [0, 2]},
+  "action": {"arm": [0, 2]},
+  "video": {"overhead": "observation.images.overhead"},
+  "parts": {
+    "state": {"arm": {"kind": "arm", "side": "single"}},
+    "action": {"arm": {"kind": "arm", "side": "single"}}
+  },
+  "actions": "absolute"
+}
