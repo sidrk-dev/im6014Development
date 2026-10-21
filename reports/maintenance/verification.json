@@ -20,7 +20,12 @@
   "local_archives_preserved": true,
   "independent_controller_checkout_unchanged": true,
   "graphics_local": "EGL passed; OSMesa library unavailable locally; CI installs it",
-  "github_ci": "Runs on publication; inspect the linked pull request checks for hosted results",
+  "github_ci": {
+    "initial_head": "1edc9674bdb4e3b0dc3966f5d8d481d7dbec7736",
+    "run": "https://github.com/sidrk-dev/im6014Development/actions/runs/39506303522",
+    "rolling_sample": "PASS: OSMesa rendering, SDK mocked transport, dataset preflight after clean dependency installation",
+    "bench": "Failed before UI tests: libEGL.so.1 absent from runner. Install libegl1/libopengl0; validation pending updated PR checks."
+  },
   "independent_review": "PASS; three planning omissions corrected and independently read back",
   "current_portable_links": 53
 }
