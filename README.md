@@ -27,6 +27,8 @@ Omit `--demo` to open the hardware dashboard. Startup remains disconnected and d
 - [Run the rolling sample](examples/rolling_contact_arm/README.md) to reproduce simulator, SDK, and dataset checks.
 - [Development guide](CONTRIBUTING.md) gives the layout and offline checks.
 
+The [GitHub work queue](https://github.com/sidrk-dev/im6014Development/issues) groups immediate execution work under [two phase milestones](https://github.com/sidrk-dev/im6014Development/milestones). Gate acceptance stays in the repository ledger.
+
 ![Illustrative rolling-contact arm poses](docs/assets/rolling-contact-preview.png)
 
 ## Repository layout

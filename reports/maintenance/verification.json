@@ -23,9 +23,30 @@
   "github_ci": {
     "initial_head": "1edc9674bdb4e3b0dc3966f5d8d481d7dbec7736",
     "run": "https://github.com/sidrk-dev/im6014Development/actions/runs/39506303522",
-    "rolling_sample": "PASS: OSMesa rendering, SDK mocked transport, dataset preflight after clean dependency installation",
-    "bench": "Failed before UI tests: libEGL.so.1 absent from runner. Install libegl1/libopengl0; validation pending updated PR checks."
+    "rolling_sample": "PASS: clean dependencies, OSMesa rendering, SDK mocked transport, dataset preflight",
+    "bench": "PASS after installing libegl1/libopengl0; clean dependencies and all offline checks",
+    "verified_head": "c963f236daf3744c4a3188ec12ca9f4735039081",
+    "verified_run": "https://github.com/sidrk-dev/im6014Development/actions/runs/39552698470"
   },
   "independent_review": "PASS; three planning omissions corrected and independently read back",
-  "current_portable_links": 53
+  "current_portable_links": 53,
+  "github_organization": {
+    "pull_request": "https://github.com/sidrk-dev/im6014Development/pull/1",
+    "milestones": [
+      1,
+      2
+    ],
+    "execution_issues": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "custom_labels": [
+      "area:bench",
+      "area:simulation",
+      "area:dream",
+      "blocked"
+    ]
+  }
 }
