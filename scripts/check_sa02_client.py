@@ -6,24 +6,19 @@ import hashlib
 import importlib.metadata as metadata
 import io
 import json
-import os
 from pathlib import Path
 import platform
 import subprocess
 import sys
 from datetime import datetime, timezone
-from unittest.mock import patch
 
 from check_single_arm_contract import check_contract
-
-os.environ["DREAM_LOG"] = "off"
+from dream_client_fixture import offline_client, registered_body
 
 try:
     import dream
-    from dream import credentials, transport
     from dream.errors import DreamActionError, DreamObservationError
     from PIL import Image
-    from shared.datasets import embodiments
 except ImportError as error:
     raise SystemExit(f"FAIL: run with the pinned Dream client environment: {error}") from error
 
@@ -65,11 +60,7 @@ def pinned_versions():
 
 def check_registration(data):
     body_dict = data["policy"]["embodiment"]
-    body = embodiments.check_registration(body_dict)
-    embodiments.check_state_width(body)
-    embodiments.check_action_width(body)
-    trained = embodiments.trained(body)
-    embodiments.check_joints(trained)
+    body = registered_body(body_dict)
     require(body.plan is not None and body.plan.use_eef is False, "joint-action plan must not use EEF")
     require([slot.name for slot in body.plan.state] == ["right_arm"], "state slot must map to right_arm")
     require([slot.name for slot in body.plan.action] == ["right_arm"], "action slot must map to right_arm")
@@ -91,51 +82,11 @@ def check_joint_action(data):
     body_dict = data["policy"]["embodiment"]
     frame = jpeg_frame()
     rows = [[0.1, 0.2, 0.3]]
-    requests = []
     negative = []
 
-    def exchange(self, payload, headers, *, path=transport.GET_ACTION_PATH, timeout_ms=None):
-        raw = transport.encode(payload)
-        sent = transport.decode(raw)
-        requests.append((path, sent))
-        if path == transport.END_SESSION_PATH:
-            reply = {"status": {"code": "DA-0000"}}
-        else:
-            reply = {
-                "status": {"code": "DA-0000" if sent["session_id"] else "DA-0001"},
-                "session_id": "offline-sa02-session",
-                "actions": {"per_key": {"action.right_arm": rows}},
-            }
-            if not sent["session_id"]:
-                reply["status"]["reason"] = "new"
-        encoded = transport.encode(reply)
-        self.last_exchange = transport.Exchange(
-            rtt_ms=1, request_bytes=len(raw), response_bytes=len(encoded)
-        )
-        return transport.decode(encoded)
-
-    creds = credentials.Credentials(
-        gateway_url="http://127.0.0.1:9",
-        platform_url="http://127.0.0.1:9",
-        data_url="http://127.0.0.1:9",
-        api_key="offline-test-key",
-        path=Path("/tmp/unused-sa02-credentials"),
-    )
-
-    with (
-        patch.object(credentials, "load", return_value=creds),
-        patch.object(transport.Transport, "request", exchange),
-    ):
-        client = dream.DreamClient(api_key="offline-test-key")
-        client.policy(
-            {
-                "checkpoint": "offline-sa01-contract",
-                "embodiment": body_dict,
-                "strict": True,
-                "_record": False,
-                "action_hz": 30,
-            }
-        )
+    with offline_client(
+        body_dict, rows, checkpoint="offline-sa01-contract", action_hz=30
+    ) as (client, exchange):
         client.set_observation(
             {"video.overhead": frame},
             {"state.arm": [0.0, 0.0, 0.0], "prompt": data["task"]["instruction"]},
@@ -144,7 +95,7 @@ def check_joint_action(data):
         reply = client.get_action()
         require(list(reply["per_key"]) == ["action.arm"], "public action key changed")
         require(reply["per_key"]["action.arm"] == rows, "action rows changed")
-        wire = requests[-1][1]["observation"]
+        wire = exchange.requests[-1][1]["observation"]
         require(wire["state.right_arm"] == [0.0, 0.0, 0.0], "state width or key changed")
         require("state.arm" not in wire, "public state key leaked to the wire")
         require(wire["video.overhead"] == [frame], "overhead frame was not forwarded")
@@ -153,7 +104,7 @@ def check_joint_action(data):
         response_rows = len(rows)
         require(response_rows == data["timing"]["action_chunk_rows"], "positive response does not match the contracted action row count")
 
-        before = len(requests)
+        before = len(exchange.requests)
         client.set_observation(
             {"video.overhead": frame},
             {"state.arm": [0.0, 0.0], "prompt": data["task"]["instruction"]},
@@ -165,9 +116,9 @@ def check_joint_action(data):
             negative.append("SDK rejects two-wide state before transport")
         else:
             raise SystemExit("FAIL: SDK accepted a state width that does not match the contract")
-        require(len(requests) == before, "invalid observation reached transport")
+        require(len(exchange.requests) == before, "invalid observation reached transport")
 
-        rows = [[0.1, 0.2]]
+        exchange.rows = [[0.1, 0.2]]
         client.set_observation(
             {"video.overhead": frame},
             {"state.arm": [0.0, 0.0, 0.0], "prompt": data["task"]["instruction"]},
@@ -179,7 +130,6 @@ def check_joint_action(data):
             negative.append("SDK rejects two-wide action after transport")
         else:
             raise SystemExit("FAIL: SDK accepted an action width that does not match the contract")
-        client.close()
 
     return {
         "checkpoint": "offline-sa01-contract",

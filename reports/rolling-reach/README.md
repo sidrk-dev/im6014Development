@@ -31,3 +31,15 @@ simulation model only. Shared-controller integration, synchronized demonstration
 selected-profile SDK validation, hosted training, learned behavior, and physical
 operation remain separate milestones. Ideal no-slip constraints do not simulate
 traction limits, compliance, backlash, or the final motor transmission.
+
+## Selected-profile SDK boundary
+
+The [SA02 review](sa02-review.md) records parent checks and review triage.
+The [SA02 report](sa02-client.json) records the parent-run pinned SDK check for
+this selected arm. Real rendered overhead JPEGs and measured logical joints pass
+through real SDK serialization, while credentials and transport are mocked.
+There are 44 layered negative checks and 37 parent-run contract/import/SDK unit
+tests. Additional parent regressions caught numeric coercion, camera/limit drift,
+and a redirected results directory before the fixes. Policy rows are 30 Hz;
+local control remains 100 Hz. A fake checkpoint proves no hosted model identity,
+training outcome, learned behavior, or SA04 control readiness.
