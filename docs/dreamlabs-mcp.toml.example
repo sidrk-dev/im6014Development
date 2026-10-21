@@ -1,0 +1,6 @@
+# Merge this table once into the Codex configuration after supplying a real key.
+# DREAM_API_KEY must be available to the process that launches Codex.
+# This file is an example and does not configure the Dream robot process.
+[mcp_servers.dreamlabs-docs]
+url = "https://platform.dreamlabs.ai/mcp"
+bearer_token_env_var = "DREAM_API_KEY"

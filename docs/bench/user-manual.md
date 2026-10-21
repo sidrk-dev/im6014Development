@@ -12,7 +12,7 @@ Open this folder in a terminal and run:
 ./start_dashboard.sh
 ```
 
-Or run `python3 motor_dashboard.py`. You can launch the local `IM6014 Motor Bench.desktop` shortcut if your file manager allows trusted application launchers.
+Or run `python3 -m im6014_bench.dashboard`. An existing installed desktop shortcut can continue to invoke the root `start_dashboard.sh` launcher.
 
 To explore without hardware:
 
@@ -22,7 +22,7 @@ To explore without hardware:
 
 Both commands start **disconnected and disarmed**. Demo mode uses simulated motors at IDs 0 and 1 and never opens a real serial adapter. Its yellow **DEMO · no hardware** badge stays visible. Changing source requires disconnecting first.
 
-Python 3, PySide6 and pySerial are required. They are already installed on this computer. If moving the application to a new computer, install `PySide6` and `pyserial` in that computer's Python environment. Keep `motor_dashboard.py`, `motor_session.py`, `spin_5rpm.py` and this manual together. No server, account or network connection is required.
+Install the pinned `requirements.txt` in a Python environment from the repository root. The `im6014_bench` package and `docs/bench/user-manual.md` belong to the checkout. No server, account, or network connection is required for bench operation.
 
 ## First connection to this motor
 
@@ -53,7 +53,7 @@ Adapter serial: `FTC2RQ7H`, FTDI FT4232H. Linux device numbers can change after 
 5. Click **Run test**. The speed target ramps up and down over 0.75 seconds. Watch measured speed and torque. The blue line is measured speed; the dashed amber line is the requested target.
 6. At the end, the motor returns to Stop and the application disarms. Re-arm for another test.
 
-These settings previously produced **5.002 rpm average**, with approximately 4.59–5.48 rpm sampled ripple, on the unloaded motor through the command-line driver. The 0.16 Nm value is bench friction compensation, not a loaded-arm calibration. The dashboard shares the same packet implementation. See `BENCH.md` and `motor_run_5rpm.json` for that earlier physical test.
+These settings previously produced **5.002 rpm average**, with approximately 4.59–5.48 rpm sampled ripple, on the unloaded motor through the command-line driver. The 0.16 Nm value is bench friction compensation, not a loaded-arm calibration. The dashboard shares the same packet implementation. Those original bench records are retained locally and are not shipped in the public source checkout.
 
 Negative speed selects the opposite direction. Friction compensation is a nonnegative magnitude whose sign follows the speed. Reverse direction and the other dashboard test modes have not been physically validated by that earlier forward-speed run.
 
@@ -186,6 +186,6 @@ damping 1 3
 
 ## Validation scope
 
-The previous physical forward-speed test established one motor/adapter's communication and 5 rpm bench operation. Dashboard validation is recorded separately in `DASHBOARD_VALIDATION.md`: simulator lifecycle and failure tests, native UI tests and the earlier physical Stop-only check. Higher-speed and position changes have been tested offline only. Simulator success is not physical validation of higher speed, position, reverse, torque-pulse, damping, scan-on-a-populated-bus or robot-arm behavior.
+The previous physical forward-speed test established one motor/adapter's communication and 5 rpm bench operation. Original dashboard validation records remain local. Current offline lifecycle/UI tests are in `tests/bench` and write their result summary to `results/bench`. The earlier physical Stop-only check remains historical evidence. Higher-speed and position changes have been tested offline only. Simulator success is not physical validation of higher speed, position, reverse, torque-pulse, damping, scan-on-a-populated-bus or robot-arm behavior.
 
 For future robot-arm work, establish joint limits, supported failure behavior/brakes, pose recovery and calibration, supply/regeneration handling, load-specific gains, and per-joint timing/freshness before using stiffness or coordinated movement.

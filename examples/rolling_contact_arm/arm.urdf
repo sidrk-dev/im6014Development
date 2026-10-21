@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="illustrative_rolling_contact_arm">
+  <mujoco>
+    <compiler discardvisual="false" fusestatic="false" />
+  </mujoco>
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.8" />
+      <geometry>
+        <cylinder radius="0.05" length=".024" />
+      </geometry>
+      <material name="">
+        <color rgba="0.55 0.61 0.68 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.8" />
+      <geometry>
+        <cylinder radius="0.05" length=".024" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="shoulder_carrier">
+    <inertial>
+      <mass value="0.025" />
+      <origin xyz="0.05 0 -0.03" />
+      <inertia ixx="1e-05" iyy="4e-05" izz="4e-05" ixy="0" ixz="0" iyz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.05 0 -0.035" />
+      <geometry>
+        <box size="0.1 0.016 0.016" />
+      </geometry>
+      <material name="">
+        <color rgba="0.8 0.8 0.82 1" />
+      </material>
+    </visual>
+  </link>
+  <link name="shoulder_link">
+    <inertial>
+      <mass value="0.7" />
+      <origin xyz="0.1344 0 0" />
+      <inertia ixx="0.0004" iyy="0.006" izz="0.006" ixy="0" ixz="0" iyz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <cylinder radius="0.05" length=".024" />
+      </geometry>
+      <material name="">
+        <color rgba="0.13 0.65 0.91 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <cylinder radius="0.05" length=".024" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.16 0 0.025" />
+      <geometry>
+        <box size="0.32 0.032 0.032" />
+      </geometry>
+      <material name="">
+        <color rgba="0.13 0.65 0.91 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.16 0 0.025" />
+      <geometry>
+        <box size="0.32 0.032 0.032" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.32 0 0" />
+      <geometry>
+        <cylinder radius="0.04" length=".024" />
+      </geometry>
+      <material name="">
+        <color rgba="0.55 0.61 0.68 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.32 0 0" />
+      <geometry>
+        <cylinder radius="0.04" length=".024" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="shoulder_a" type="revolute">
+    <parent link="base_link" />
+    <child link="shoulder_carrier" />
+    <origin xyz="0 0 0.8" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.6" upper="0.6" effort="25" velocity="2" />
+  </joint>
+  <joint name="shoulder_b" type="revolute">
+    <parent link="shoulder_carrier" />
+    <child link="shoulder_link" />
+    <origin xyz="0.1 0 0" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.6" upper="0.6" effort="25" velocity="2" />
+    <mimic joint="shoulder_a" multiplier="1.0" offset="0" />
+  </joint>
+  <link name="elbow_carrier">
+    <inertial>
+      <mass value="0.025" />
+      <origin xyz="0.04 0 -0.03" />
+      <inertia ixx="1e-05" iyy="4e-05" izz="4e-05" ixy="0" ixz="0" iyz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.04 0 -0.035" />
+      <geometry>
+        <box size="0.08 0.016 0.016" />
+      </geometry>
+      <material name="">
+        <color rgba="0.8 0.8 0.82 1" />
+      </material>
+    </visual>
+  </link>
+  <link name="elbow_link">
+    <inertial>
+      <mass value="0.4" />
+      <origin xyz="0.1176 0 0" />
+      <inertia ixx="0.0004" iyy="0.003" izz="0.003" ixy="0" ixz="0" iyz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <cylinder radius="0.04" length=".024" />
+      </geometry>
+      <material name="">
+        <color rgba="0.96 0.56 0.18 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <cylinder radius="0.04" length=".024" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.14 0 0.025" />
+      <geometry>
+        <box size="0.28 0.032 0.032" />
+      </geometry>
+      <material name="">
+        <color rgba="0.96 0.56 0.18 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.14 0 0.025" />
+      <geometry>
+        <box size="0.28 0.032 0.032" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="elbow_a" type="revolute">
+    <parent link="shoulder_link" />
+    <child link="elbow_carrier" />
+    <origin xyz="0.32 0 0" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.7" upper="0.7" effort="25" velocity="2" />
+  </joint>
+  <joint name="elbow_b" type="revolute">
+    <parent link="elbow_carrier" />
+    <child link="elbow_link" />
+    <origin xyz="0.08 0 0" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.7" upper="0.7" effort="25" velocity="2" />
+    <mimic joint="elbow_a" multiplier="1.0" offset="0" />
+  </joint>
+  <link name="tool" />
+  <joint name="tool_fixed" type="fixed">
+    <parent link="elbow_link" />
+    <child link="tool" />
+    <origin xyz="0.28 0 0.025" />
+  </joint>
+</robot>

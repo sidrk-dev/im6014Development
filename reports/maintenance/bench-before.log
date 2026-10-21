@@ -1,0 +1,19 @@
+PASS: test input boundaries, nonfinite rejection, simultaneous/unknown fault decoding
+PASS: demo never opens hardware; connect remains stopped; timeout blocks arm and explicit acknowledgment restores watchdog
+PASS: one serial owner, arm per test, active-test replacement rejected, delayed FOC acknowledgment, ramps, watchdog and final Stop
+PASS: reverse speed, bounded negative torque pulse, damping and operator Stop
+PASS: 60 rpm completes with speed/travel trips Off; no hidden 5/8 rpm or one-revolution ceiling
+PASS: configured measured-speed and travel trips still stop and disarm
+PASS: relative and signed absolute position: current-angle start, smooth targets, gains, hold, timed Stop
+PASS: position target/travel and impossible move duration rejected before enabling FOC
+PASS: arm expiry and priority Stop invalidate queued arm/motion requests
+PASS: motor fault, corrupt CRC and lost replies latch disarmed; restored communications never resumes motion
+PASS: stalled UI heartbeat and stale motor feedback abort motion and confirm Stop
+PASS: individual-ID Stop scan, disconnect/reconnect disarming and unambiguous per-connection capture tags
+PASS: failed adapter open releases ownership and permits a fresh connection
+PASS: native UI connect/ack/checkbox/arm/run/Stop flow, live chart rendering, mode-specific controls and console validation
+PASS: higher-speed input, position controls/current-angle copy/target plot/console and dark-theme demo/real/fault contrast
+PASS: CSV/JSON round trips, typed adapter path honored, and responsive 1024×768 layout
+PASS: closing the native window during motion confirms Stop, releases adapter and joins its worker
+PASS: light-theme real-hardware badge and status banner contrast; starts disconnected
+18 grouped checks passed. No real motor I/O.

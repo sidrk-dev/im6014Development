@@ -1,4 +1,4 @@
-"""One serial owner for the desktop dashboard; packet functions live in spin_5rpm.
+"""One serial owner for the desktop dashboard; packet functions live in motor.
 
 No motor operation occurs on import or construction. UI requests are serialized.
 """
@@ -12,7 +12,7 @@ import time
 
 import serial
 
-from spin_5rpm import PORT, RATIO, command, crc32, exchange, healthy
+from .motor import PORT, RATIO, command, crc32, exchange, healthy
 
 ERRORS = {0: 'Overcurrent', 1: 'Transient overvoltage', 2: 'Sustained overvoltage',
           3: 'Undervoltage', 4: 'Chip overheating', 5: 'MOS temperature outside range',

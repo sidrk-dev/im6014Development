@@ -1,0 +1,46 @@
+name: Offline checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - run: sudo apt-get update && sudo apt-get install -y libegl1 libopengl0
+      - run: python -m pip install -r requirements.txt
+      - run: scripts/check_offline.sh
+        env:
+          QT_QPA_PLATFORM: offscreen
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bench-results
+          path: results/bench/
+  rolling-sample:
+    runs-on: ubuntu-latest
+    env:
+      MUJOCO_GL: osmesa
+      DREAM_LOG: 'off'
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - run: sudo apt-get update && sudo apt-get install -y libosmesa6
+      - run: python -m pip install -r examples/rolling_contact_arm/requirements.txt
+      - run: python -m pip check
+      - run: python examples/rolling_contact_arm/verify.py --render
+      - run: python examples/rolling_contact_arm/verify_dream.py
+      - run: python examples/rolling_contact_arm/record_dataset.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rolling-results
+          path: examples/rolling_contact_arm/results/

@@ -1,0 +1,111 @@
+{
+  "recorded_at_utc": "2026-10-20T21:45:53.442477+00:00",
+  "verdict": "PASS for illustrative simulation, installed SDK contract, and local dataset preflight",
+  "scope": "User requested offline simulator and SDK checks; no checkpoint exists yet",
+  "python": "3.14.6",
+  "versions": {
+    "mujoco": "3.16.0",
+    "yourdfpy": "0.0.60",
+    "numpy": "2.5.4",
+    "Pillow": "13.0.0",
+    "dreamlabs-client": "1.0.3"
+  },
+  "geometry_poses_each": 625,
+  "geometry_cases": [
+    "native MJCF",
+    "URDF imported into MuJoCo",
+    "unequal circular radii"
+  ],
+  "dynamics_steps_each": 24000,
+  "dynamics_seconds_each": 8,
+  "metrics_checked_every_step": true,
+  "dynamic_maxima": {
+    "coupling_rad": 0.00011746500635918198,
+    "contact_slip_m_s": 0.00201387259685416,
+    "contact_gap_m": 6.938893903907228e-17,
+    "tool_reference_error_m": 9.902918181584103e-06,
+    "tracking_rad": 0.0738273099283446,
+    "actuator_force_nm": 4.7099396149974835,
+    "actual_contacts": 0
+  },
+  "mutations_detected": [
+    "removed rolling constraints",
+    "reversed rolling constraints",
+    "malformed SDK actions",
+    "nonfinite or out-of-range adapter targets",
+    "wrong-width dataset"
+  ],
+  "direct_urdf_import": {
+    "direct_import_nq": 4,
+    "direct_import_neq": 2,
+    "direct_import_nu": 0,
+    "mimic_preserved": true,
+    "added": "logical-bend actuators, contact exclusions, solver settings, tool site; no added equality constraints"
+  },
+  "sdk_contract": {
+    "independent_joint_values": 2,
+    "cameras": 1,
+    "gripper": false,
+    "body_side": "single",
+    "training_mode": "joint actions",
+    "response_source": "mocked transport",
+    "real_sdk_client_executed": true,
+    "fresh_camera_rendered_after_motion": true
+  },
+  "dataset_preflight": {
+    "ok": true,
+    "error": null,
+    "sessions": 1,
+    "episodes": 1,
+    "frames": 90,
+    "files": 5,
+    "bytes": 31743,
+    "state_dim": 2,
+    "action_dim": 2,
+    "fps": 30,
+    "video_keys": [
+      "observation.images.overhead"
+    ],
+    "notes": []
+  },
+  "prototype_asset_unchanged": true,
+  "hosted_calls": 0,
+  "hardware_io": false,
+  "learned_policy_tested": false,
+  "final_arm_model_created": false,
+  "milestone_acceptance_advanced": false,
+  "independent_review": "2026-10-20-rolling-sample-independent-review.md",
+  "parent_checks": {
+    "source_hashes_match": true,
+    "local_links": 29,
+    "git_diff_check": "PASS",
+    "pip_check": "PASS"
+  },
+  "sample_sha256": {
+    "README.md": "6de0cc1c8b59f3a351a119b2c638b233f03ec4cbe6621bea1216aa9357581aa0",
+    "arm.urdf": "76a98842dab463730957cc26c8886914153ede073ec216d02c24e4182a80331f",
+    "arm.xml": "6c7b29b15403a51581a213a83766140ce58635cbcafa797e95d913e1babff957",
+    "dream_bridge.py": "0bfc63d890b0b00def6828e110813b0a5fef57fdd7160481edd7e44e59012491",
+    "dream_embodiment.json": "df075d26b29e9831c59d06cc042ecf08f1afaec286b469ef45d0274672e4510a",
+    "manifest.json": "41e6c811745fa9fbb55febad2a8791b5e38f5903b97950a3552984c3e1d2858a",
+    "model.py": "678c1e5840d16a027edc187f1fe6e55f6777eacd5ffbfe6998a24c892e4701c8",
+    "record_dataset.py": "0a933bee33b0a404ce8e038d249a89b425951bafd7181ff88d8d04e70c5043a6",
+    "requirements.lock.txt": "4b409c873db3c45a9b0c388868cc39125180d77930959f195bbc39520ae18151",
+    "requirements.txt": "01572b7206fa8e3965a2e15146a8c43e57cc7b34ca03bffbe67ea971ef889c9e",
+    "results/dataset_fixture/data/chunk-000/episode_000000.parquet": "b125b37a4c0d50a50430112629b996fabf1247afa04eab146bbebfbb2dfcc500",
+    "results/dataset_fixture/meta/episodes.jsonl": "085ffe90eb4cd66ba786417e40392333f09093eb295f6336e4548fc9f05a69dc",
+    "results/dataset_fixture/meta/info.json": "2853c92f18662870b7a30bc610d486b2de73552da33b0945d71a2f777d8a829e",
+    "results/dataset_fixture/meta/tasks.jsonl": "1938d87bceab0f2969c7785c447bba8a505192dce234afcfce5096bd83cb0a59",
+    "results/dataset_fixture/videos/chunk-000/observation.images.overhead/episode_000000.mp4": "6bc47f172e31a2db85dbb4f86f129b9661e9d63dc9b5509ca0a6236991094a07",
+    "results/dataset_validation.json": "c2045d8798219e9f632997cf8115b1a2eb02f974b3cca33419f6dc9221b79c5f",
+    "results/dream_contract.json": "f7735d171755dd3ddc75adaabf67bf8568a25b7c8b336570195d924d532168dd",
+    "results/motion.gif": "2cc937d8c374b7aaf7f182aa28e47acee57a98a9cf4827952e3033f67e35c25a",
+    "results/preview.png": "18cdc268a7d8b9db7cd0850937ddd10829207ad58d7ba013b9e5f39e1db329df",
+    "results/unequal_radii.urdf": "a6d25f07d06d6244f99808a0aa2ff875cddb376e139d086c41a384c31760511d",
+    "results/urdf_import.xml": "533b42c1eced7500121718c1807d884613c63f4e7d1d2faa5533e3e02904d959",
+    "results/urdf_with_control.xml": "782c6179e6df9c0bc044f73da422bd6a0d6031d2d966fcac7d4b142fa7033486",
+    "results/verification.json": "dd269c528520f961d5a23e97d175939e5d558167aea2d871d95a2c4f8eaac540",
+    "verify.py": "2c92b9f6937b133ced6d30ac5e87a24a96f94c3223d5e3d5e44cc317c8efc1c9",
+    "verify_dream.py": "ca139593a91c4506a6eba69429a69ec5f9d035b5e56cee47c8f59c80b073cf3d"
+  }
+}

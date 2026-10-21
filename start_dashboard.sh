@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 set -eu
 app_dir="$(cd -- "$(dirname -- "$0")" && pwd)"
-exec python3 "$app_dir/motor_dashboard.py" "$@"
+cd -- "$app_dir"
+exec python3 -m im6014_bench.dashboard "$@"

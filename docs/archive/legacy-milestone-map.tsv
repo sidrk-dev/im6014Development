@@ -1,0 +1,196 @@
+legacy_id	surviving_gates	disposition
+A01	SA02;SA04	historical baseline; reuse existing evidence
+A02	SA02;SA04	historical baseline; reuse existing evidence
+A03	SA02;SA04	historical baseline; reuse existing evidence
+A04	SA02;SA04	historical baseline; reuse existing evidence
+A05	SA02;SA04	historical baseline; reuse existing evidence
+A06	SA02;SA04	historical baseline; reuse existing evidence
+A07	SA02;SA04	historical baseline; reuse existing evidence
+A08	SA02;SA04	historical baseline; reuse existing evidence
+A09	SA02;SA04	historical baseline; reuse existing evidence
+A10	SA02;SA04	historical baseline; reuse existing evidence
+B01	SA04	retain transport/protocol regression guarantees
+B02	SA04	retain transport/protocol regression guarantees
+B03	SA04	retain transport/protocol regression guarantees
+B04	SA04	retain transport/protocol regression guarantees
+B05	SA04	retain transport/protocol regression guarantees
+B06	SA04	retain transport/protocol regression guarantees
+B07	SA04	retain transport/protocol regression guarantees
+B08	SA04	retain transport/protocol regression guarantees
+B09	SA04	retain transport/protocol regression guarantees
+B10	SA04	retain transport/protocol regression guarantees
+B11	SA04	retain transport/protocol regression guarantees
+B12	SA04	retain transport/protocol regression guarantees
+B13	SA04	retain transport/protocol regression guarantees
+B14	SA04	retain transport/protocol regression guarantees
+C01	SA04;SA11	retain controller and applicable physical acceptance
+C02	SA04;SA11	retain controller and applicable physical acceptance
+C03	SA04;SA11	retain controller and applicable physical acceptance
+C04	SA04;SA11	retain controller and applicable physical acceptance
+C05	SA04;SA11	retain controller and applicable physical acceptance
+C06	SA04;SA11	retain controller and applicable physical acceptance
+C07	SA04;SA11	retain controller and applicable physical acceptance
+C08	SA04;SA11	retain controller and applicable physical acceptance
+C09	SA04;SA11	retain controller and applicable physical acceptance
+C10	SA04;SA11	retain controller and applicable physical acceptance
+C11	SA04;SA11	retain controller and applicable physical acceptance
+C12	SA04;SA11	retain controller and applicable physical acceptance
+C13	SA04;SA11	retain controller and applicable physical acceptance
+C14	SA04;SA11	retain controller and applicable physical acceptance
+C15	SA04;SA11	retain controller and applicable physical acceptance
+C16	SA04;SA11	retain controller and applicable physical acceptance
+D01	SA01	merge build identity and calibration contract
+D02	SA01	merge build identity and calibration contract
+D03	SA01	merge build identity and calibration contract
+D04	SA01	merge build identity and calibration contract
+D05	SA01	merge build identity and calibration contract
+D06	SA01	merge build identity and calibration contract
+E01	SA04;SA11	defer MakerMods-specific UI; preserve control semantics
+E02	SA04;SA11	defer MakerMods-specific UI; preserve control semantics
+E03	SA04;SA11	defer MakerMods-specific UI; preserve control semantics
+E04	SA04;SA11	defer MakerMods-specific UI; preserve control semantics
+E05	SA04;SA11	defer MakerMods-specific UI; preserve control semantics
+E06	SA04;SA11	defer MakerMods-specific UI; preserve control semantics
+E07	SA04;SA11	defer MakerMods-specific UI; preserve control semantics
+E08	SA04;SA11	defer MakerMods-specific UI; preserve control semantics
+E09	SA04;SA11	defer MakerMods-specific UI; preserve control semantics
+E10	SA04;SA11	defer MakerMods-specific UI; preserve control semantics
+F01	SA03;SA05;SA11;SA12	retain camera capture, timing, freshness and calibration
+F02	SA03;SA05;SA11;SA12	retain camera capture, timing, freshness and calibration
+F03	SA03;SA05;SA11;SA12	retain camera capture, timing, freshness and calibration
+F04	SA03;SA05;SA11;SA12	retain camera capture, timing, freshness and calibration
+F05	SA03;SA05;SA11;SA12	retain camera capture, timing, freshness and calibration
+F06	SA03;SA05;SA11;SA12	retain camera capture, timing, freshness and calibration
+F07	SA03;SA05;SA11;SA12	retain camera capture, timing, freshness and calibration
+F08	SA03;SA05;SA11;SA12	retain camera capture, timing, freshness and calibration
+G01	SA04;SA05;SA06;SA12	merge bounded teleoperation, recording and replay
+G02	SA04;SA05;SA06;SA12	merge bounded teleoperation, recording and replay
+G03	SA04;SA05;SA06;SA12	merge bounded teleoperation, recording and replay
+G04	SA04;SA05;SA06;SA12	merge bounded teleoperation, recording and replay
+G05	SA04;SA05;SA06;SA12	merge bounded teleoperation, recording and replay
+G06	SA04;SA05;SA06;SA12	merge bounded teleoperation, recording and replay
+G07	SA04;SA05;SA06;SA12	merge bounded teleoperation, recording and replay
+G08	SA04;SA05;SA06;SA12	merge bounded teleoperation, recording and replay
+G09	SA04;SA05;SA06;SA12	merge bounded teleoperation, recording and replay
+G10	SA04;SA05;SA06;SA12	merge bounded teleoperation, recording and replay
+G11	SA04;SA05;SA06;SA12	merge bounded teleoperation, recording and replay
+G12	SA04;SA05;SA06;SA12	merge bounded teleoperation, recording and replay
+S01	SA03;SA04;SA05;SA10	selected-build simulation; Cartesian IK optional
+S02	SA03;SA04;SA05;SA10	selected-build simulation; Cartesian IK optional
+S03	SA03;SA04;SA05;SA10	selected-build simulation; Cartesian IK optional
+S04	SA03;SA04;SA05;SA10	selected-build simulation; Cartesian IK optional
+S05	SA03;SA04;SA05;SA10	selected-build simulation; Cartesian IK optional
+S06	SA03;SA04;SA05;SA10	selected-build simulation; Cartesian IK optional
+S07	SA03;SA04;SA05;SA10	selected-build simulation; Cartesian IK optional
+S08	SA03;SA04;SA05;SA10	selected-build simulation; Cartesian IK optional
+S09	SA03;SA04;SA05;SA10	selected-build simulation; Cartesian IK optional
+S10	SA03;SA04;SA05;SA10	selected-build simulation; Cartesian IK optional
+S11	SA03;SA04;SA05;SA10	selected-build simulation; Cartesian IK optional
+S12	SA03;SA04;SA05;SA10	selected-build simulation; Cartesian IK optional
+P01	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+P02	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+P03	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+P04	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+P05	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+P06	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+P07	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+P08	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+P09	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+P10	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+P11	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+P12	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+P13	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+P14	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+P15	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+P16	SA01;SA02;SA04;SA07;SA09;SA10	merge Dream boundary into canonical gates
+T01	SA06;SA07;SA08;SA10	hosted data/job/model/evaluation gates; local optimizer deferred
+T02	SA06;SA07;SA08;SA10	hosted data/job/model/evaluation gates; local optimizer deferred
+T03	SA06;SA07;SA08;SA10	hosted data/job/model/evaluation gates; local optimizer deferred
+T04	SA06;SA07;SA08;SA10	hosted data/job/model/evaluation gates; local optimizer deferred
+T05	SA06;SA07;SA08;SA10	hosted data/job/model/evaluation gates; local optimizer deferred
+T06	SA06;SA07;SA08;SA10	hosted data/job/model/evaluation gates; local optimizer deferred
+T07	SA06;SA07;SA08;SA10	hosted data/job/model/evaluation gates; local optimizer deferred
+T08	SA06;SA07;SA08;SA10	hosted data/job/model/evaluation gates; local optimizer deferred
+T09	SA06;SA07;SA08;SA10	hosted data/job/model/evaluation gates; local optimizer deferred
+T10	SA06;SA07;SA08;SA10	hosted data/job/model/evaluation gates; local optimizer deferred
+T11	SA06;SA07;SA08;SA10	hosted data/job/model/evaluation gates; local optimizer deferred
+T12	SA06;SA07;SA08;SA10	hosted data/job/model/evaluation gates; local optimizer deferred
+RC00	RC00	retain stable rolling branch gate
+RC01	RC01	retain stable rolling branch gate
+RC02	RC02	retain stable rolling branch gate
+RC03	RC03	retain stable rolling branch gate
+RC04	RC04	retain stable rolling branch gate
+R01	deferred	direct-agent experiment outside first task
+R02	deferred	direct-agent experiment outside first task
+R03	deferred	direct-agent experiment outside first task
+R04	deferred	direct-agent experiment outside first task
+R05	deferred	direct-agent experiment outside first task
+R06	deferred	direct-agent experiment outside first task
+R07	deferred	direct-agent experiment outside first task
+R08	deferred	direct-agent experiment outside first task
+H1.01	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H1.02	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H1.03	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H1.04	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H1.05	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H1.06	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H2.01	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H2.02	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H2.03	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H2.04	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H2.05	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H2.06	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H2.07	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H2.08	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H2.09	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H2.10	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H2.11	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H2.12	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H3.01	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H3.02	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H3.03	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H3.04	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H3.05	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H3.06	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H3.07	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H3.08	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H3.09	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H3.10	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H4.01	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H4.02	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H4.03	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H4.04	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H4.05	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H4.06	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H5.01	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H5.02	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H5.03	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H5.04	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H5.05	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H5.06	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H6.01	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H6.02	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H6.03	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H6.04	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H6.05	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H6.06	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H6.07	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H6.08	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H6.09	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H6.10	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H7.01	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H7.02	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H7.03	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H7.04	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H7.05	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H7.06	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H7.07	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H7.08	SA11;SA12	build-specific commissioning; future wrists/scoop conditional on actual task
+H8.01	SA12;SA13;SA14	physical data, adaptation and supervised trials
+H8.02	SA12;SA13;SA14	physical data, adaptation and supervised trials
+H8.03	SA12;SA13;SA14	physical data, adaptation and supervised trials
+H8.04	SA12;SA13;SA14	physical data, adaptation and supervised trials
+H8.05	SA12;SA13;SA14	physical data, adaptation and supervised trials
+H8.06	SA12;SA13;SA14	physical data, adaptation and supervised trials
+H8.07	SA12;SA13;SA14	physical data, adaptation and supervised trials
+H8.08	SA12;SA13;SA14	physical data, adaptation and supervised trials

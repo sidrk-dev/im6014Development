@@ -1,0 +1,7 @@
+mujoco==3.16.0
+yourdfpy==0.0.60
+numpy==2.5.4
+Pillow==13.0.0
+dreamlabs-client[datasets]==1.0.3
+av==19.0.1
+pyarrow==26.0.0

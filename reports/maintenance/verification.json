@@ -1,0 +1,52 @@
+{
+  "scope": "Repository organization only; no physical I/O or hosted Dream calls",
+  "bench_groups_before": 18,
+  "bench_groups_after": 18,
+  "bench_checks_identical": true,
+  "function_and_class_ast_equivalence": true,
+  "dashboard_ast_exception": "manual resource path only",
+  "launcher_from_tmp_rendered": true,
+  "launcher_real_serial_constructors": 0,
+  "fresh_source_checkout": {
+    "bench": "PASS",
+    "simulation": "PASS",
+    "sdk_mocked_transport": "PASS",
+    "dataset_preflight": "PASS"
+  },
+  "active_gates": 21,
+  "future_gates": 19,
+  "legacy_ids_archived_and_mapped": 195,
+  "old_milestone_statuses_advanced": false,
+  "local_archives_preserved": true,
+  "independent_controller_checkout_unchanged": true,
+  "graphics_local": "EGL passed; OSMesa library unavailable locally; CI installs it",
+  "github_ci": {
+    "initial_head": "1edc9674bdb4e3b0dc3966f5d8d481d7dbec7736",
+    "run": "https://github.com/sidrk-dev/im6014Development/actions/runs/39506303522",
+    "rolling_sample": "PASS: clean dependencies, OSMesa rendering, SDK mocked transport, dataset preflight",
+    "bench": "PASS after installing libegl1/libopengl0; clean dependencies and all offline checks",
+    "verified_head": "c963f236daf3744c4a3188ec12ca9f4735039081",
+    "verified_run": "https://github.com/sidrk-dev/im6014Development/actions/runs/39552698470"
+  },
+  "independent_review": "PASS; three planning omissions corrected and independently read back",
+  "current_portable_links": 53,
+  "github_organization": {
+    "pull_request": "https://github.com/sidrk-dev/im6014Development/pull/1",
+    "milestones": [
+      1,
+      2
+    ],
+    "execution_issues": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "custom_labels": [
+      "area:bench",
+      "area:simulation",
+      "area:dream",
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "recorded_at_utc": "2026-10-20T09:14:50.962456+00:00",
+  "purpose": "Source inspection for a Dream-first milestone revision; not execution acceptance",
+  "packages": [
+    {
+      "distribution": "dreamlabs",
+      "version": "1.0.5",
+      "requires_python": "<3.14,>=3.11",
+      "metadata_url": "https://pypi.org/pypi/dreamlabs/json",
+      "wheel_url": "https://files.pythonhosted.org/packages/e2/d8/93053db3c6865841d3a7f5e2f7d68f09175c7139f737a0f91844cb198cec/dreamlabs-1.0.5-py3-none-any.whl",
+      "filename": "dreamlabs-1.0.5-py3-none-any.whl",
+      "bytes": 17785418,
+      "published_sha256": "f26fe4e78e209bce4435a46ae22fd9d17529840ffbc7ae36a0be49a8eed8669d",
+      "downloaded_sha256": "f26fe4e78e209bce4435a46ae22fd9d17529840ffbc7ae36a0be49a8eed8669d",
+      "hash_match": true
+    },
+    {
+      "distribution": "dreamlabs-client",
+      "version": "1.0.3",
+      "requires_python": ">=3.10",
+      "metadata_url": "https://pypi.org/pypi/dreamlabs-client/json",
+      "wheel_url": "https://files.pythonhosted.org/packages/1d/ed/caf212b8d88b2079d257a78792c538c64d56358caea8588c1771739df736/dreamlabs_client-1.0.3-py3-none-any.whl",
+      "filename": "dreamlabs_client-1.0.3-py3-none-any.whl",
+      "bytes": 458969,
+      "published_sha256": "2a2afaaead696a5f76de5fb3a671dbf7ac85fa69c3311deae40f698f621af5c2",
+      "downloaded_sha256": "2a2afaaead696a5f76de5fb3a671dbf7ac85fa69c3311deae40f698f621af5c2",
+      "hash_match": true
+    }
+  ],
+  "inspected_files": [
+    {
+      "wheel_member": "robots/examples.py",
+      "sha256": "32aa619dd981edcf012c257528e7d93460efd0f4bc2b9484f0c671d687511e87"
+    },
+    {
+      "wheel_member": "dream_examples/yam_mujoco/README.md",
+      "sha256": "188a97b5ccc5b842842bc9aa61284a6b0c9c6be79597527b17cdd130484a65e4"
+    },
+    {
+      "wheel_member": "dream_examples/yam_mujoco/yam_env.py",
+      "sha256": "d5baf2a7ff67e236337b0c05095714674b7142b40c277a8ff90d39469fc269cf"
+    },
+    {
+      "wheel_member": "dream_examples/yam_mujoco/yam_mujoco.py",
+      "sha256": "5b2082360617814e3b1829c639004b3802fbec0fa094203d737de6be2728a1e3"
+    },
+    {
+      "wheel_member": "dream_examples/yam_mujoco/dream_control.py",
+      "sha256": "be2a3dbf825699ca3de10f5a8adceefec8d85def8ab13445f34ed1aac1245058"
+    },
+    {
+      "wheel_member": "dream/facade.py",
+      "sha256": "fd61541da8850d8d48274aed83b8c236566eff4aa36df4960df9d7ea9712b57d"
+    },
+    {
+      "wheel_member": "dream/client_ik.py",
+      "sha256": "54301f1ca92b238699d8bf65e7c8abb89e8c42972304cf983ee466b5fecb90cc"
+    }
+  ],
+  "static_checks": {
+    "yam_example_registered": true,
+    "self_test_headless": true,
+    "offline_observation_mode": true,
+    "example_recording_disabled": true,
+    "facade_methods": true
+  },
+  "host": {
+    "os": "Fedora Linux 43",
+    "system_python": "3.14.6",
+    "uv": "/usr/bin/uv",
+    "dream_installed_in_system_interpreter": false
+  },
+  "credential_readiness": {
+    "dream_mcp_entry_exists": false,
+    "DREAM_API_KEY_present": false,
+    "standard_dream_credentials_file_exists": false,
+    "secret_values_printed_or_recorded": false
+  },
+  "public_docs_check": {
+    "urls_redirected_to_login": [
+      "https://platform.dreamlabs.ai/docs/",
+      "https://platform.dreamlabs.ai/docs/control-loop/",
+      "https://platform.dreamlabs.ai/docs/your-own-robot/",
+      "https://platform.dreamlabs.ai/docs/yam-sim/"
+    ],
+    "authenticated_contents_verified": false
+  },
+  "execution": {
+    "packages_installed": false,
+    "vendor_code_imported": false,
+    "self_test_run": false,
+    "rendering_run": false,
+    "inference_calls": 0,
+    "hardware_io": false,
+    "global_codex_configuration_modified": false
+  },
+  "trial_priority": "DL01 offline isolated installation next; DL03 required before inference",
+  "reference_plan": "ROBOT_WORKBENCH_AGENT_PROMPT (2).md",
+  "principles": {
+    "Sequence Work into Verifiable Units": "Separate vendor sim, custom sim, and physical acceptance",
+    "Prove It Works": "Source audit does not pass runtime or policy gates"
+  },
+  "throughput_checkpoint": "One source audit and one documentation revision. No training, GPU benchmark, implementation fan-out, or hardware run.",
+  "reference_plan_original_sha256": "70c4a04ed4d28e55daab5e78b280df515806d89de2091c40197fb1d37b628307",
+  "reference_plan_change": "One priority notice added; original 190 milestone definitions preserved as historical reference"
+}

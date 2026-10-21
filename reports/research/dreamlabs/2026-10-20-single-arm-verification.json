@@ -1,0 +1,149 @@
+{
+  "recorded_at_utc": "2026-10-20T09:21:10.976919+00:00",
+  "packages": {
+    "dreamlabs": "1.0.5",
+    "dreamlabs-client": "1.0.3"
+  },
+  "checks": {
+    "single_six_joint_body_registration": "PASS",
+    "joint_training_shape_checks": "PASS",
+    "single_parts_map_to_right_training_slots": "PASS",
+    "gripperless_joint_body_schema": "PASS",
+    "single_arm_eef_training": "REJECTED as expected: use_eef needs the state part 'right_eef_xyz' (3 wide); the embodiment config has no such state part.",
+    "stock_station_missing_left_arm": "REJECTED as expected: config key 'follower_l' is required",
+    "three_camera_model_missing_left_wrist": "REJECTED as expected: the body's cameras ['overhead', 'wrist_r'] cannot be sent the way 'base-model-contract-fixture' reads them, which is ['overhead', 'wrist_l', 'wrist_r'] (one scene camera, then wrist_l and wrist_r, matched by name): missing ['wrist_l'], extra []. Name the body's cameras after those roles",
+    "internal_one_arm_IK_names": "REJECTED as expected: openyam_r, piper, franka, ur5e"
+  },
+  "single_arm_config_fixture": {
+    "state": {
+      "joints": [
+        0,
+        6
+      ]
+    },
+    "action": {
+      "joints": [
+        0,
+        6
+      ]
+    },
+    "video": {
+      "overhead": "observation.images.overhead",
+      "wrist_r": "observation.images.wrist_r"
+    },
+    "head_camera": "overhead",
+    "parts": {
+      "state": {
+        "joints": {
+          "kind": "arm",
+          "side": "single"
+        }
+      },
+      "action": {
+        "joints": {
+          "kind": "arm",
+          "side": "single"
+        }
+      }
+    },
+    "actions": "absolute"
+  },
+  "training_slots": {
+    "state": {
+      "right_arm": [
+        0,
+        6
+      ]
+    },
+    "action": {
+      "right_arm": [
+        0,
+        6
+      ]
+    },
+    "use_eef": false
+  },
+  "source_hashes": {
+    "robots/config.py": "fe00733327a1d83098a24853156b3d668252d368d764199dee7c5ed374b4586a",
+    "robots/types.py": "7d7b09aa74583844f1086a0263c13c23ed9f080a776f4a82f7c5a0e6e38086a1",
+    "dream/client_ik.py": "54301f1ca92b238699d8bf65e7c8abb89e8c42972304cf983ee466b5fecb90cc",
+    "dream/arm_file.py": "bd5c63398e7d045e9428bea5dfc6b4956055df738548e088d8db8c895ea99b2b",
+    "shared/datasets/embodiments.py": "8b932d57cc1b739c4de5a4ed9687fd867adda030b0f6afd593e9f0acfcc28a8d",
+    "dream_ik/specs.py": "3a1eeae316ddab2039daaf160297c58d25b7f03865853dbe0d934bd0539d41b3"
+  },
+  "method": "Imported the standard-library-only embodiment schema. Config and camera failure checks execute source-extracted pure functions, not the full station or client. Model camera roles are a contract fixture based on the documented base-model cameras. The IK selector check executes the actual extracted check_config function and constants for four internal single-arm names.",
+  "conclusion": {
+    "stock_station": "requires two arms",
+    "single_arm_joint_finetuning_schema": "accepted, including a joint-only fixed tool body",
+    "single_arm_eef_training_schema": "unsupported",
+    "base_zero_shot_one_arm_operation": "not verified or documented as supported",
+    "cloud_training_and_inference": "not run",
+    "internal_single_arm_zero_shot_specs": "Present with an idle YAM side; names not exposed by public client IK selector"
+  },
+  "hardware_io": false,
+  "cloud_calls": 0,
+  "independent_review": {
+    "task": "/root/single_arm_check",
+    "requested_model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "result": "Confirms one-arm joint fine-tune schema/client support, stock bimanual loop, and unverified public one-arm zero-shot route"
+  },
+  "overhead_only_followup": {
+    "recorded_at_utc": "2026-10-20T09:27:03.987347+00:00",
+    "cases": [
+      {
+        "joints": 6,
+        "gripper": false,
+        "cameras": [
+          "overhead"
+        ],
+        "registration": "PASS",
+        "joint_training_validation": "PASS",
+        "use_eef": false,
+        "trained_state": {
+          "right_arm": [
+            0,
+            6
+          ]
+        },
+        "trained_action": {
+          "right_arm": [
+            0,
+            6
+          ]
+        }
+      },
+      {
+        "joints": 6,
+        "gripper": true,
+        "cameras": [
+          "overhead"
+        ],
+        "registration": "PASS",
+        "joint_training_validation": "PASS",
+        "use_eef": false,
+        "trained_state": {
+          "right_arm": [
+            0,
+            6
+          ],
+          "right_gripper": [
+            6,
+            7
+          ]
+        },
+        "trained_action": {
+          "right_arm": [
+            0,
+            6
+          ],
+          "right_gripper": [
+            6,
+            7
+          ]
+        }
+      }
+    ],
+    "scope": "Executed actual released pure schema and joint-training validators; no cloud registration, fine-tuning, inference, rendering, or hardware I/O."
+  }
+}
