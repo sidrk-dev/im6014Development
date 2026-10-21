@@ -23,12 +23,18 @@ The future runtime sends images, measured independent state, and task text to a 
 
 Local `.worktrees/controller-*` folders belong to independent checkouts associated with a separate workbench repository. This cleanup preserves them unchanged. Their accepted code and ledger must be reconciled at SA04; they are not in a fresh public clone. Unaccepted C13-C16 requirements remain explicit in the roadmap checklist.
 
+## Selected simulation
+
+`examples/rolling_reach_arm` selects `sim_rolling_reach_v1`: three logical coordinates (base yaw and two rolling bends), five internal hinges, a payload, table, red marker, and overhead RGB camera. `scene.py` owns the assumed model and generated manifest; `reach.py` owns the hand-coded image-feedback baseline; `verify.py` checks loaded mechanics, import, and reaching. Its governor is a reference-test component and does not accept SA04 shared-controller obligations.
+
+This independently designed simulation needs no private CAD, measured hardware masses, or motor port. It models ideal no-slip circular rolling and assumed tendon actuation. It is not a calibrated digital twin.
+
 ## Model assets
 
-The public example is self-contained. The CAD-derived prototype URDF currently exists only in a local development checkout and is not shipped here. The [SA01 contract](single-arm-contract.json) freezes the selected prototype interfaces; SA03 must acquire a reviewed asset bundle, hash its provenance, and validate physics. Do not substitute the two-coordinate sample for the three-coordinate prototype. Final rolling geometry is a separate RC01-RC04 revision.
+The public example is self-contained. The CAD-derived prototype URDF currently exists only in a local development checkout and is not shipped here. The [prototype contract](single-arm-contract.json) and its import evidence remain scoped to that earlier CAD profile. Current simulation uses the [reaching scenario](../examples/rolling_reach_arm/README.md); its generated manifest records assumed geometry, masses, camera, timing, and task. Final hardware-matched rolling geometry remains a separate RC01-RC04 revision.
 
 ## Results and history
 
-Bench outputs live in `results/bench`. Example outputs live in `examples/rolling_contact_arm/results`. Both are ignored. Selected JSON reports and images are versioned in `reports/` and `docs/assets/`.
+Bench outputs live in `results/bench`. Example outputs live in each example's ignored `results/` directory. Both are ignored. Selected JSON reports and images are versioned in `reports/` and `docs/assets/`.
 
 `reports/research` and `docs/archive` retain dated investigations and superseded plans. Historical records preserve original paths and revision-limited claims; they are not current instructions. Vendor ZIPs, raw telemetry, and machine-specific launchers are retained in ignored `.local/artifacts`. Independent checkouts and environments stay in place.

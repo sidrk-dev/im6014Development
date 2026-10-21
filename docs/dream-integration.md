@@ -6,7 +6,9 @@ Use one arm, one fixed scene camera with role `overhead`, and measured independe
 
 Freeze build/model identity, actual independent count/order, signs/zeros, radians, tool, limits, absolute-target meaning, and timing. Passive rolling hinges stay internal. Gripper channels exist only for a build with a gripper.
 
-The [sample embodiment](../examples/rolling_contact_arm/dream_embodiment.json) declares a two-value `arm` part with `side: single` in state/action, one overhead video feature, and absolute actions. `[0, 2]` is a vector span, not a limit. The [SA01 contract](single-arm-contract.json) freezes the selected three-coordinate prototype profile, joint order, overhead camera, absolute targets, timing, and success rule; final coordinates follow RC01. Its [generated reference](single-arm-contract.md) is the readable form.
+Current simulation selects [sim_rolling_reach_v1](../examples/rolling_reach_arm/README.md), with state/action order `[base_yaw, shoulder_bend, elbow_bend]` in radians, absolute logical targets, one `overhead` camera, and no gripper. Its model/task contract is generated from `scene.py`. The existing SDK fixtures below remain evidence for the earlier profiles; SA02 must validate this selected profile before SA04 integration. Equal vector width alone does not establish profile compatibility.
+
+The [sample embodiment](../examples/rolling_contact_arm/dream_embodiment.json) declares a two-value `arm` part with `side: single` in state/action, one overhead video feature, and absolute actions. `[0, 2]` is a vector span, not a limit. The [SA01 contract](single-arm-contract.json) freezes the earlier three-coordinate CAD prototype profile, joint order, overhead camera, absolute targets, timing, and success rule; final coordinates follow RC01. Its [generated reference](single-arm-contract.md) is the readable form.
 
 Dream client 1.0.3 maps `state.arm` to its internal right-arm slot and restores `reply["per_key"]["action.arm"]`. The [SA02 client verification](../reports/research/single-arm/2026-10-20-sa02-client-verification.json) records the pinned offline check of that mapping for the three-wide prototype contract. Omit `ik` and `robot="other_embodiment"` for this route. Dream's stock IK importer rejects moving mimic joints. The local simulator/controller owns rolling constraints.
 
@@ -37,7 +39,7 @@ The [local results](../reports/rolling-contact/README.md) cover mechanics, SDK b
 
 Before a hosted job, verify account access, actual model identity, processing, data recording, current price, and authorized funding. Begin with one submission and retain its job ID to avoid duplicate retries. A polling timeout is not a spending cap. Do not assume priced jobs can be cancelled or simulation fine-tunes can initialize physical-data training.
 
-RC03 precedes final-profile demonstrations; RC04 precedes final-profile upload. Prototype work has its own chain. Physical data/trials require an accepted task-capable actual build, calibration, loaded-joint/tool/camera checks, and explicit live scope. Absent future wrists/scoop are not first-task prerequisites.
+RC03 precedes hardware-matched final-profile demonstrations; RC04 precedes that profile's upload. The current assumed simulation follows SA01-SA10 without final CAD or physical calibration. Its RGB reference baseline is not a demonstration dataset or Dream policy. Physical data/trials require an accepted task-capable actual build, calibration, loaded-joint/tool/camera checks, and explicit live scope. Absent future wrists/scoop are not first-task prerequisites.
 
 Before SA14, freeze a separate physical held-out set, measured tolerance, timeout, and stopping criteria. Report all attempts and interventions independently of simulation results.
 

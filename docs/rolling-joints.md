@@ -1,6 +1,6 @@
 # Rolling-contact mechanism model
 
-The current CAD arm is a three-moving-coordinate prototype. The final shoulder and elbow will use rolling-contact joints. The [sample](../examples/rolling_contact_arm/README.md), prototype, and final model have distinct identities and datasets. The [SA01 contract](single-arm-contract.json) freezes the selected prototype's joint order and policy interface; this page covers mechanism relations. Final geometry and drive relationships remain undefined.
+The selected [reaching simulator](../examples/rolling_reach_arm/README.md), `sim_rolling_reach_v1`, has base yaw and ideal circular rolling shoulder/elbow joints. Its three logical coordinates drive five internal hinges. It uses independently chosen geometry and masses so simulation can proceed before hardware exists. The earlier CAD prototype, two-bend [sample](../examples/rolling_contact_arm/README.md), and eventual hardware-matched model retain separate identities and evidence. Final physical geometry and drive relationships remain undefined.
 
 ## Ideal circular pair
 
@@ -32,10 +32,16 @@ tau_m = transpose(J) * tau_q
 
 Verify constant ratios where applicable. Nonlinear or coupled drives require the derivative in velocity, effort, gain, feedback-estimation, and release checks. A motor encoder may only estimate link angle through a compliant transmission.
 
+## Selected reaching scene
+
+The 320/280 mm links are mounted vertically at a 350 mm shoulder height with a yaw hub and 100 g tool. The overhead camera supplies 320×240 RGB at 30 Hz; physics runs at 3000 Hz and reference control at 100 Hz. The goal is 40 mm above the tabletop at the visible red marker XY; the tool must stay within 20 mm for one second before a 20 second timeout.
+
+Parent-run checks cover 567 combined poses, loaded dynamics, rolling contact-point velocity, virtual work, URDF mimic import, and actual image-feedback adaptation to marker shifts. The URDF uses boxes/cylinders while native MJCF uses capsules; importer checks do not prove contact-equivalent behavior. The reference reacher is hand-coded and cannot pass learned-policy gates. See the [verification record](../reports/rolling-reach/README.md).
+
 ## Final-model acceptance
 
 RC01 freezes final CAD, profiles/radii, centers/contact frames, axes, signs/zeros, travel, independent coordinates, drive relationships, and mass/inertia/collision provenance. RC02 compares full poses across limits and combined configurations against CAD or independent geometry, checks finite-difference Jacobians/coupling, and evaluates load behavior and timestep sensitivity. Assign every mass once.
 
-RC03 integrates the drive mapping into the shared controller; RC04 freezes the corresponding Dream profile and data revision. The [ledger](milestones.tsv) owns dependencies and evidence. Prototype work continues without final CAD.
+RC03 integrates the drive mapping into the shared controller; RC04 freezes the corresponding Dream profile and data revision. The [ledger](milestones.tsv) owns dependencies and evidence. The selected assumed simulation proceeds without final CAD; RC gates apply when matching the final physical mechanism.
 
 The [sample reports](../reports/rolling-contact/README.md) state actual numerical limits. MuJoCo documents [joint equality](https://mujoco.readthedocs.io/en/stable/XMLreference.html#equality-joint) and its [URDF workflow](https://mujoco.readthedocs.io/en/stable/modeling.html#urdf-extensions). The [general rolling-contact paper](https://arxiv.org/html/2409.00616v1) covers geometry-specific surfaces.
