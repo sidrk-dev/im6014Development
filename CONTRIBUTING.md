@@ -42,6 +42,7 @@ python3.14 -m venv .venv-rolling
 .venv-rolling/bin/python -m pip install -r examples/rolling_contact_arm/requirements.txt
 MUJOCO_GL=egl .venv-rolling/bin/python examples/rolling_reach_arm/verify.py --render
 MUJOCO_GL=egl .venv-rolling/bin/python examples/rolling_reach_arm/verify_dream.py
+.venv-rolling/bin/python -m unittest tests.test_rolling_drive_semantics
 MUJOCO_GL=egl .venv-rolling/bin/python examples/rolling_reach_arm/reach.py --episodes 4 --seed 0
 ```
 

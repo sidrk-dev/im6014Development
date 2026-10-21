@@ -36,7 +36,7 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y libosmesa6
       - run: python -m pip install -r examples/rolling_contact_arm/requirements.txt
       - run: python -m pip check
-      - run: python -m unittest tests.test_single_arm_contract tests.test_sa03_prototype tests.test_rolling_dream_contract
+      - run: python -m unittest tests.test_single_arm_contract tests.test_sa03_prototype tests.test_rolling_dream_contract tests.test_rolling_drive_semantics
       - run: python scripts/check_sa02_client.py
       - run: python examples/rolling_reach_arm/verify_dream.py
       - run: python examples/rolling_contact_arm/verify.py --render
