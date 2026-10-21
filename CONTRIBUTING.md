@@ -33,6 +33,19 @@ To check the external prototype import for SA03, supply the frozen local assets:
 
 The checker verifies asset hashes, preserves fixed links and visuals, and compares MuJoCo link poses with independent URDF forward kinematics. Generated imports and reports stay under ignored `results/`. A pass covers provenance and kinematics only. Placeholder inertias, missing collisions, and unfinished tool, camera, and marker definitions keep SA03 incomplete. The offline baseline skips the simulator-dependent unit cases when that separate environment is absent.
 
+## Run the selected hardware-free reaching scene
+
+Use the same pinned simulation requirements in a separate environment:
+
+```bash
+python3.14 -m venv .venv-rolling
+.venv-rolling/bin/python -m pip install -r examples/rolling_contact_arm/requirements.txt
+MUJOCO_GL=egl .venv-rolling/bin/python examples/rolling_reach_arm/verify.py --render
+MUJOCO_GL=egl .venv-rolling/bin/python examples/rolling_reach_arm/reach.py --episodes 4 --seed 0
+```
+
+Use `MUJOCO_GL=osmesa` with libOSMesa on machines without EGL. These checks need no hardware, private CAD, API key, or hosted call. They verify a hand-coded RGB reference baseline. The [example guide](examples/rolling_reach_arm/README.md) documents assumptions and the generated manifest. Earlier prototype checks above retain their own evidence; they do not block this assumed simulator.
+
 ## Place changes with their owner
 
 `im6014_bench/motor.py` owns packet units, encoding, feedback checks, and the bounded bench CLI. `session.py` owns serial access and lifecycle transitions. `dashboard.py` owns Qt presentation. Preserve one serial owner and disconnected/disarmed startup.
@@ -48,7 +61,7 @@ python scripts/check_repository.py --write-roadmap
 python scripts/check_repository.py
 ```
 
-Keep stable IDs. A gate needs parent-run evidence for the declared build/profile before its status changes. Final rolling profiles additionally obey `final_profile_requires`; prototype work does not wait for final CAD. GitHub issues are execution work packages linked to those IDs, not a second acceptance ledger.
+Keep stable IDs. A gate needs parent-run evidence for the declared build/profile before its status changes. Hardware-matched final rolling profiles additionally obey `final_profile_requires`; the selected assumed simulator does not wait for final CAD. GitHub issues are execution work packages linked to those IDs, not a second acceptance ledger.
 
 ## Submit a reviewable change
 
