@@ -1,6 +1,6 @@
 # im6014_control
 
-Transport-free C12 joint-controller core. The `JointCore` lifecycle, ownership,
+Transport-free joint-controller core, based on the reviewed C12 source. The `JointCore` lifecycle, ownership,
 and fault state machine is thread-confined over frozen domain records; mapping,
 reference planning, and codec functions are pure. This package imports no
 serial transport and never opens a port.
@@ -25,12 +25,22 @@ Migrated from committed C12 source at
 `227ec4ecc712c0cee48a50c9e234e70dd065b8e3`. See `provenance.json` for the
 source-to-destination map and original source/test SHA256 values.
 
-This package contains the committed C12 pure controller closure only. C13 effort
-prediction, C14 fault acceptance, C15 timing, C16 station independence, and SA04
-rolling-simulator station integration are **not accepted**. The source review
-evidence is software-only; this is not a physically verified or hardware-ready
-station, and no second bench/transport owner is added. The old bench launcher is
-untouched.
+The initial C12 port is recorded separately from subsequent effort changes.
+The required `JointSpec.max_effort_nm` bounds the combined decoded stiffness,
+damping, and feedforward demand at measured position and velocity. The planner
+suppresses the complete vector if any joint exceeds its limit. It preserves
+admissible encoding inputs separately from decoded gain values and performs a
+post-computation release check before committing reference history.
+
+Measured effort above the same scalar limit latches an attributed fault and
+revokes ownership. Healthy packets, Stop, and reconnect do not clear it. Recovery
+requires acknowledgment, fresh healthy Stop feedback, and a new explicit arm.
+This scalar is not a continuous-duty or thermal rating.
+
+[Effort verification](../reports/controller-effort/README.md) describes the
+software checks. C14-C16 acceptance and SA04 rolling-simulator station integration
+remain open. No physical drive or thermal qualification follows from these
+checks; the package adds no transport owner.
 
 Accepted C12 behavior is preserved, including one-shot reference consumption,
 codec quantization and gain/torque caps, and release-time vetoes. A future station
@@ -45,4 +55,4 @@ From the repository root, using only the standard library:
 python -m unittest discover -s tests/control -t .
 ```
 
-This runs the 108 migrated C12 regression tests against this package.
+This runs the 108 migrated C12 regression tests plus effort, fault, and release-barrier regressions against this package. Legacy fixtures use explicit wide test caps to keep their original gates active; applications must supply their own justified limits.

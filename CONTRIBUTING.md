@@ -9,7 +9,7 @@ source .venv/bin/activate
 scripts/check_offline.sh
 ```
 
-This checks the 108 portable controller regressions, packet encoding, fake serial behavior, Qt lifecycle/UI behavior, CLI help, the frozen single-arm contract and its mutation regressions, roadmap consistency, and active documentation links. It performs no physical motor communication. Screenshots and the UI summary go to `results/bench/`.
+This checks the portable controller regressions and effort checks, packet encoding, fake serial behavior, Qt lifecycle/UI behavior, CLI help, the frozen single-arm contract and its mutation regressions, roadmap consistency, and active documentation links. It performs no physical motor communication. Screenshots and the UI summary go to `results/bench/`.
 
 Use a separate environment for the [rolling sample](examples/rolling_contact_arm/README.md). Its checks exercise MuJoCo, the actual Dream SDK with mocked transport, and local dataset upload validation. They make no hosted calls and require no API key.
 
@@ -31,7 +31,7 @@ To check the external prototype import for SA03, supply the frozen local assets:
   --output-dir results/single-arm/sa03-prototype
 ```
 
-The checker verifies asset hashes, preserves fixed links and visuals, and compares MuJoCo link poses with independent URDF forward kinematics. Generated imports and reports stay under ignored `results/`. A pass covers provenance and kinematics only. Placeholder inertias, missing collisions, and unfinished tool, camera, and marker definitions keep SA03 incomplete. The offline baseline skips the simulator-dependent unit cases when that separate environment is absent.
+The checker verifies asset hashes, preserves fixed links and visuals, and compares MuJoCo link poses with independent URDF forward kinematics. Generated imports and reports stay under ignored `results/`. A pass covers provenance and kinematics only. For that earlier CAD profile, placeholder inertias, missing collisions, and unfinished tool, camera, and marker definitions remain unverified. The selected assumed simulator has separate SA03 acceptance below. The offline baseline skips the simulator-dependent unit cases when that separate environment is absent.
 
 ## Run the selected hardware-free reaching scene
 
@@ -53,7 +53,7 @@ Use `MUJOCO_GL=osmesa` with libOSMesa on machines without EGL. These checks need
 python -m unittest discover -s tests/control -t .
 ```
 
-This standard-library suite imports `im6014_control` directly. It preserves the reviewed C12 software behavior; it does not connect the simulator station, accept unfinished effort/timing gates, or open a motor port. See the [port record](reports/controller-core/README.md).
+This standard-library suite imports `im6014_control` directly. It preserves reviewed C12 behavior and checks scalar decoded-command effort, measured faults, and terminal release vetoes. It does not connect the simulator station, accept remaining timing/station gates, or open a motor port. See the [port record](reports/controller-core/README.md).
 
 ## Place changes with their owner
 

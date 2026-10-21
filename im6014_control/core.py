@@ -29,6 +29,8 @@ from .records import (
     Target,
 )
 from .reference import (
+    _applied_reference,
+    _predicted_effort,
     plan_reference,
     position_rates_at_release,
     project_joint_target,
@@ -149,6 +151,7 @@ class JointCore:
         timeout: bool = False,
         communication_error: CommunicationFailure | None = None,
         stale: bool = False,
+        effort_limit_exceeded: bool = False,
     ) -> None:
         existing = self._faults.get(name) or JointFault(name, motor_id)
         communication_errors = existing.communication_errors
@@ -162,6 +165,7 @@ class JointCore:
             stale=existing.stale or stale,
             communication_error=communication_error or existing.communication_error,
             communication_errors=communication_errors,
+            effort_limit_exceeded=existing.effort_limit_exceeded or effort_limit_exceeded,
         )
         self._faults[name] = fault
         self._state = State.FAULT
@@ -250,13 +254,15 @@ class JointCore:
             return self._rejected(DecisionCode.INVALID_OBSERVATION)
 
         self._observations[index] = JointStatus(sample, status, self._now())
-        if not status.healthy:
+        effort_limit_exceeded = abs(sample.tau_nm) > self._specs[index].max_effort_nm
+        if not status.healthy or effort_limit_exceeded:
             self._latch_joint_fault(
                 self._specs[index].name,
                 motor_id,
                 errors=status.errors,
                 warnings=status.warnings,
                 timeout=status.timeout,
+                effort_limit_exceeded=effort_limit_exceeded,
             )
         return self._accepted()
 
@@ -415,18 +421,11 @@ class JointCore:
 
         try:
             for spec, joint_target in zip(self._specs, target.joints):
-                output = spec.mapping.to_output(joint_target)
-                command(
-                    spec.motor_id,
-                    mode=1,
-                    rpm=output.rpm,
-                    kd=output.kd,
-                    torque=output.tau_nm,
-                    watchdog=True,
-                    position=output.q_rad,
-                    kp=output.kp,
-                )
-        except ValueError:
+                if abs(joint_target.tau_nm) > spec.max_effort_nm:
+                    return self._rejected(DecisionCode.EFFORT_LIMIT)
+                if abs(_applied_reference(spec, joint_target).tau_nm) > spec.max_effort_nm:
+                    return self._rejected(DecisionCode.EFFORT_LIMIT)
+        except (ArithmeticError, ValueError):
             return self._rejected(DecisionCode.INVALID_ARGUMENT)
 
         if target.sequence <= self._last_sequence:
@@ -441,7 +440,7 @@ class JointCore:
             return None
         now = self._now()
         self._tick_at(now)
-        if self._state is State.FAULT or any(not joint.healthy for joint in self._observations):
+        if self._state not in (State.ARMED, State.MOVING) or any(not joint.healthy for joint in self._observations):
             return None
         pending = self._pending_target
         if pending is None:
@@ -457,28 +456,48 @@ class JointCore:
         if now >= target.expires_at_s:
             self._pending_target = None
             return None
-        if self._history is None:
+        history = self._history
+        if history is None:
             return None
 
-        elapsed = now - self._history.issued_at_s
-        measured_positions = tuple(joint.sample.q_rad for joint in self._observations)
+        observations = tuple(self._observations)
+        source = self._source
+        state = self._state
+        ownership = self._ownership
+        generation = self._ownership_generation
+        elapsed = now - history.issued_at_s
+        measured_positions = tuple(joint.sample.q_rad for joint in observations)
         candidate_joints = plan_reference(
             specs=self._specs,
             requested=target.joints,
-            previous=self._history.joints,
-            previous_rates=self._history.position_rates_rad_s,
+            previous=history.joints,
+            previous_rates=history.position_rates_rad_s,
             measured_positions=measured_positions,
+            measured_velocities=tuple(joint.sample.dq_rad_s for joint in observations),
             elapsed_s=elapsed,
             max_step_s=self._max_reference_step_s,
-            allow_bootstrap=(self._history.kind == "seed"),
+            allow_bootstrap=(history.kind == "seed"),
         )
         if candidate_joints is None:
+            return None
+
+        try:
+            efforts = tuple(
+                _predicted_effort(_applied_reference(spec, cand), obs.sample.q_rad, obs.sample.dq_rad_s)
+                for spec, cand, obs in zip(self._specs, candidate_joints, observations)
+            )
+        except (ArithmeticError, ValueError):
             return None
 
         release_now = self._now()
         self._tick_at(release_now)
         if (
-            self._state not in (State.ARMED, State.MOVING)
+            self._state is not state
+            or self._source is not source
+            or self._history is not history
+            or self._ownership is not ownership
+            or self._ownership_generation != generation
+            or any(current is not captured for current, captured in zip(self._observations, observations))
             or any(not joint.healthy for joint in self._observations)
         ):
             return None
@@ -495,18 +514,20 @@ class JointCore:
             self._pending_target = None
             return None
 
-        release_elapsed = release_now - self._history.issued_at_s
+        release_elapsed = release_now - history.issued_at_s
         rates = position_rates_at_release(
             specs=self._specs,
-            previous=self._history.joints,
-            previous_rates=self._history.position_rates_rad_s,
+            previous=history.joints,
+            previous_rates=history.position_rates_rad_s,
             candidate=candidate_joints,
             elapsed_s=release_elapsed,
         )
         if rates is None:
             return None
 
-        for spec, cand, obs in zip(self._specs, candidate_joints, self._observations):
+        if any(abs(effort) > spec.max_effort_nm for spec, effort in zip(self._specs, efforts)):
+            return None
+        for spec, cand, obs in zip(self._specs, candidate_joints, observations):
             if obs.sample is None or not math.isfinite(obs.sample.q_rad):
                 return None
             if abs(cand.q_rad - obs.sample.q_rad) > spec.max_measured_lead_rad:

@@ -172,18 +172,18 @@ class ReferenceLeadTests(unittest.TestCase):
         mapping = JointMap(1, 1, 0.0)
         limits = PositionLimits(-2.0, 2.0)
         with self.assertRaises(TypeError):
-            JointSpec("J1", 0, mapping, limits, 1.0, 2.0)
+            JointSpec("J1", 0, mapping, limits, 1.0, 2.0, max_effort_nm=1e100)
         for bad in (True, False, 0, 0.0, -1.0, -0.001, math.nan, math.inf, -math.inf, "0.1", None, 10**400):
             with self.subTest(bad=repr(bad)), self.assertRaises(ValueError):
-                JointSpec("J1", 0, mapping, limits, 1.0, 2.0, max_measured_lead_rad=bad)
+                JointSpec("J1", 0, mapping, limits, 1.0, 2.0, max_measured_lead_rad=bad, max_effort_nm=1e100)
         for good in (0.001, 0.05, 1.0, 100.0):
-            spec = JointSpec("J1", 0, mapping, limits, 1.0, 2.0, max_measured_lead_rad=good)
+            spec = JointSpec("J1", 0, mapping, limits, 1.0, 2.0, max_measured_lead_rad=good, max_effort_nm=1e100)
             self.assertEqual(spec.max_measured_lead_rad, float(good))
 
     def test_plan_reference_bounds_forward_and_reverse_lead(self):
         mapping = JointMap(1, 1, 0.0)
         limits = PositionLimits(-5.0, 5.0)
-        spec = JointSpec("J1", 0, mapping, limits, 10.0, 50.0, max_measured_lead_rad=0.05)
+        spec = JointSpec("J1", 0, mapping, limits, 10.0, 50.0, max_measured_lead_rad=0.05, max_effort_nm=1e100)
         prev = JointTarget(0.0, 0.0, 0.0, 1.0, 0.1)
 
         # Distant forward goal: requested q=2.0, q_meas=0.0, lead=0.05 -> candidate q must not exceed 0.05
@@ -196,6 +196,7 @@ class ReferenceLeadTests(unittest.TestCase):
             elapsed_s=0.1,
             max_step_s=0.1,
             allow_bootstrap=False,
+            measured_velocities=(0.0,) * len((spec,)),
         )
         self.assertIsNotNone(fwd_cand)
         self.assertLessEqual(fwd_cand[0].q_rad, 0.05)
@@ -211,6 +212,7 @@ class ReferenceLeadTests(unittest.TestCase):
             elapsed_s=0.1,
             max_step_s=0.1,
             allow_bootstrap=False,
+            measured_velocities=(0.0,) * len((spec,)),
         )
         self.assertIsNotNone(rev_cand)
         self.assertGreaterEqual(rev_cand[0].q_rad, -0.05)
@@ -221,28 +223,31 @@ class ReferenceLeadTests(unittest.TestCase):
         prev = JointTarget(0.0, 0.0, 0.0, 1.0, 0.1)
 
         # Case A: lead is tightest bound (limits 1.0, V*h 0.2, lead 0.03)
-        spec_a = JointSpec("J1", 0, mapping, PositionLimits(-1.0, 1.0), 2.0, 10.0, max_measured_lead_rad=0.03)
+        spec_a = JointSpec("J1", 0, mapping, PositionLimits(-1.0, 1.0), 2.0, 10.0, max_measured_lead_rad=0.03, max_effort_nm=1e100)
         cand_a = plan_reference(
             (spec_a,), (JointTarget(0.5, 0.0, 0.0, 1.0, 0.1),), (prev,), (0.0,), (0.0,),
             elapsed_s=0.1, max_step_s=0.1, allow_bootstrap=False,
+            measured_velocities=(0.0,) * len((spec_a,)),
         )
         self.assertIsNotNone(cand_a)
         self.assertLessEqual(cand_a[0].q_rad, 0.03)
 
         # Case B: velocity is tightest bound (limits 1.0, V*h 0.02, lead 0.1)
-        spec_b = JointSpec("J1", 0, mapping, PositionLimits(-1.0, 1.0), 0.2, 10.0, max_measured_lead_rad=0.1)
+        spec_b = JointSpec("J1", 0, mapping, PositionLimits(-1.0, 1.0), 0.2, 10.0, max_measured_lead_rad=0.1, max_effort_nm=1e100)
         cand_b = plan_reference(
             (spec_b,), (JointTarget(0.5, 0.0, 0.0, 1.0, 0.1),), (prev,), (0.0,), (0.0,),
             elapsed_s=0.1, max_step_s=0.1, allow_bootstrap=False,
+            measured_velocities=(0.0,) * len((spec_b,)),
         )
         self.assertIsNotNone(cand_b)
         self.assertLessEqual(cand_b[0].q_rad, 0.02)
 
         # Case C: position limit is tightest bound (limits [-0.01, 0.01], V*h 0.2, lead 0.1)
-        spec_c = JointSpec("J1", 0, mapping, PositionLimits(-0.01, 0.01), 2.0, 10.0, max_measured_lead_rad=0.1)
+        spec_c = JointSpec("J1", 0, mapping, PositionLimits(-0.01, 0.01), 2.0, 10.0, max_measured_lead_rad=0.1, max_effort_nm=1e100)
         cand_c = plan_reference(
             (spec_c,), (JointTarget(0.5, 0.0, 0.0, 1.0, 0.1),), (prev,), (0.0,), (0.0,),
             elapsed_s=0.1, max_step_s=0.1, allow_bootstrap=False,
+            measured_velocities=(0.0,) * len((spec_c,)),
         )
         self.assertIsNotNone(cand_c)
         self.assertLessEqual(cand_c[0].q_rad, 0.01)
@@ -253,7 +258,7 @@ class ReferenceLeadTests(unittest.TestCase):
         # Deceleration corridor requires moving forward at least e * (2.0 - 1.0*0.02) = 0.0396 rad -> q >= 0.5396 rad.
         # But measured position is lagging at 0.40 rad with lead 0.05 -> q <= 0.45 rad.
         # The lead bound (0.45) is below the minimum deceleration point (0.5396) -> disjoint empty corridor!
-        spec = JointSpec("J1", 0, mapping, PositionLimits(-2.0, 2.0), 2.0, 1.0, max_measured_lead_rad=0.05)
+        spec = JointSpec("J1", 0, mapping, PositionLimits(-2.0, 2.0), 2.0, 1.0, max_measured_lead_rad=0.05, max_effort_nm=1e100)
         prev = JointTarget(0.5, 2.0, 0.0, 1.0, 0.1)
 
         result = plan_reference(
@@ -265,28 +270,30 @@ class ReferenceLeadTests(unittest.TestCase):
             elapsed_s=0.02,
             max_step_s=0.02,
             allow_bootstrap=False,
+            measured_velocities=(0.0,) * len((spec,)),
         )
         self.assertIsNone(result)
 
     def test_plan_reference_invalid_measured_positions(self):
         mapping = JointMap(1, 1, 0.0)
-        spec = JointSpec("J1", 0, mapping, PositionLimits(-1.0, 1.0), 1.0, 2.0, max_measured_lead_rad=0.1)
+        spec = JointSpec("J1", 0, mapping, PositionLimits(-1.0, 1.0), 1.0, 2.0, max_measured_lead_rad=0.1, max_effort_nm=1e100)
         prev = JointTarget(0.0, 0.0, 0.0, 1.0, 0.1)
         req = JointTarget(0.5, 0.0, 0.0, 1.0, 0.1)
 
         # Mismatched length
-        self.assertIsNone(plan_reference((spec,), (req,), (prev,), (0.0,), (), 0.02, 0.02, False))
-        self.assertIsNone(plan_reference((spec,), (req,), (prev,), (0.0,), (0.0, 0.0), 0.02, 0.02, False))
+        self.assertIsNone(plan_reference((spec,), (req,), (prev,), (0.0,), (), 0.02, 0.02, False, measured_velocities=(0.0,) * len((spec,))))
+        self.assertIsNone(plan_reference((spec,), (req,), (prev,), (0.0,), (0.0, 0.0), 0.02, 0.02, False, measured_velocities=(0.0,) * len((spec,))))
 
         # Invalid element types
         for bad_q in (True, False, math.nan, math.inf, -math.inf, "0.0", None):
             with self.subTest(bad_q=repr(bad_q)):
-                self.assertIsNone(plan_reference((spec,), (req,), (prev,), (0.0,), (bad_q,), 0.02, 0.02, False))
+                self.assertIsNone(plan_reference((spec,), (req,), (prev,), (0.0,), (bad_q,), 0.02, 0.02, False, measured_velocities=(0.0,) * len((spec,))))
 
     def test_distant_target_accepted_at_submit_time(self):
         spec = JointSpec(
             "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0),
             max_velocity_rad_s=1.0, max_acceleration_rad_s2=2.0, max_measured_lead_rad=0.05,
+            max_effort_nm=1e100,
         )
         core, station, clock = armed_core((spec,), (0.0,))
 
@@ -306,6 +313,7 @@ class ReferenceLeadTests(unittest.TestCase):
         spec = JointSpec(
             "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0),
             max_velocity_rad_s=1.0, max_acceleration_rad_s2=10.0, max_measured_lead_rad=0.01,
+            max_effort_nm=1e100,
         )
         core, station, clock = armed_core((spec,), (0.0,), max_step=0.02)
 
@@ -350,8 +358,8 @@ class ReferenceLeadTests(unittest.TestCase):
         self.assertGreater(ref_advance.joints[0].q_rad, 0.01)
 
     def test_multi_joint_coupling_suppresses_whole_vector(self):
-        spec1 = JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0), 1.0, 2.0, max_measured_lead_rad=0.5)
-        spec2 = JointSpec("J2", 1, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0), 1.0, 2.0, max_measured_lead_rad=0.02)
+        spec1 = JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0), 1.0, 2.0, max_measured_lead_rad=0.5, max_effort_nm=1e100)
+        spec2 = JointSpec("J2", 1, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0), 1.0, 2.0, max_measured_lead_rad=0.02, max_effort_nm=1e100)
         core, station, clock = armed_core((spec1, spec2), (0.0, 0.0), max_step=0.02)
 
         # J1 requested 1.0 rad (has 0.5 lead headroom). J2 requested 1.0 rad but only has 0.02 lead headroom.
@@ -374,7 +382,7 @@ class ReferenceLeadTests(unittest.TestCase):
             self.assertLessEqual(ref_coupled.joints[1].q_rad, 0.02)
 
     def test_release_time_lead_check_veto(self):
-        spec = JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0), 1.0, 2.0, max_measured_lead_rad=0.05)
+        spec = JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0), 1.0, 2.0, max_measured_lead_rad=0.05, max_effort_nm=1e100)
         core, station, clock = armed_core((spec,), (0.0,), max_step=0.02)
 
         clock.value = 0.02
@@ -409,7 +417,7 @@ class ReferenceLeadTests(unittest.TestCase):
                 with self.subTest(reduction=reduction, direction=direction):
                     mapping = JointMap(reduction, direction, 0.0)
                     limits = PositionLimits(-2.0, 2.0)
-                    spec = JointSpec("J1", 0, mapping, limits, 1.0, 2.0, max_measured_lead_rad=0.05)
+                    spec = JointSpec("J1", 0, mapping, limits, 1.0, 2.0, max_measured_lead_rad=0.05, max_effort_nm=1e100)
                     q_meas = 0.1
                     prev = JointTarget(q_meas, 0.0, 0.0, 1.0, 0.1)
 
@@ -422,6 +430,7 @@ class ReferenceLeadTests(unittest.TestCase):
                         elapsed_s=0.05,
                         max_step_s=0.05,
                         allow_bootstrap=False,
+                        measured_velocities=(0.0,) * len((spec,)),
                     )
                     self.assertIsNotNone(cand)
                     # Candidate must not exceed measured + lead
@@ -439,13 +448,14 @@ class ReferenceLeadTests(unittest.TestCase):
         mapping = JointMap(1, 1, 0.0)
         limits = PositionLimits(-2.0, 2.0)
         lead = 0.05
-        spec = JointSpec("J1", 0, mapping, limits, 5.0, 20.0, max_measured_lead_rad=lead)
+        spec = JointSpec("J1", 0, mapping, limits, 5.0, 20.0, max_measured_lead_rad=lead, max_effort_nm=1e100)
         prev = JointTarget(0.0, 0.0, 0.0, 1.0, 0.1)
 
         # Target at exact boundary (0.05)
         cand_exact = plan_reference(
             (spec,), (JointTarget(lead, 0.0, 0.0, 1.0, 0.1),), (prev,), (0.0,), (0.0,),
             elapsed_s=0.1, max_step_s=0.1, allow_bootstrap=False,
+            measured_velocities=(0.0,) * len((spec,)),
         )
         self.assertIsNotNone(cand_exact)
         self.assertLessEqual(cand_exact[0].q_rad, lead)
@@ -454,12 +464,13 @@ class ReferenceLeadTests(unittest.TestCase):
         cand_beyond = plan_reference(
             (spec,), (JointTarget(lead + 1e-4, 0.0, 0.0, 1.0, 0.1),), (prev,), (0.0,), (0.0,),
             elapsed_s=0.1, max_step_s=0.1, allow_bootstrap=False,
+            measured_velocities=(0.0,) * len((spec,)),
         )
         self.assertIsNotNone(cand_beyond)
         self.assertLessEqual(cand_beyond[0].q_rad, lead)
 
     def test_infeasibility_preserves_state_machine_and_history(self):
-        spec = JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0), 2.0, 1.0, max_measured_lead_rad=0.05)
+        spec = JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0), 2.0, 1.0, max_measured_lead_rad=0.05, max_effort_nm=1e100)
         core, station, clock = armed_core((spec,), (0.0,))
 
         # Inject disjoint observation condition: reference was at 0.0, but measured position jumped to -0.5 rad
@@ -484,7 +495,7 @@ class ReferenceLeadTests(unittest.TestCase):
         self.assertIsNotNone(snap.pending_target)
 
     def test_bootstrap_seed_at_zero_lead_separation(self):
-        spec = JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0), 1.0, 2.0, max_measured_lead_rad=0.05)
+        spec = JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0), 1.0, 2.0, max_measured_lead_rad=0.05, max_effort_nm=1e100)
         core, station, clock = armed_core((spec,), (0.25,))
 
         # Arm seeded position at 0.25 rad. Measured position is 0.25 rad.

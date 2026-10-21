@@ -52,15 +52,15 @@ class PositionLimitTests(unittest.TestCase):
         with self.assertRaises(AttributeError):
             equal.minimum_rad = 0.0
         with self.assertRaises(TypeError):
-            JointSpec("J1", 0, JointMap(1, 1, 0.0))
+            JointSpec("J1", 0, JointMap(1, 1, 0.0), max_effort_nm=1e100)
         with self.assertRaises(ValueError):
-            JointSpec("J1", 0, JointMap(1, 1, 0.0), object(), max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0)
+            JointSpec("J1", 0, JointMap(1, 1, 0.0), object(), max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0, max_effort_nm=1e100)
 
     def test_endpoints_and_zero_width_are_accepted_but_adjacent_values_reject(self):
         limits = (PositionLimits(-0.4, 0.2), PositionLimits(0.1, 0.1))
         specs = (
-            JointSpec("J1", 0, JointMap(1, 1, 0.0), limits[0], max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0),
-            JointSpec("J2", 1, JointMap(1, 1, -0.1), limits[1], max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0),
+            JointSpec("J1", 0, JointMap(1, 1, 0.0), limits[0], max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0, max_effort_nm=1e100),
+            JointSpec("J2", 1, JointMap(1, 1, -0.1), limits[1], max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0, max_effort_nm=1e100),
         )
         core, station, clock = self._armed_station(specs)
         endpoint_target = self._target(core, 0, (
@@ -105,8 +105,8 @@ class PositionLimitTests(unittest.TestCase):
 
     def test_bad_second_joint_rejects_whole_vector_and_does_not_advance_sequence(self):
         specs = (
-            JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-0.5, 0.5), max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0),
-            JointSpec("J2", 1, JointMap(1, 1, 0.0), PositionLimits(-0.25, 0.25), max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0),
+            JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-0.5, 0.5), max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0, max_effort_nm=1e100),
+            JointSpec("J2", 1, JointMap(1, 1, 0.0), PositionLimits(-0.25, 0.25), max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0, max_effort_nm=1e100),
         )
         core, station, _ = self._armed_station(specs)
         pending = self._target(core, 3, (
@@ -134,7 +134,7 @@ class PositionLimitTests(unittest.TestCase):
         self.assertEqual(station.writes, [])
 
     def test_codec_invalid_position_inside_configured_interval_keeps_codec_rejection(self):
-        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), WIDE_LIMITS, max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0),)
+        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), WIDE_LIMITS, max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0, max_effort_nm=1e100),)
         core, station, _ = self._armed_station(specs)
         valid = self._target(core, 1, (JointTarget(0.1, 0.0, 0.0, 1.0, 0.1),))
         self.assertTrue(station.submit(valid).accepted)
@@ -148,7 +148,7 @@ class PositionLimitTests(unittest.TestCase):
         self.assertEqual(station.writes, [])
 
     def test_arm_rejects_measured_pose_outside_interval_without_grant_or_generation_change(self):
-        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-0.05, 0.05), max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0),)
+        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-0.05, 0.05), max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0, max_effort_nm=1e100),)
         core = JointCore(specs, clock=DeterministicClock(0.0), max_reference_step_s=1000000.0)
         station = FakeStation(core)
         self.assertTrue(station.connect().accepted)
@@ -170,7 +170,7 @@ class PositionLimitTests(unittest.TestCase):
             for direction in (-1, 1):
                 with self.subTest(reduction=reduction, direction=direction):
                     mapping = JointMap(reduction, direction, 0.37)
-                    spec = JointSpec("J1", 0, mapping, PositionLimits(-0.5, 0.5), max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0)
+                    spec = JointSpec("J1", 0, mapping, PositionLimits(-0.5, 0.5), max_velocity_rad_s=1000000.0, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0, max_effort_nm=1e100)
                     core, station, clock = self._armed_station((spec,))
                     requested = JointTarget(0.2, 0.0, 0.0, 1.0, 0.1)
                     target = self._target(core, 0, (requested,))
