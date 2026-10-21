@@ -36,6 +36,7 @@ class DecisionCode(str, Enum):
     EXPIRED = "expired"
     INVALID_OWNERSHIP = "invalid_ownership"
     POSITION_LIMIT = "position_limit"
+    EFFORT_LIMIT = "effort_limit"
     DUPLICATE_OR_OLDER = "duplicate_or_older"
 
 
@@ -111,6 +112,7 @@ class JointSpec:
     max_velocity_rad_s: float
     max_acceleration_rad_s2: float
     max_measured_lead_rad: float
+    max_effort_nm: float
 
     def __post_init__(self) -> None:
         if type(self.name) is not str or not self.name.strip():
@@ -154,6 +156,17 @@ class JointSpec:
             raise ValueError("max_measured_lead_rad must be finite and positive")
         object.__setattr__(self, "max_measured_lead_rad", lead)
 
+        effort = self.max_effort_nm
+        if isinstance(effort, bool) or not isinstance(effort, (int, float)):
+            raise ValueError("max_effort_nm must be finite and positive")
+        try:
+            effort = float(effort)
+        except (OverflowError, TypeError, ValueError) as exc:
+            raise ValueError("max_effort_nm must be finite and positive") from exc
+        if not math.isfinite(effort) or effort <= 0.0:
+            raise ValueError("max_effort_nm must be finite and positive")
+        object.__setattr__(self, "max_effort_nm", effort)
+
 @dataclass(frozen=True)
 class JointFault:
     name: str
@@ -164,6 +177,7 @@ class JointFault:
     communication_error: CommunicationFailure | None = None
     stale: bool = False
     communication_errors: tuple[CommunicationFailure, ...] = ()
+    effort_limit_exceeded: bool = False
 
     def __post_init__(self) -> None:
         if type(self.name) is not str or not self.name.strip():
@@ -180,6 +194,8 @@ class JointFault:
             raise ValueError("communication_error must be a CommunicationFailure or None")
         if type(self.stale) is not bool:
             raise ValueError("stale must be a bool")
+        if type(self.effort_limit_exceeded) is not bool:
+            raise ValueError("effort_limit_exceeded must be a bool")
         if type(self.communication_errors) is not tuple or any(
             not isinstance(c, CommunicationFailure) for c in self.communication_errors
         ):

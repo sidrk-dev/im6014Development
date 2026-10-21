@@ -171,18 +171,19 @@ class ReferenceAccelerationTests(unittest.TestCase):
         mapping = JointMap(1, 1, 0.0)
         limits = PositionLimits(-1.0, 1.0)
         with self.assertRaises(TypeError):
-            JointSpec("J1", 0, mapping, limits, 1.0)
+            JointSpec("J1", 0, mapping, limits, 1.0, max_effort_nm=1e100)
         for bad in (True, False, 0, 0.0, -1.0, -0.001, math.nan, math.inf, -math.inf, "1.0", None, 10**400):
             with self.subTest(bad=repr(bad)), self.assertRaises(ValueError):
-                JointSpec("J1", 0, mapping, limits, 1.0, max_acceleration_rad_s2=bad, max_measured_lead_rad=1000000.0)
+                JointSpec("J1", 0, mapping, limits, 1.0, max_acceleration_rad_s2=bad, max_measured_lead_rad=1000000.0, max_effort_nm=1e100)
         for good in (0.01, 1.0, 50.0, 1000.0):
-            spec = JointSpec("J1", 0, mapping, limits, 1.0, max_acceleration_rad_s2=good, max_measured_lead_rad=1000000.0)
+            spec = JointSpec("J1", 0, mapping, limits, 1.0, max_acceleration_rad_s2=good, max_measured_lead_rad=1000000.0, max_effort_nm=1e100)
             self.assertEqual(spec.max_acceleration_rad_s2, float(good))
 
     def test_dq_ramp_and_q_step_with_dq0_obey_acceleration_and_velocity_bounds(self):
         spec = JointSpec(
             "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0),
             max_velocity_rad_s=1.0, max_acceleration_rad_s2=2.0, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         core, station, clock = armed_core((spec,), (0.0,), max_step=0.05)
 
@@ -227,6 +228,7 @@ class ReferenceAccelerationTests(unittest.TestCase):
         spec = JointSpec(
             "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0),
             max_velocity_rad_s=1.0, max_acceleration_rad_s2=2.0, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         core, station, clock = armed_core((spec,), (0.0,), max_step=0.05)
 
@@ -251,6 +253,7 @@ class ReferenceAccelerationTests(unittest.TestCase):
         spec = JointSpec(
             "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0),
             max_velocity_rad_s=1.0, max_acceleration_rad_s2=4.0, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         core, station, clock = armed_core((spec,), (0.0,), max_step=0.05)
 
@@ -303,6 +306,7 @@ class ReferenceAccelerationTests(unittest.TestCase):
                         PositionLimits(-1.5, 1.5),
                         max_velocity_rad_s=0.8,
                         max_acceleration_rad_s2=2.0, max_measured_lead_rad=1000000.0,
+                        max_effort_nm=1e100,
                     )
                     core, station, clock = armed_core((spec,), (0.0,), max_step=0.05)
                     clock.value = 0.02
@@ -332,6 +336,7 @@ class ReferenceAccelerationTests(unittest.TestCase):
         spec = JointSpec(
             "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-0.1, 0.1),
             max_velocity_rad_s=0.5, max_acceleration_rad_s2=1.0, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         core, station, clock = armed_core((spec,), (0.0,), max_step=0.05)
         clock.value = 0.01
@@ -348,6 +353,7 @@ class ReferenceAccelerationTests(unittest.TestCase):
         spec = JointSpec(
             "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0),
             max_velocity_rad_s=0.01, max_acceleration_rad_s2=0.05, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         core, station, clock = armed_core((spec,), (0.0,), max_step=0.05)
 
@@ -377,10 +383,12 @@ class ReferenceAccelerationTests(unittest.TestCase):
         spec_fast = JointSpec(
             "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0),
             max_velocity_rad_s=1.0, max_acceleration_rad_s2=10.0, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         spec_slow = JointSpec(
             "J2", 1, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0),
             max_velocity_rad_s=0.001, max_acceleration_rad_s2=0.01, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         core, station, clock = armed_core((spec_fast, spec_slow), (0.0, 0.0), max_step=0.05)
 
@@ -410,6 +418,7 @@ class ReferenceAccelerationTests(unittest.TestCase):
         spec = JointSpec(
             "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0),
             max_velocity_rad_s=1.0, max_acceleration_rad_s2=2.0, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         core, station, clock = armed_core((spec,), (0.0,), max_step=0.05)
 
@@ -430,6 +439,7 @@ class ReferenceAccelerationTests(unittest.TestCase):
         spec = JointSpec(
             "seed", 0, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0),
             max_velocity_rad_s=1.0, max_acceleration_rad_s2=1.0, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         q_seed = raw_to_position(1) / 2.0
         core, station, clock = armed_core((spec,), (q_seed,), max_step=0.05)
@@ -468,6 +478,7 @@ class ReferenceAccelerationTests(unittest.TestCase):
         spec = JointSpec(
             "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0),
             max_velocity_rad_s=1.0, max_acceleration_rad_s2=2.0, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         core, station, clock = armed_core(
             (spec,), (0.0,), max_step=0.02, feedback_max_age=20.0,
@@ -496,6 +507,7 @@ class ReferenceAccelerationTests(unittest.TestCase):
         spec = JointSpec(
             "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0),
             max_velocity_rad_s=1.0, max_acceleration_rad_s2=2.0, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         core, station, clock = armed_core((spec,), (0.0,))
         tgt0 = make_target(core, clock, 0, (JointTarget(0.5, 0.0, 0.0, 1.0, 0.1),))
@@ -517,8 +529,8 @@ class ReferenceAccelerationTests(unittest.TestCase):
 
     def test_second_joint_projection_failure_preserves_pending_and_history_atomically(self):
         specs = (
-            JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0), 1.0, 2.0, 1000000.0),
-            JointSpec("J2", 1, JointMap(1, -1, 0.0), PositionLimits(-1.0, 1.0), 1.0, 2.0, 1000000.0),
+            JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0), 1.0, 2.0, 1000000.0, max_effort_nm=1e100),
+            JointSpec("J2", 1, JointMap(1, -1, 0.0), PositionLimits(-1.0, 1.0), 1.0, 2.0, 1000000.0, max_effort_nm=1e100),
         )
         core, station, clock = armed_core(specs, (0.0, 0.0))
         seed_tgt = make_target(
@@ -567,6 +579,7 @@ class ReferenceAccelerationTests(unittest.TestCase):
         spec = JointSpec(
             "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0),
             max_velocity_rad_s=1.0, max_acceleration_rad_s2=1.0, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         core, station, clock = armed_core((spec,), (0.0,), max_step=0.5, feedback_max_age=1000.0)
 
@@ -605,6 +618,7 @@ class ReferenceAccelerationTests(unittest.TestCase):
         spec = JointSpec(
             "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0),
             max_velocity_rad_s=1.0, max_acceleration_rad_s2=2.0, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         core, station, clock = armed_core(
             (spec,), (0.0,), max_step=0.1, feedback_max_age=0.1,
@@ -667,6 +681,7 @@ class ReferenceAccelerationTests(unittest.TestCase):
         spec = JointSpec(
             "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0),
             max_velocity_rad_s=1.0, max_acceleration_rad_s2=2.0, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         core, station, clock = armed_core((spec,), (0.0,))
         old_ownership = core.snapshot().ownership
@@ -703,6 +718,7 @@ class ReferenceAccelerationTests(unittest.TestCase):
         huge = JointSpec(
             "huge", 0, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0),
             max_velocity_rad_s=1.0, max_acceleration_rad_s2=1e308, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         core, station, clock = armed_core((huge,), (0.0,), feedback_max_age=1000.0)
         clock.value = 10.0
@@ -715,6 +731,7 @@ class ReferenceAccelerationTests(unittest.TestCase):
         tiny = JointSpec(
             "tiny", 0, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0),
             max_velocity_rad_s=1e-12, max_acceleration_rad_s2=1e-12, max_measured_lead_rad=1000000.0,
+            max_effort_nm=1e100,
         )
         core2, station2, clock2 = armed_core((tiny,), (0.0,), max_step=1e-6)
         clock2.value = 0.01

@@ -60,20 +60,21 @@ class ReferenceVelocityTests(unittest.TestCase):
         limits = PositionLimits(-1.0, 1.0)
         for value in (True, False, 0, -1.0, math.nan, math.inf, -math.inf, 10**400, "1"):
             with self.subTest(value=repr(value)), self.assertRaises(ValueError):
-                JointSpec("J1", 0, mapping, limits, value, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0)
+                JointSpec("J1", 0, mapping, limits, value, max_acceleration_rad_s2=1000000.0, max_measured_lead_rad=1000000.0, max_effort_nm=1e100)
             with self.subTest(step=value), self.assertRaises(ValueError):
                 JointCore(
-                    (JointSpec("J1", 0, mapping, limits, 1.0, 1000000.0, 1000000.0),),
+                    (JointSpec("J1", 0, mapping, limits, 1.0, 1000000.0, 1000000.0, max_effort_nm=1e100),),
                     max_reference_step_s=value,
                 )
         with self.assertRaises(TypeError):
-            JointSpec("J1", 0, mapping, limits)
+            JointSpec("J1", 0, mapping, limits, max_effort_nm=1e100)
         with self.assertRaises(TypeError):
-            JointCore((JointSpec("J1", 0, mapping, limits, 1.0, 1000000.0, 1000000.0),))
+            JointCore((JointSpec("J1", 0, mapping, limits, 1.0, 1000000.0, 1000000.0, max_effort_nm=1e100),))
 
     def test_arm_rejects_measured_seed_outside_codec_range_without_grant(self):
         spec = JointSpec(
-            "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-20_000_000.0, 20_000_000.0), 1.0, 1000000.0, 1000000.0
+            "J1", 0, JointMap(1, 1, 0.0), PositionLimits(-20_000_000.0, 20_000_000.0), 1.0, 1000000.0, 1000000.0,
+            max_effort_nm=1e100,
         )
         core = JointCore((spec,), max_reference_step_s=0.02)
         self.assertTrue(core.begin_connect())
@@ -93,7 +94,7 @@ class ReferenceVelocityTests(unittest.TestCase):
         self.assertIsNone(snapshot.pending_target)
 
     def test_arm_surfaces_projection_type_error_before_grant_or_reference(self):
-        spec = JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0), 1.0, 1000000.0, 1000000.0)
+        spec = JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0), 1.0, 1000000.0, 1000000.0, max_effort_nm=1e100)
         clock = DeterministicClock(0.0)
         core = JointCore((spec,), clock=clock, max_reference_step_s=0.02)
         station = FakeStation(core)
@@ -117,7 +118,7 @@ class ReferenceVelocityTests(unittest.TestCase):
         self.assertEqual(station.writes, [])
 
     def test_consume_surfaces_projection_type_error_without_reference_or_write(self):
-        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0), 1.0, 1000000.0, 1000000.0),)
+        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1.0, 1.0), 1.0, 1000000.0, 1000000.0, max_effort_nm=1e100),)
         core, station, clock = armed_core(specs, (0.0,))
         request = target(core, clock, 0, (JointTarget(0.5, 0.0, 0.0, 1.0, 0.1),))
         self.assertTrue(station.submit(request))
@@ -140,8 +141,8 @@ class ReferenceVelocityTests(unittest.TestCase):
 
     def test_nonzero_measured_seed_per_joint_steps_reversal_and_feedforward_clipping(self):
         specs = (
-            JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0), 0.4, 1000000.0, 1000000.0),
-            JointSpec("J2", 1, JointMap(1, -1, 0.0), PositionLimits(-2.0, 2.0), 0.8, 1000000.0, 1000000.0),
+            JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2.0, 2.0), 0.4, 1000000.0, 1000000.0, max_effort_nm=1e100),
+            JointSpec("J2", 1, JointMap(1, -1, 0.0), PositionLimits(-2.0, 2.0), 0.8, 1000000.0, 1000000.0, max_effort_nm=1e100),
         )
         core, station, clock = armed_core(specs, (0.2, -0.3), max_step=0.2)
         first = target(core, clock, 0, (
@@ -179,7 +180,7 @@ class ReferenceVelocityTests(unittest.TestCase):
         )
 
     def test_zero_elapsed_is_stationary_but_same_tick_streaming_advances(self):
-        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0),)
+        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0, max_effort_nm=1e100),)
         core, station, clock = armed_core(specs, (0.0,), max_step=0.02)
         first = target(core, clock, 0, (JointTarget(0.5, 2.0, 0.0, 1.0, 0.1),))
         self.assertTrue(station.submit(first))
@@ -205,7 +206,7 @@ class ReferenceVelocityTests(unittest.TestCase):
         self.assertLessEqual(next_reference.joints[0].q_rad - advanced.joints[0].q_rad, 0.01)
 
     def test_acceptance_queue_and_idle_time_never_bank_more_than_step_cap(self):
-        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2, 2), 1.0, 1000000.0, 1000000.0),)
+        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-2, 2), 1.0, 1000000.0, 1000000.0, max_effort_nm=1e100),)
         core, station, clock = armed_core(
             specs, (0.0,), max_step=0.02, feedback_max_age=20.0
         )
@@ -227,7 +228,7 @@ class ReferenceVelocityTests(unittest.TestCase):
         self.assertLessEqual(idle_issue.joints[0].q_rad - issued.joints[0].q_rad, 0.02)
 
     def test_absent_expired_invalid_replacement_and_clock_regression_preserve_bounds(self):
-        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0),)
+        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0, max_effort_nm=1e100),)
         core, station, clock = armed_core(specs, (0.0,))
         self.assertIsNone(station.consume())
         self.assertEqual(station.writes, [])
@@ -272,8 +273,8 @@ class ReferenceVelocityTests(unittest.TestCase):
 
     def test_failed_second_joint_projection_keeps_pending_and_history_atomically(self):
         specs = (
-            JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0),
-            JointSpec("J2", 1, JointMap(1, -1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0),
+            JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0, max_effort_nm=1e100),
+            JointSpec("J2", 1, JointMap(1, -1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0, max_effort_nm=1e100),
         )
         core, station, clock = armed_core(specs, (0.0, 0.0))
         seed_target = target(core, clock, 0, (
@@ -324,7 +325,7 @@ class ReferenceVelocityTests(unittest.TestCase):
             self.assertLessEqual(abs(issued.q_rad - seed.q_rad), 0.02)
 
     def test_projection_time_passing_target_deadline_discards_without_release(self):
-        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0),)
+        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0, max_effort_nm=1e100),)
         core, station, clock = armed_core(specs, (0.0,), max_step=0.1)
         seed_target = target(core, clock, 0, (JointTarget(0.0, 0.0, 0.0, 1.0, 0.1),))
         self.assertTrue(station.submit(seed_target))
@@ -375,7 +376,7 @@ class ReferenceVelocityTests(unittest.TestCase):
         )
 
     def test_projection_time_staling_feedback_revokes_without_release(self):
-        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0),)
+        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0, max_effort_nm=1e100),)
         core, station, clock = armed_core(
             specs, (0.0,), max_step=0.1, feedback_max_age=0.1
         )
@@ -414,7 +415,7 @@ class ReferenceVelocityTests(unittest.TestCase):
         self.assertEqual(snapshot.ownership_generation, before.ownership_generation + 1)
 
     def test_projection_compute_delay_stamps_final_release_time(self):
-        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0),)
+        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0, max_effort_nm=1e100),)
         core, station, clock = armed_core(specs, (0.0,), max_step=0.1)
         request = target(
             core, clock, 1, (JointTarget(0.5, 0.0, 0.0, 1.0, 0.1),),
@@ -465,7 +466,7 @@ class ReferenceVelocityTests(unittest.TestCase):
         self.assertEqual(len(station.writes), 2)
 
     def test_clock_regression_during_projection_preserves_history_and_writes_nothing(self):
-        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0),)
+        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 1.0, 1000000.0, 1000000.0, max_effort_nm=1e100),)
         core, station, clock = armed_core(specs, (0.0,), max_step=0.1)
         seed_target = target(core, clock, 0, (JointTarget(0.0, 0.0, 0.0, 1.0, 0.1),))
         self.assertTrue(station.submit(seed_target))
@@ -515,7 +516,7 @@ class ReferenceVelocityTests(unittest.TestCase):
         )
 
     def test_subgrid_zero_elapsed_corridor_is_retained_until_feasible(self):
-        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 0.1, 1000000.0, 1000000.0),)
+        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 0.1, 1000000.0, 1000000.0, max_effort_nm=1e100),)
         core, station, clock = armed_core(specs, (0.0001,), max_step=0.02)
         seed_status = core.snapshot().joints[0]
         request = target(core, clock, 0, (JointTarget(0.2, 0.0, 0.0, 1.0, 0.1),))
@@ -536,7 +537,7 @@ class ReferenceVelocityTests(unittest.TestCase):
         )
 
     def test_lifecycle_rearm_seeds_new_measured_pose_and_requires_new_grant(self):
-        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 0.5, 1000000.0, 1000000.0),)
+        specs = (JointSpec("J1", 0, JointMap(1, 1, 0.0), PositionLimits(-1, 1), 0.5, 1000000.0, 1000000.0, max_effort_nm=1e100),)
         core, station, clock = armed_core(specs, (0.0,), max_step=0.1)
         old_grant = core.snapshot().ownership
         self.assertTrue(station.stop())
@@ -589,7 +590,7 @@ class ReferenceVelocityTests(unittest.TestCase):
                     ).dq_rad_s
                     max_velocity = math.nextafter(abs(speed_grid), 0.0)
                     limits = PositionLimits(-1.0, upper)
-                    spec = JointSpec("J1", 0, mapping, limits, max_velocity, 1000000.0, 1000000.0)
+                    spec = JointSpec("J1", 0, mapping, limits, max_velocity, 1000000.0, 1000000.0, max_effort_nm=1e100)
                     core, station, clock = armed_core((spec,), (0.0,), max_step=1.0)
 
                     for speed_sign in (-1, 1):

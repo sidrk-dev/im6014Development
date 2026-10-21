@@ -5,6 +5,7 @@ no lifecycle, clock, serial transport, pending targets, or mutable state.
 """
 
 import math
+from dataclasses import dataclass
 
 from .codec import (
     command,
@@ -16,6 +17,40 @@ from .codec import (
 )
 from .mapping import JointTarget, OutputSample
 from .records import JointSpec
+
+
+@dataclass(frozen=True)
+class _AppliedJointReference:
+    q_rad: float
+    dq_rad_s: float
+    tau_nm: float
+    kp: float
+    kd: float
+
+
+def _applied_reference(spec: JointSpec, target: JointTarget) -> _AppliedJointReference:
+    output = spec.mapping.to_output(target)
+    decoded = decode_command(command(
+        spec.motor_id, mode=1, position=output.q_rad, rpm=output.rpm,
+        torque=output.tau_nm, kp=output.kp, kd=output.kd, watchdog=True,
+    ))
+    sample = spec.mapping.from_output(OutputSample(
+        decoded["position_rad"], decoded["rpm"], decoded["torque_nm"],
+    ))
+    reduction = spec.mapping.reduction
+    kp = decoded["kp"] * reduction * reduction
+    kd = decoded["kd"] * reduction * reduction
+    if not math.isfinite(kp) or not math.isfinite(kd):
+        raise ValueError("applied gains must be finite")
+    return _AppliedJointReference(sample.q_rad, sample.dq_rad_s, sample.tau_nm, kp, kd)
+
+
+def _predicted_effort(applied: _AppliedJointReference, q_rad: float, dq_rad_s: float) -> float:
+    effort = (applied.kp * (applied.q_rad - q_rad)
+              + applied.kd * (applied.dq_rad_s - dq_rad_s) + applied.tau_nm)
+    if not math.isfinite(effort):
+        raise ValueError("predicted effort must be finite")
+    return effort
 
 
 def project_joint_target(
@@ -83,6 +118,8 @@ def plan_reference(
     elapsed_s: float,
     max_step_s: float,
     allow_bootstrap: bool,
+    *,
+    measured_velocities: tuple[float, ...],
 ) -> tuple[JointTarget, ...] | None:
     """Plan a complete bounded candidate vector under S2 semantic contract.
 
@@ -106,20 +143,26 @@ def plan_reference(
         or max_step_s <= 0.0
     ):
         return None
+    if not isinstance(measured_velocities, tuple):
+        return None
     if (
         len(specs) != len(requested)
         or len(specs) != len(previous)
         or len(specs) != len(previous_rates)
         or len(specs) != len(measured_positions)
+        or len(specs) != len(measured_velocities)
     ):
         return None
-    for q_meas in measured_positions:
-        if (
-            isinstance(q_meas, bool)
-            or not isinstance(q_meas, (int, float))
-            or not math.isfinite(q_meas)
-        ):
-            return None
+    try:
+        for measured in (*measured_positions, *measured_velocities):
+            if (
+                isinstance(measured, bool)
+                or not isinstance(measured, (int, float))
+                or not math.isfinite(measured)
+            ):
+                return None
+    except OverflowError:
+        return None
 
     h = min(elapsed_s, max_step_s)
     candidate_joints: list[JointTarget] = []
@@ -284,6 +327,15 @@ def plan_reference(
                 return None
             if static_speed_raw != prev_speed_raw and cand_speed_raw == prev_speed_raw:
                 return None
+
+        try:
+            effort = _predicted_effort(
+                _applied_reference(spec, cand), q_meas, measured_velocities[i],
+            )
+        except (ArithmeticError, ValueError):
+            return None
+        if abs(effort) > spec.max_effort_nm:
+            return None
 
         candidate_joints.append(cand)
 

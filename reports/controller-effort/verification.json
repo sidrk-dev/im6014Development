@@ -1,0 +1,118 @@
+{
+  "date": "2026-10-21",
+  "baseline": "3e2e4ee43263c3f6bb0157fdbce6dc929bd64666",
+  "scope": "scalar physical-codec effort and terminal release software checks; not full SA04, hosted or physical acceptance",
+  "controller_tests": {
+    "passed": 130,
+    "original_identities_preserved": 108,
+    "new_effort_tests": 22,
+    "legacy_test_ast_comparison": "identical after removing only new max_effort_nm and measured_velocities keyword arguments"
+  },
+  "parent_oracle": {
+    "seed": 421,
+    "cases": 5400,
+    "issued": 2075,
+    "suppressed": 3325,
+    "max_abs_effort_over_cap_of_issued": 0.9993714308889663,
+    "oracle": "decoded output command PD+feedforward, then signed external reduction; independent of private applied-effort helper"
+  },
+  "native_drive_design_probe": {
+    "scope": "read-only loaded-model drive design probe; not station acceptance",
+    "cases": 200,
+    "saturated_cases": 196,
+    "peak_force_formula_error_nm": 1.4210854715202004e-14,
+    "peak_generalized_mapping_error_nm": 0.0,
+    "gain": [
+      180.0,
+      420.0,
+      420.0
+    ],
+    "bias": [
+      [
+        0.0,
+        -180.0,
+        -18.0
+      ],
+      [
+        0.0,
+        -420.0,
+        -38.0
+      ],
+      [
+        0.0,
+        -420.0,
+        -38.0
+      ]
+    ],
+    "force_ranges_nm": [
+      [
+        -14.0,
+        14.0
+      ],
+      [
+        -25.0,
+        25.0
+      ],
+      [
+        -25.0,
+        25.0
+      ]
+    ],
+    "desired_velocity": 0,
+    "feedforward": 0,
+    "stop_probe": "mjDSBL_ACTUATION gives exactly zero actuator and generalized actuator force; not a hold or gravity compensation"
+  },
+  "selected_contract_sdk_tests": {
+    "passed": 37,
+    "skipped": 0,
+    "transport": "mocked"
+  },
+  "offline_baseline": {
+    "bench_groups_passed": 18,
+    "controller_passed": 130,
+    "contract_tests_passed": 26,
+    "contract_simulator_cases_skipped": 4,
+    "initial_repository_check": "temporary broken link while report was being created; final repository check required",
+    "final_repository_check": "passed:21 gates, both dependency graphs,195 legacy mappings,archive/simulator hashes,83 portable links",
+    "final_full_check": "passed scripts/check_offline.sh;130 controller tests,18 bench grouped checks,SA01 contract,26 contract tests with4simulator cases skipped;those cases covered separately by37-test pinned environment suite"
+  },
+  "source_sha256": {
+    "im6014_control/__init__.py": "b72d9e9a7628c789e1f8d171070d992532a0a1aa2c2169aa5bf1165e8383ddcd",
+    "im6014_control/codec.py": "82aed0838cc0a9d8d63ab2065aea786893ade405f55e5a0b7c895eacf2197af9",
+    "im6014_control/core.py": "b09b9cc1e0eaa9a1eeaf060d22eaa78b83d9fe67631cbaa136a52e7ba6057824",
+    "im6014_control/mapping.py": "a39502e207e9dac4f9dae1827ba4dacd4b9e835633ea11d738834e3be152fd0b",
+    "im6014_control/records.py": "7b3f19f65e7ab42dc23ced9091c989899bacd873d15852d45688391041a5fba5",
+    "im6014_control/reference.py": "9bfba68cc85549258dc1c70c6c177b20a0a36d6976ff93978951a472af069b6a",
+    "tests/control/test_controller.py": "654ea21fd2f5cd3c778f7dc68ac2710d39b1eb01addbc1148fed5f26657b8488",
+    "tests/control/test_controller_acceleration.py": "e3b9a40e90976772c773855013abcfa1abdb3d97b892dfd71d366d9d8d76a884",
+    "tests/control/test_controller_effort.py": "d1e800954c79cf218a9d0e762e9110f5ae6761a356bda7cd685b02c5ee6fcaf9",
+    "tests/control/test_controller_lead.py": "e0a1f69f904c5086ea1e23c519414a343979a31f2eb2519872f5ee25f7b81b76",
+    "tests/control/test_controller_limits.py": "4660e9284ef85588bf0ae5d834926ce168310b47c72d02c68b7aebcb872f3d3c",
+    "tests/control/test_controller_ownership.py": "28f21ef3e2ca257d1265c2aaf803565c86f789adce5896942014e0b45ea93e4b",
+    "tests/control/test_controller_targets.py": "7ea3ba517df2849b20221c3fa235673d181f363ed40f1c5c1dc7fb68af8bfcc6",
+    "tests/control/test_controller_velocity.py": "d0b192346be0076a64581dc7e00bb1ff86157ee0ad929c629b61dd80f560f9d9"
+  },
+  "remaining": [
+    "native MuJoCo representation and drive/gain relation",
+    "simulator station and independent multi-rate timing under inference delay",
+    "full C14-C16 acceptance",
+    "hosted checkpoint and learned behavior",
+    "physical and thermal qualification"
+  ],
+  "source_review": {
+    "provider": "antigravity",
+    "model": "gemini-3.8-flash-high",
+    "status": "complete",
+    "model_evidence": "pinned-argv",
+    "result": "no actionable defects",
+    "scope": "full current core,records,reference,mapping,codec source inline; source hashes matched; reviewer ran no tests; parent accepted scoped conclusion only",
+    "post_review_cleanup": "removed2narrative docstrings only; no functional change"
+  },
+  "comments_review": {
+    "deleted": 2,
+    "restored": 0,
+    "reruns": 0,
+    "constraints_or_suppressions": 0,
+    "open_findings": 0
+  }
+}
