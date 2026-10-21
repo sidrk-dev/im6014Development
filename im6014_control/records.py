@@ -104,6 +104,48 @@ class PositionLimits:
             raise ValueError("minimum_rad must not exceed maximum_rad")
 
 @dataclass(frozen=True)
+class PhysicalIM6014:
+    """Default physical IM6014 drive, planned through the strict codec."""
+
+
+@dataclass(frozen=True)
+class NativePositionServo:
+    """Fixed-gain continuous position drive expressed in logical joint units."""
+
+    kp: float
+    kd: float
+    force_min_nm: float
+    force_max_nm: float
+
+    def __post_init__(self) -> None:
+        values = {}
+        for name in ("kp", "kd", "force_min_nm", "force_max_nm"):
+            value = getattr(self, name)
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise ValueError(f"{name} must be a finite real number")
+            try:
+                value = float(value)
+            except (OverflowError, TypeError, ValueError) as exc:
+                raise ValueError(f"{name} must be finite") from exc
+            if not math.isfinite(value):
+                raise ValueError(f"{name} must be finite")
+            values[name] = value
+        if values["kp"] < 0.0 or values["kd"] < 0.0:
+            raise ValueError("kp and kd must be nonnegative")
+        if not values["force_min_nm"] < 0.0 < values["force_max_nm"]:
+            raise ValueError("force_min_nm must be negative and force_max_nm positive")
+        for name, value in values.items():
+            object.__setattr__(self, name, value)
+
+    def target(self, q_rad: float) -> JointTarget:
+        """Build the exact fixed-gain intent for a logical position reference."""
+        return JointTarget(q_rad, 0.0, 0.0, self.kp, self.kd)
+
+
+Drive = PhysicalIM6014 | NativePositionServo
+
+
+@dataclass(frozen=True)
 class JointSpec:
     name: str
     motor_id: int
@@ -113,6 +155,7 @@ class JointSpec:
     max_acceleration_rad_s2: float
     max_measured_lead_rad: float
     max_effort_nm: float
+    drive: Drive = PhysicalIM6014()
 
     def __post_init__(self) -> None:
         if type(self.name) is not str or not self.name.strip():
@@ -166,6 +209,19 @@ class JointSpec:
         if not math.isfinite(effort) or effort <= 0.0:
             raise ValueError("max_effort_nm must be finite and positive")
         object.__setattr__(self, "max_effort_nm", effort)
+
+        if type(self.drive) not in (PhysicalIM6014, NativePositionServo):
+            raise ValueError("drive must be a PhysicalIM6014 or NativePositionServo")
+        if isinstance(self.drive, NativePositionServo):
+            mapping = self.mapping
+            if (
+                mapping.reduction != 1.0
+                or mapping.direction != 1
+                or mapping.zero_output_rad != 0.0
+            ):
+                raise ValueError("native drive requires the logical identity JointMap")
+            if effort > min(-self.drive.force_min_nm, self.drive.force_max_nm):
+                raise ValueError("max_effort_nm must not exceed the native force limit")
 
 @dataclass(frozen=True)
 class JointFault:
