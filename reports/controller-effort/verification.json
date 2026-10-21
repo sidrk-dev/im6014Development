@@ -114,5 +114,20 @@
     "reruns": 0,
     "constraints_or_suppressions": 0,
     "open_findings": 0
+  },
+  "native_drive_regressions": {
+    "passed": 4,
+    "seed": 421,
+    "cases": 200,
+    "saturated_cases": 188,
+    "unsaturated_cases": 12,
+    "combined_contract_sdk_drive_suite_passed": 41,
+    "scope": "actual loaded MuJoCo force,logical q/dq,moment mapping,wrong desired velocity negative,zero-actuation Stop and explicit restore;not station acceptance",
+    "source_sha256": {
+      "examples/rolling_reach_arm/scene.py": "779c901b145e534c27c2b44cfeeafa4ed35893f0496b5be21d3f389d22201970",
+      "tests/test_rolling_drive_semantics.py": "c68b52e5af8fbb76b46fdd70ee19443e8bd9921c7069b941bcc5aaeed4dd8b93"
+    },
+    "comments_review": "removed1narrative docstring; import-order style suppression retained for deliberate path setup",
+    "parent_mutation_proof": "disabling actual loaded actuator force limiting causes seeded dynamics regression to fail; restored fresh-model4tests pass"
   }
 }

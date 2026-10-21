@@ -65,6 +65,17 @@ feedforward. A 200-state loaded-model design probe matched servo force within
 or gravity compensation. These probes guide the next unit and do not establish
 a simulator station, policy-delay behavior, or task success through this core.
 
+The [native-drive regressions](../../tests/test_rolling_drive_semantics.py) now
+make those model checks repeatable in simulator CI. Four tests pass, including
+200 seeded states (188 saturated, 12 unsaturated), actuator position/velocity
+mapping, a wrong desired-velocity negative, and explicit disable/enable. The
+combined pinned contract/SDK/drive suite passes all 41 tests. This vectorized
+seeded matrix is separate from the earlier design probe above.
+
+```bash
+.venv-rolling/bin/python -m unittest tests.test_rolling_drive_semantics
+```
+
 No motor port, hosted request, training, upload, or physical motion was used.
 The [initial C12 port record](../controller-core/README.md) remains historical;
 its source-equivalence claim predates these intentional effort changes.
