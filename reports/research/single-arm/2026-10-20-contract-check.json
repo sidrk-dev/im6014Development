@@ -1,0 +1,29 @@
+{
+  "recorded_at_utc": "2026-10-20T23:00:55+00:00",
+  "verdict": "PASS",
+  "scope": "contract-level only; no simulation, hosted, or physical result",
+  "contract": "docs/single-arm-contract.json",
+  "contract_sha256": "af5cc2aea60709f4351b7854e4306ea7693789d26be8e00250f01b366803c3f7",
+  "reference_doc": "docs/single-arm-contract.md",
+  "reference_doc_sha256": "91448dc88719f139db799c91b29696360723a8ae329f7896a388550f36dbe47c",
+  "checks": [
+    "contract identity",
+    "profile separation",
+    "prototype asset hashes recorded",
+    "joint order and units",
+    "single-arm policy interface",
+    "overhead camera",
+    "timing",
+    "task and success rule",
+    "training and evaluation budget",
+    "exclusions and evidence limits",
+    "prototype hashes and joints",
+    "reference page current"
+  ],
+  "prototype_asset": {
+    "verified": true,
+    "arm_urdf_sha256": "72444bc6efafed2118ee5757f533ab1480e4beeb9b28765d4b3050d7445eef8f",
+    "model_json_sha256": "b61487771bac01ec92550c1c8a85a32c057e710e3e8ae7fba1ba0ccad0112d35",
+    "moving_coordinate_count": 3
+  }
+}

@@ -6,9 +6,9 @@ Use one arm, one fixed scene camera with role `overhead`, and measured independe
 
 Freeze build/model identity, actual independent count/order, signs/zeros, radians, tool, limits, absolute-target meaning, and timing. Passive rolling hinges stay internal. Gripper channels exist only for a build with a gripper.
 
-The [sample embodiment](../examples/rolling_contact_arm/dream_embodiment.json) declares a two-value `arm` part with `side: single` in state/action, one overhead video feature, and absolute actions. `[0, 2]` is a vector span, not a limit. The prototype needs its own three-coordinate profile; final coordinates follow RC01.
+The [sample embodiment](../examples/rolling_contact_arm/dream_embodiment.json) declares a two-value `arm` part with `side: single` in state/action, one overhead video feature, and absolute actions. `[0, 2]` is a vector span, not a limit. The [SA01 contract](single-arm-contract.json) freezes the selected three-coordinate prototype profile, joint order, overhead camera, absolute targets, timing, and success rule; final coordinates follow RC01. Its [generated reference](single-arm-contract.md) is the readable form.
 
-Dream client 1.0.3 maps `state.arm` to its internal right-arm slot and restores `reply["per_key"]["action.arm"]`. Omit `ik` and `robot="other_embodiment"` for this route. Dream's stock IK importer rejects moving mimic joints. The local simulator/controller owns rolling constraints.
+Dream client 1.0.3 maps `state.arm` to its internal right-arm slot and restores `reply["per_key"]["action.arm"]`. The [SA02 client verification](../reports/research/single-arm/2026-10-20-sa02-client-verification.json) records the pinned offline check of that mapping for the three-wide prototype contract. Omit `ik` and `robot="other_embodiment"` for this route. Dream's stock IK importer rejects moving mimic joints. The local simulator/controller owns rolling constraints.
 
 ```mermaid
 flowchart LR

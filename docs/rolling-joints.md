@@ -1,6 +1,6 @@
 # Rolling-contact mechanism model
 
-The current CAD arm is a three-moving-coordinate prototype. The final shoulder and elbow will use rolling-contact joints. The [sample](../examples/rolling_contact_arm/README.md), prototype, and final model have distinct identities and datasets. Final geometry and drive relationships remain undefined.
+The current CAD arm is a three-moving-coordinate prototype. The final shoulder and elbow will use rolling-contact joints. The [sample](../examples/rolling_contact_arm/README.md), prototype, and final model have distinct identities and datasets. The [SA01 contract](single-arm-contract.json) freezes the selected prototype's joint order and policy interface; this page covers mechanism relations. Final geometry and drive relationships remain undefined.
 
 ## Ideal circular pair
 

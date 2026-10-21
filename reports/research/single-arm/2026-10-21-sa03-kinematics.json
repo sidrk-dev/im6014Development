@@ -1,0 +1,1073 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-10-21T05:52:08+00:00",
+  "verdict": "PASS: asset integrity and kinematic import only",
+  "scope": "intermediate asset provenance and kinematic import probe; not physics acceptance",
+  "contract": {
+    "path": "docs/single-arm-contract.json",
+    "sha256": "af5cc2aea60709f4351b7854e4306ea7693789d26be8e00250f01b366803c3f7",
+    "checks": [
+      "contract identity",
+      "profile separation",
+      "prototype asset hashes recorded",
+      "joint order, direction, limits and units",
+      "single-arm policy interface",
+      "overhead camera",
+      "timing",
+      "task and success rule",
+      "training and evaluation budget",
+      "exclusions and evidence limits"
+    ]
+  },
+  "prototype": {
+    "verified": true,
+    "arm_urdf_sha256": "72444bc6efafed2118ee5757f533ab1480e4beeb9b28765d4b3050d7445eef8f",
+    "model_json_sha256": "b61487771bac01ec92550c1c8a85a32c057e710e3e8ae7fba1ba0ccad0112d35",
+    "moving_coordinate_count": 3
+  },
+  "structure": {
+    "nq": 3,
+    "nv": 3,
+    "njnt": 3,
+    "root_mapping": "named body",
+    "joint_map": {
+      "revolute_2": {
+        "qposadr": 0,
+        "dofadr": 0
+      },
+      "revolute_1": {
+        "qposadr": 1,
+        "dofadr": 1
+      },
+      "revolute_3": {
+        "qposadr": 2,
+        "dofadr": 2
+      }
+    },
+    "link_count": 76,
+    "link_map": {
+      "_8_32_thin_nylock_nut__32_02_": "_8_32_thin_nylock_nut__32_02_",
+      "_8_32_thin_nylock_nut__32_02__1": "_8_32_thin_nylock_nut__32_02__1",
+      "_8_32_thin_nylock_nut__32_02__2": "_8_32_thin_nylock_nut__32_02__2",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016_": "_8_32_x________2_1_2______star_drive_screw______276_8016_",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__1": "_8_32_x________2_1_2______star_drive_screw______276_8016__1",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__10": "_8_32_x________2_1_2______star_drive_screw______276_8016__10",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__11": "_8_32_x________2_1_2______star_drive_screw______276_8016__11",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__12": "_8_32_x________2_1_2______star_drive_screw______276_8016__12",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__13": "_8_32_x________2_1_2______star_drive_screw______276_8016__13",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__14": "_8_32_x________2_1_2______star_drive_screw______276_8016__14",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__15": "_8_32_x________2_1_2______star_drive_screw______276_8016__15",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__16": "_8_32_x________2_1_2______star_drive_screw______276_8016__16",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__17": "_8_32_x________2_1_2______star_drive_screw______276_8016__17",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__2": "_8_32_x________2_1_2______star_drive_screw______276_8016__2",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__3": "_8_32_x________2_1_2______star_drive_screw______276_8016__3",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__4": "_8_32_x________2_1_2______star_drive_screw______276_8016__4",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__5": "_8_32_x________2_1_2______star_drive_screw______276_8016__5",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__6": "_8_32_x________2_1_2______star_drive_screw______276_8016__6",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__7": "_8_32_x________2_1_2______star_drive_screw______276_8016__7",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__8": "_8_32_x________2_1_2______star_drive_screw______276_8016__8",
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__9": "_8_32_x________2_1_2______star_drive_screw______276_8016__9",
+      "none": "none",
+      "none_1": "none_1",
+      "none_2": "none_2",
+      "none_3": "none_3",
+      "part_1": "part_1",
+      "part_1_1": "part_1_1",
+      "part_1_10": "part_1_10",
+      "part_1_11": "part_1_11",
+      "part_1_12": "part_1_12",
+      "part_1_13": "part_1_13",
+      "part_1_14": "part_1_14",
+      "part_1_15": "part_1_15",
+      "part_1_16": "part_1_16",
+      "part_1_17": "part_1_17",
+      "part_1_18": "part_1_18",
+      "part_1_19": "part_1_19",
+      "part_1_2": "part_1_2",
+      "part_1_20": "part_1_20",
+      "part_1_21": "part_1_21",
+      "part_1_22": "part_1_22",
+      "part_1_23": "part_1_23",
+      "part_1_24": "part_1_24",
+      "part_1_25": "part_1_25",
+      "part_1_26": "part_1_26",
+      "part_1_27": "part_1_27",
+      "part_1_28": "part_1_28",
+      "part_1_29": "part_1_29",
+      "part_1_3": "part_1_3",
+      "part_1_30": "part_1_30",
+      "part_1_31": "part_1_31",
+      "part_1_32": "part_1_32",
+      "part_1_33": "part_1_33",
+      "part_1_34": "part_1_34",
+      "part_1_35": "part_1_35",
+      "part_1_36": "part_1_36",
+      "part_1_37": "part_1_37",
+      "part_1_38": "part_1_38",
+      "part_1_39": "part_1_39",
+      "part_1_4": "part_1_4",
+      "part_1_40": "part_1_40",
+      "part_1_41": "part_1_41",
+      "part_1_42": "part_1_42",
+      "part_1_43": "part_1_43",
+      "part_1_5": "part_1_5",
+      "part_1_6": "part_1_6",
+      "part_1_7": "part_1_7",
+      "part_1_8": "part_1_8",
+      "part_1_9": "part_1_9",
+      "root": "root",
+      "socket_button_head_screw_m4x0_7_x_16": "socket_button_head_screw_m4x0_7_x_16",
+      "socket_button_head_screw_m4x0_7_x_16_1": "socket_button_head_screw_m4x0_7_x_16_1",
+      "socket_button_head_screw_m4x0_7_x_16_2": "socket_button_head_screw_m4x0_7_x_16_2",
+      "socket_button_head_screw_m4x0_7_x_16_3": "socket_button_head_screw_m4x0_7_x_16_3",
+      "socket_button_head_screw_m4x0_7_x_16_4": "socket_button_head_screw_m4x0_7_x_16_4",
+      "socket_button_head_screw_m4x0_7_x_16_5": "socket_button_head_screw_m4x0_7_x_16_5"
+    },
+    "original_visual_count": 74,
+    "compiled_visual_count": 74,
+    "original_collision_count": 0,
+    "visual_counts_per_link": {
+      "_8_32_thin_nylock_nut__32_02_": 1,
+      "_8_32_thin_nylock_nut__32_02__1": 1,
+      "_8_32_thin_nylock_nut__32_02__2": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016_": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__1": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__10": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__11": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__12": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__13": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__14": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__15": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__16": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__17": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__2": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__3": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__4": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__5": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__6": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__7": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__8": 1,
+      "_8_32_x________2_1_2______star_drive_screw______276_8016__9": 1,
+      "none": 1,
+      "none_1": 0,
+      "none_2": 1,
+      "none_3": 1,
+      "part_1": 1,
+      "part_1_1": 1,
+      "part_1_10": 1,
+      "part_1_11": 1,
+      "part_1_12": 1,
+      "part_1_13": 1,
+      "part_1_14": 1,
+      "part_1_15": 1,
+      "part_1_16": 1,
+      "part_1_17": 1,
+      "part_1_18": 1,
+      "part_1_19": 1,
+      "part_1_2": 1,
+      "part_1_20": 1,
+      "part_1_21": 1,
+      "part_1_22": 1,
+      "part_1_23": 1,
+      "part_1_24": 1,
+      "part_1_25": 1,
+      "part_1_26": 1,
+      "part_1_27": 1,
+      "part_1_28": 1,
+      "part_1_29": 1,
+      "part_1_3": 1,
+      "part_1_30": 1,
+      "part_1_31": 1,
+      "part_1_32": 1,
+      "part_1_33": 1,
+      "part_1_34": 1,
+      "part_1_35": 1,
+      "part_1_36": 1,
+      "part_1_37": 1,
+      "part_1_38": 1,
+      "part_1_39": 1,
+      "part_1_4": 1,
+      "part_1_40": 1,
+      "part_1_41": 1,
+      "part_1_42": 1,
+      "part_1_43": 1,
+      "part_1_5": 1,
+      "part_1_6": 1,
+      "part_1_7": 1,
+      "part_1_8": 1,
+      "part_1_9": 1,
+      "root": 0,
+      "socket_button_head_screw_m4x0_7_x_16": 1,
+      "socket_button_head_screw_m4x0_7_x_16_1": 1,
+      "socket_button_head_screw_m4x0_7_x_16_2": 1,
+      "socket_button_head_screw_m4x0_7_x_16_3": 1,
+      "socket_button_head_screw_m4x0_7_x_16_4": 1,
+      "socket_button_head_screw_m4x0_7_x_16_5": 1
+    }
+  },
+  "kinematics": {
+    "joint_order": [
+      "J1",
+      "J2",
+      "J3"
+    ],
+    "urdf_joint_order": [
+      "revolute_2",
+      "revolute_1",
+      "revolute_3"
+    ],
+    "joint_map": {
+      "revolute_2": {
+        "qposadr": 0,
+        "dofadr": 0
+      },
+      "revolute_1": {
+        "qposadr": 1,
+        "dofadr": 1
+      },
+      "revolute_3": {
+        "qposadr": 2,
+        "dofadr": 2
+      }
+    },
+    "pose_count": 33,
+    "seed": 0,
+    "pose_bounds_rad": [
+      -0.5,
+      0.5
+    ],
+    "poses": [
+      {
+        "pose": 0,
+        "values_rad": {
+          "J1": 0.0,
+          "J2": 0.0,
+          "J3": 0.0
+        }
+      },
+      {
+        "pose": 1,
+        "values_rad": {
+          "J1": 0.1369616873214543,
+          "J2": -0.2302132862361297,
+          "J3": -0.4590264760638053
+        }
+      },
+      {
+        "pose": 2,
+        "values_rad": {
+          "J1": -0.4834723644714709,
+          "J2": 0.3132702392002724,
+          "J3": 0.4127555772777217
+        }
+      },
+      {
+        "pose": 3,
+        "values_rad": {
+          "J1": 0.10663577576717986,
+          "J2": 0.2294965609839984,
+          "J3": 0.04362499146542287
+        }
+      },
+      {
+        "pose": 4,
+        "values_rad": {
+          "J1": 0.4350724237877682,
+          "J2": 0.31585355412153215,
+          "J3": -0.4972614998298519
+        }
+      },
+      {
+        "pose": 5,
+        "values_rad": {
+          "J1": 0.35740427658756935,
+          "J2": -0.46641442469453565,
+          "J3": 0.22965544642994407
+        }
+      },
+      {
+        "pose": 6,
+        "values_rad": {
+          "J1": -0.324344379397441,
+          "J2": 0.3631789223498866,
+          "J3": 0.04146122024909171
+        }
+      },
+      {
+        "pose": 7,
+        "values_rad": {
+          "J1": -0.20028810946261522,
+          "J2": -0.07731277880234155,
+          "J3": -0.47168032885453703
+        }
+      },
+      {
+        "pose": 8,
+        "values_rad": {
+          "J1": -0.37571672350043606,
+          "J2": 0.17062441469363032,
+          "J3": 0.1471895115742501
+        }
+      },
+      {
+        "pose": 9,
+        "values_rad": {
+          "J1": 0.11538511148125385,
+          "J2": -0.11632244573811656,
+          "J3": 0.497209935789211
+        }
+      },
+      {
+        "pose": 10,
+        "values_rad": {
+          "J1": 0.4808353387762301,
+          "J2": 0.1855419844806947,
+          "J3": 0.1504592762678163
+        }
+      },
+      {
+        "pose": 11,
+        "values_rad": {
+          "J1": 0.18844673057094008,
+          "J2": -0.11107857602089621,
+          "J3": -0.3649034949775888
+        }
+      },
+      {
+        "pose": 12,
+        "values_rad": {
+          "J1": 0.2214883401940817,
+          "J2": 0.025354322475725888,
+          "J3": -0.18975812444104434
+        }
+      },
+      {
+        "pose": 13,
+        "values_rad": {
+          "J1": -0.014164641168210923,
+          "J2": 0.38948783434900025,
+          "J3": 0.4340435159562497
+        }
+      },
+      {
+        "pose": 14,
+        "values_rad": {
+          "J1": -0.14220480329092977,
+          "J2": 0.07152983072976093,
+          "J3": -0.17813060892405785
+        }
+      },
+      {
+        "pose": 15,
+        "values_rad": {
+          "J1": 0.0943000301996968,
+          "J2": -0.16208877449286674,
+          "J3": -0.10838099947183877
+        }
+      },
+      {
+        "pose": 16,
+        "values_rad": {
+          "J1": 0.3902743520047923,
+          "J2": -0.2728424064666203,
+          "J3": 0.12318714468604242
+        }
+      },
+      {
+        "pose": 17,
+        "values_rad": {
+          "J1": -0.4159846564176152,
+          "J2": 0.3326441476533978,
+          "J3": 0.28709830748868337
+        }
+      },
+      {
+        "pose": 18,
+        "values_rad": {
+          "J1": -0.26063055700704785,
+          "J2": 0.3764842308107038,
+          "J3": -0.44143196519480565
+        }
+      },
+      {
+        "pose": 19,
+        "values_rad": {
+          "J1": -0.16388293945433963,
+          "J2": -0.34972053310516094,
+          "J3": -0.049660633350713024
+        }
+      },
+      {
+        "pose": 20,
+        "values_rad": {
+          "J1": 0.29632427028729424,
+          "J2": -0.26935779100625257,
+          "J3": -0.4479786989355904
+        }
+      },
+      {
+        "pose": 21,
+        "values_rad": {
+          "J1": -0.0954481601784718,
+          "J2": -0.30148695549074467,
+          "J3": -0.4092469543808781
+        }
+      },
+      {
+        "pose": 22,
+        "values_rad": {
+          "J1": 0.08033238598685066,
+          "J2": -0.2013038671810774,
+          "J3": 0.17199487795635937
+        }
+      },
+      {
+        "pose": 23,
+        "values_rad": {
+          "J1": -0.3004845560317867,
+          "J2": 0.4421131105064978,
+          "J3": -0.13488983175517144
+        }
+      },
+      {
+        "pose": 24,
+        "values_rad": {
+          "J1": -0.3945047204297705,
+          "J2": 0.12910815153970923,
+          "J3": 0.4271545530678674
+        }
+      },
+      {
+        "pose": 25,
+        "values_rad": {
+          "J1": -0.05962284528421602,
+          "J2": 0.45459049369073723,
+          "J3": -0.00010418631235298292
+        }
+      },
+      {
+        "pose": 26,
+        "values_rad": {
+          "J1": -0.07477137515092447,
+          "J2": 0.12021345201537781,
+          "J3": 0.4950965052353241
+        }
+      },
+      {
+        "pose": 27,
+        "values_rad": {
+          "J1": 0.4489436749377653,
+          "J2": -0.039954860690903926,
+          "J3": 0.25772884530829143
+        }
+      },
+      {
+        "pose": 28,
+        "values_rad": {
+          "J1": -0.002577304512381029,
+          "J2": 0.02931216019677041,
+          "J3": 0.2857857007138075
+        }
+      },
+      {
+        "pose": 29,
+        "values_rad": {
+          "J1": -0.08534415064432921,
+          "J2": 0.23448357178872936,
+          "J3": 0.21114287798974984
+        }
+      },
+      {
+        "pose": 30,
+        "values_rad": {
+          "J1": 0.43205968661337824,
+          "J2": -0.3850673667190948,
+          "J3": 0.2290151170763094
+        }
+      },
+      {
+        "pose": 31,
+        "values_rad": {
+          "J1": 0.4274239286245599,
+          "J2": 0.4679261899246464,
+          "J3": -0.4852936950346307
+        }
+      },
+      {
+        "pose": 32,
+        "values_rad": {
+          "J1": 0.36364009024557575,
+          "J2": 0.4811950400663443,
+          "J3": 0.45721017961096355
+        }
+      }
+    ],
+    "pose_note": "mathematical probe values; not commissioned physical envelopes",
+    "tolerances": {
+      "translation_m": 1e-08,
+      "rotation_fro": 1e-08
+    },
+    "maxima": {
+      "translation_m": 3.991016288122638e-15,
+      "rotation_fro": 1.9643580339517168e-14
+    },
+    "worst": {
+      "translation_m": {
+        "link": "part_1_33",
+        "pose": 1
+      },
+      "rotation_fro": {
+        "link": "part_1_11",
+        "pose": 13
+      }
+    },
+    "per_pose_maxima": [
+      {
+        "pose": 0,
+        "translation_m": 3.5293263533313107e-15,
+        "rotation_fro": 1.8539409744216368e-14
+      },
+      {
+        "pose": 1,
+        "translation_m": 3.991016288122638e-15,
+        "rotation_fro": 1.9624357741066673e-14
+      },
+      {
+        "pose": 2,
+        "translation_m": 3.1968351000476123e-15,
+        "rotation_fro": 1.8165861586100265e-14
+      },
+      {
+        "pose": 3,
+        "translation_m": 3.672556682548643e-15,
+        "rotation_fro": 1.866708664523428e-14
+      },
+      {
+        "pose": 4,
+        "translation_m": 3.77160002087877e-15,
+        "rotation_fro": 1.875298420469509e-14
+      },
+      {
+        "pose": 5,
+        "translation_m": 3.364841297455748e-15,
+        "rotation_fro": 1.8546831231822078e-14
+      },
+      {
+        "pose": 6,
+        "translation_m": 3.278243688726513e-15,
+        "rotation_fro": 1.8047540858570815e-14
+      },
+      {
+        "pose": 7,
+        "translation_m": 3.475132186878675e-15,
+        "rotation_fro": 1.8341444520625512e-14
+      },
+      {
+        "pose": 8,
+        "translation_m": 3.1876722753187262e-15,
+        "rotation_fro": 1.8355049010814054e-14
+      },
+      {
+        "pose": 9,
+        "translation_m": 3.393112024019675e-15,
+        "rotation_fro": 1.8836250487923964e-14
+      },
+      {
+        "pose": 10,
+        "translation_m": 3.482550593859297e-15,
+        "rotation_fro": 1.8770568856266176e-14
+      },
+      {
+        "pose": 11,
+        "translation_m": 3.794401387868872e-15,
+        "rotation_fro": 1.854429374046277e-14
+      },
+      {
+        "pose": 12,
+        "translation_m": 3.581329789008719e-15,
+        "rotation_fro": 1.8517418859051796e-14
+      },
+      {
+        "pose": 13,
+        "translation_m": 3.4656979236758353e-15,
+        "rotation_fro": 1.9643580339517168e-14
+      },
+      {
+        "pose": 14,
+        "translation_m": 3.776518107618551e-15,
+        "rotation_fro": 1.8575750596420455e-14
+      },
+      {
+        "pose": 15,
+        "translation_m": 3.8431200290280855e-15,
+        "rotation_fro": 1.906152902118555e-14
+      },
+      {
+        "pose": 16,
+        "translation_m": 3.3867489391439426e-15,
+        "rotation_fro": 1.8200701724244123e-14
+      },
+      {
+        "pose": 17,
+        "translation_m": 3.3232883212397635e-15,
+        "rotation_fro": 1.7642116182543255e-14
+      },
+      {
+        "pose": 18,
+        "translation_m": 3.6379132478449466e-15,
+        "rotation_fro": 1.8215263968176327e-14
+      },
+      {
+        "pose": 19,
+        "translation_m": 3.780901349177767e-15,
+        "rotation_fro": 1.803716222634137e-14
+      },
+      {
+        "pose": 20,
+        "translation_m": 3.731241399586262e-15,
+        "rotation_fro": 1.8862348389567306e-14
+      },
+      {
+        "pose": 21,
+        "translation_m": 3.693994970485537e-15,
+        "rotation_fro": 1.8082455486116083e-14
+      },
+      {
+        "pose": 22,
+        "translation_m": 3.3069926816079407e-15,
+        "rotation_fro": 1.800091974586719e-14
+      },
+      {
+        "pose": 23,
+        "translation_m": 3.335436151952675e-15,
+        "rotation_fro": 1.8875575432029348e-14
+      },
+      {
+        "pose": 24,
+        "translation_m": 3.3152521784366686e-15,
+        "rotation_fro": 1.748884190921784e-14
+      },
+      {
+        "pose": 25,
+        "translation_m": 3.2355192482368666e-15,
+        "rotation_fro": 1.817765157264956e-14
+      },
+      {
+        "pose": 26,
+        "translation_m": 3.3832498338840805e-15,
+        "rotation_fro": 1.8851147669095243e-14
+      },
+      {
+        "pose": 27,
+        "translation_m": 3.305361612368594e-15,
+        "rotation_fro": 1.8024168857286172e-14
+      },
+      {
+        "pose": 28,
+        "translation_m": 3.3309003623083637e-15,
+        "rotation_fro": 1.861450209563912e-14
+      },
+      {
+        "pose": 29,
+        "translation_m": 3.340369399602668e-15,
+        "rotation_fro": 1.8274081708906092e-14
+      },
+      {
+        "pose": 30,
+        "translation_m": 3.2110214185320387e-15,
+        "rotation_fro": 1.8322774041554987e-14
+      },
+      {
+        "pose": 31,
+        "translation_m": 3.7258694339903e-15,
+        "rotation_fro": 1.8886972893976493e-14
+      },
+      {
+        "pose": 32,
+        "translation_m": 3.2643495200882116e-15,
+        "rotation_fro": 1.8217654386244086e-14
+      }
+    ]
+  },
+  "versions": {
+    "python": "3.14.6",
+    "python_implementation": "CPython",
+    "numpy": "2.5.4",
+    "mujoco": "3.16.0",
+    "yourdfpy": "0.0.60"
+  },
+  "sa03_accepted": false,
+  "dynamics_validated": false,
+  "collision_validated": false,
+  "tool_frame_frozen": false,
+  "camera_extrinsics_frozen": false,
+  "marker_geometry_frozen": false,
+  "hosted_calls": 0,
+  "motor_calls": 0,
+  "unresolved_blockers": [
+    "placeholder inertials: the imported inertia values are not validated physics",
+    "no collision geometry or collision validation",
+    "tool reference frame is not frozen",
+    "overhead camera extrinsics are not frozen",
+    "marker geometry is not frozen",
+    "SA03 physics acceptance remains pending"
+  ],
+  "assets": {
+    "source": {
+      "urdf": {
+        "file": "mainassem.urdf",
+        "sha256": "8c3b60f2bc8c19b6843143f491b92fe4365a9ce9928f39e3566ae3903b05666c",
+        "bytes_verified": false,
+        "status": "metadata only; source file not supplied"
+      },
+      "archive": {
+        "file": "mainAssem (3).zip",
+        "sha256": "ebb0777628e318e27eca25686adefed16dabc92daec44229f51913b915d6cd72",
+        "bytes_verified": false,
+        "status": "metadata only; source file not supplied"
+      }
+    },
+    "visual_elements": 74,
+    "collision_elements": 0,
+    "visual_mesh_references": 74,
+    "collision_mesh_references": 0,
+    "meshes": [
+      {
+        "path": "meshes/NONE.stl",
+        "sha256": "71645531749bccd5a159ac0b1e961c6bd4e91e60e667eecfb3ade30401dcc548",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 3
+      },
+      {
+        "path": "meshes/Part_1.stl",
+        "sha256": "ea834a2197bb07f230392a3ed6d9684eaf01a323f0888d274fcfdd82ac653635",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 4
+      },
+      {
+        "path": "meshes/Part_1_1.stl",
+        "sha256": "07214b92c349fd7f8e15943c58964089aa0fda0cfc40aacc2315345c4a21f561",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 4
+      },
+      {
+        "path": "meshes/Part_1_10.stl",
+        "sha256": "9d3f68465ee94f9a503c11cf9ae589a4c98ec5f7f548a38d0d587d0dbc440389",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 1
+      },
+      {
+        "path": "meshes/Part_1_11.stl",
+        "sha256": "17c174aa6a8c9e452458b354ec756715f62ffc56878d07a0c568117ebeec1d2c",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 1
+      },
+      {
+        "path": "meshes/Part_1_2.stl",
+        "sha256": "a863156c680cba6266a4d222801212e0dc0719b044ef62cc135c22d182d096d7",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 3
+      },
+      {
+        "path": "meshes/Part_1_3.stl",
+        "sha256": "2bd058994713cae2a78d1071eed9c31fb1a7c12392119b1316e5985c9b4d619a",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 2
+      },
+      {
+        "path": "meshes/Part_1_4.stl",
+        "sha256": "fdbf3bdcaeea6be21299f3496e6d9a958516ce149ec4ceeddccca5d0ad3d8dc2",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 4
+      },
+      {
+        "path": "meshes/Part_1_5.stl",
+        "sha256": "648f6ae7959d14424afc7536c4356c846c56d0cb6b952e740b32aec1f4597acc",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 1
+      },
+      {
+        "path": "meshes/Part_1_6.stl",
+        "sha256": "6aa3264d6dc34e382129c4c23e2cfcf495977ee17c9a5a94d77320a004bdac43",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 12
+      },
+      {
+        "path": "meshes/Part_1_7.stl",
+        "sha256": "3286e1cf97b8a62e785034f156dc26acdc3a00aa48086abf1214079742fc986a",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 3
+      },
+      {
+        "path": "meshes/Part_1_8.stl",
+        "sha256": "0d5987a9efa0fe317ec40990468a3caad0c5cee4b6205e240a020d0b45b06f14",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 6
+      },
+      {
+        "path": "meshes/Part_1_9.stl",
+        "sha256": "6c566aa05813d0deffdb6e65c8e6ede231a95da31e5964f126c97e097a4c2291",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 3
+      },
+      {
+        "path": "meshes/Socket_button_head_screw_M4x0_7_x_16.stl",
+        "sha256": "c0970e118ad97392bb3432ecfbf76132e33bc39d351279b0bec4597c57faa773",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 6
+      },
+      {
+        "path": "meshes/_8_32_Thin_Nylock_Nut__32_02_.stl",
+        "sha256": "1c31776a7b0d5fb833703fc5c05c25b0497333907244543683666094c1a753f3",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 3
+      },
+      {
+        "path": "meshes/_8_32_x________2_1_2______Star_Drive_Screw______276_8016_.stl",
+        "sha256": "1b2acdea61cdae481228fbd28b84d2b9ce050ebe2b9b6848dc2a2181a04e5684",
+        "roles": [
+          "urdf_visual"
+        ],
+        "reference_count": 18
+      }
+    ],
+    "portable_meshes": [
+      {
+        "path": "meshes/NONE.stl",
+        "sha256": "71645531749bccd5a159ac0b1e961c6bd4e91e60e667eecfb3ade30401dcc548"
+      },
+      {
+        "path": "meshes/Part_1.stl",
+        "sha256": "ea834a2197bb07f230392a3ed6d9684eaf01a323f0888d274fcfdd82ac653635"
+      },
+      {
+        "path": "meshes/Part_1_1.stl",
+        "sha256": "07214b92c349fd7f8e15943c58964089aa0fda0cfc40aacc2315345c4a21f561"
+      },
+      {
+        "path": "meshes/Part_1_10.stl",
+        "sha256": "9d3f68465ee94f9a503c11cf9ae589a4c98ec5f7f548a38d0d587d0dbc440389"
+      },
+      {
+        "path": "meshes/Part_1_11.stl",
+        "sha256": "17c174aa6a8c9e452458b354ec756715f62ffc56878d07a0c568117ebeec1d2c"
+      },
+      {
+        "path": "meshes/Part_1_2.stl",
+        "sha256": "a863156c680cba6266a4d222801212e0dc0719b044ef62cc135c22d182d096d7"
+      },
+      {
+        "path": "meshes/Part_1_3.stl",
+        "sha256": "2bd058994713cae2a78d1071eed9c31fb1a7c12392119b1316e5985c9b4d619a"
+      },
+      {
+        "path": "meshes/Part_1_4.stl",
+        "sha256": "fdbf3bdcaeea6be21299f3496e6d9a958516ce149ec4ceeddccca5d0ad3d8dc2"
+      },
+      {
+        "path": "meshes/Part_1_5.stl",
+        "sha256": "648f6ae7959d14424afc7536c4356c846c56d0cb6b952e740b32aec1f4597acc"
+      },
+      {
+        "path": "meshes/Part_1_6.stl",
+        "sha256": "6aa3264d6dc34e382129c4c23e2cfcf495977ee17c9a5a94d77320a004bdac43"
+      },
+      {
+        "path": "meshes/Part_1_7.stl",
+        "sha256": "3286e1cf97b8a62e785034f156dc26acdc3a00aa48086abf1214079742fc986a"
+      },
+      {
+        "path": "meshes/Part_1_8.stl",
+        "sha256": "0d5987a9efa0fe317ec40990468a3caad0c5cee4b6205e240a020d0b45b06f14"
+      },
+      {
+        "path": "meshes/Part_1_9.stl",
+        "sha256": "6c566aa05813d0deffdb6e65c8e6ede231a95da31e5964f126c97e097a4c2291"
+      },
+      {
+        "path": "meshes/Socket_button_head_screw_M4x0_7_x_16.stl",
+        "sha256": "c0970e118ad97392bb3432ecfbf76132e33bc39d351279b0bec4597c57faa773"
+      },
+      {
+        "path": "meshes/_8_32_Thin_Nylock_Nut__32_02_.stl",
+        "sha256": "1c31776a7b0d5fb833703fc5c05c25b0497333907244543683666094c1a753f3"
+      },
+      {
+        "path": "meshes/_8_32_x________2_1_2______Star_Drive_Screw______276_8016_.stl",
+        "sha256": "1b2acdea61cdae481228fbd28b84d2b9ce050ebe2b9b6848dc2a2181a04e5684"
+      }
+    ],
+    "body_blobs": [
+      {
+        "body": "base",
+        "role": "frame",
+        "path": "meshes/base.frame.bin",
+        "sha256": "ac5ee035dbab69c329089d32e7646a49c58ce4653982a7d7a607efcb70f9a1e8"
+      },
+      {
+        "body": "base",
+        "role": "hardware",
+        "path": "meshes/base.hardware.bin",
+        "sha256": "43756a15a8af87ca7a743bda31b1eb771a8ea923ca1ec3a2d1747b2413edacf0"
+      },
+      {
+        "body": "base",
+        "role": "motor",
+        "path": "meshes/base.motor.bin",
+        "sha256": "338d50a1d39055eed9e9e9a9671f60db27931a88778ba0d415640d5fce53386f"
+      },
+      {
+        "body": "j1",
+        "role": "frame",
+        "path": "meshes/j1.frame.bin",
+        "sha256": "7eea8f44548c7708adf483a8c15600812ed74da646108ce7cc964fa58cc1dea4"
+      },
+      {
+        "body": "j1",
+        "role": "hardware",
+        "path": "meshes/j1.hardware.bin",
+        "sha256": "022bf0c5f8b4dea90b42321c48f778e6b56ab3636a6ee35daafcc72774f81f01"
+      },
+      {
+        "body": "j1",
+        "role": "hub",
+        "path": "meshes/j1.hub.bin",
+        "sha256": "937ab984078854ba1906109f0fe3b6a80a277045f180010654f7c54cd00b3b1a"
+      },
+      {
+        "body": "j1",
+        "role": "motor",
+        "path": "meshes/j1.motor.bin",
+        "sha256": "dcd2ba6d3ca378297e689123e2ec6588bce92a08af9ac6eb7f669d7597c7054f"
+      },
+      {
+        "body": "j1",
+        "role": "tube",
+        "path": "meshes/j1.tube.bin",
+        "sha256": "2048ce803d16871d95c02c748ed5a681a9e8743f46592324c0d4edb741e4ef31"
+      },
+      {
+        "body": "j2",
+        "role": "frame",
+        "path": "meshes/j2.frame.bin",
+        "sha256": "7b30cc914f6f3eddefff1c0899623ffe7aaa9a5b36ea03dbf1c9b0deb0ebe6a6"
+      },
+      {
+        "body": "j2",
+        "role": "hardware",
+        "path": "meshes/j2.hardware.bin",
+        "sha256": "6300e6b55ef1b221599bdf4be5b7204a1219123a2859d929ed0a0984e14583f0"
+      },
+      {
+        "body": "j2",
+        "role": "hub",
+        "path": "meshes/j2.hub.bin",
+        "sha256": "601abeca065fa6e6619c3d56c60d76dd79dd2b00321f93e4d068212e61eac5c4"
+      },
+      {
+        "body": "j2",
+        "role": "link",
+        "path": "meshes/j2.link.bin",
+        "sha256": "7bfc078e31a96a9f844eb0d09452cfdb854dd5d8ef86a41026b03c77535f678a"
+      },
+      {
+        "body": "j2",
+        "role": "motor",
+        "path": "meshes/j2.motor.bin",
+        "sha256": "3655f46d02b55badc2d174e057bf184eaf35761b371719b876c1a1c30f717fad"
+      },
+      {
+        "body": "j2",
+        "role": "tube",
+        "path": "meshes/j2.tube.bin",
+        "sha256": "f1db308a7ac543730de1cb726b9c62b3065f21e657bb283a77ef7079957ef715"
+      },
+      {
+        "body": "j3",
+        "role": "hub",
+        "path": "meshes/j3.hub.bin",
+        "sha256": "11110542a9788baa4edad10600c674d67ff8737be6a38610eb630aa8904bca8f"
+      },
+      {
+        "body": "j3",
+        "role": "link",
+        "path": "meshes/j3.link.bin",
+        "sha256": "fa40abea7f144035d4b125e3b22ce3cd4b92db498d4c9b329e75e25913b17a53"
+      },
+      {
+        "body": "j3",
+        "role": "tube",
+        "path": "meshes/j3.tube.bin",
+        "sha256": "315619c2be7e634d649baafc0f6b51e1474fc2073212822628ec0303653283e5"
+      }
+    ],
+    "model_status": {
+      "schema": 1,
+      "units": "mm",
+      "placeholder_inertials": true,
+      "dynamics_validated": false,
+      "collision_validated": false
+    },
+    "urdf": {
+      "sha256": "72444bc6efafed2118ee5757f533ab1480e4beeb9b28765d4b3050d7445eef8f",
+      "bytes_verified": true
+    },
+    "model_json": {
+      "sha256": "b61487771bac01ec92550c1c8a85a32c057e710e3e8ae7fba1ba0ccad0112d35",
+      "bytes_verified": true
+    }
+  },
+  "import": {
+    "compiler": {
+      "fusestatic": "false",
+      "discardvisual": "false",
+      "strippath": "false"
+    },
+    "visual_names_assigned": 74,
+    "generated_import_published": false,
+    "note": "Local import uses verified absolute mesh paths; hash is machine-path dependent and retained only in ignored raw results."
+  },
+  "sha256": {
+    "scripts/check_sa03_prototype.py": "8381a47e2cc306bbb03a6b9ac2debd60498df46e4fa9b084cc583e6dfe7923c5",
+    "tests/test_sa03_prototype.py": "c99e9727ce685fbfe0245c103bd54fd099f1d536049cc169420d67b93fcf8c9e"
+  },
+  "parent_validation": {
+    "focused_tests_passed": 26,
+    "sa03_tests_passed": 10,
+    "root_redirect_tests_reject_prior_guard": true,
+    "independent_local_review": "review finding fixed and closure verified",
+    "external_review_complete": true,
+    "prior_external_review_complete": false,
+    "external_review": "2026-10-21-continuation-review.md"
+  }
+}

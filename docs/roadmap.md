@@ -11,9 +11,9 @@ Source inspection and local fixture verification retain their limited meaning. H
 | ID | Status | Dependencies | Additional final-profile gates | Work |
 | --- | --- | --- | --- | --- |
 | DL00 | source inspected | None | None | Inspect Dream packages and one-arm formats |
-| SA01 | pending | DL00 | None | Freeze the task and one-arm model contract |
-| SA02 | pending | SA01 | None | Install an isolated client and validate the schema |
-| SA03 | pending | SA01 | None | Import the prototype URDF and validate the selected MuJoCo model |
+| SA01 | contract frozen | DL00 | None | Freeze the task and one-arm model contract |
+| SA02 | client verified | SA01 | None | Install an isolated client and validate the schema |
+| SA03 | in progress | SA01 | None | Import the prototype URDF and validate the selected MuJoCo model |
 | SA04 | pending | SA02;SA03 | None | Connect the single-arm loop through the shared controller |
 | SA05 | pending | SA04 | RC03 | Record synchronized simulated demonstrations |
 | SA06 | pending | SA05 | None | Validate and freeze the dataset |
