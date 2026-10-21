@@ -9,9 +9,29 @@ source .venv/bin/activate
 scripts/check_offline.sh
 ```
 
-This checks packet encoding, fake serial behavior, Qt lifecycle/UI behavior, CLI help, roadmap consistency, and active documentation links. It performs no physical motor communication. Screenshots and the UI summary go to `results/bench/`.
+This checks packet encoding, fake serial behavior, Qt lifecycle/UI behavior, CLI help, the frozen single-arm contract and its mutation regressions, roadmap consistency, and active documentation links. It performs no physical motor communication. Screenshots and the UI summary go to `results/bench/`.
 
 Use a separate environment for the [rolling sample](examples/rolling_contact_arm/README.md). Its checks exercise MuJoCo, the actual Dream SDK with mocked transport, and local dataset upload validation. They make no hosted calls and require no API key.
+
+Validate the frozen contract with the pinned client:
+
+```bash
+MUJOCO_GL=egl .venv-rolling-sample/bin/python scripts/check_sa02_client.py
+MUJOCO_GL=egl .venv-rolling-sample/bin/python examples/rolling_contact_arm/verify_dream.py
+```
+
+This checks the three-wide joint-action schema, one overhead camera, and no-EEF registration. Transport is mocked; no cloud or motor call occurs.
+
+To check the external prototype import for SA03, supply the frozen local assets:
+
+```bash
+.venv-rolling-sample/bin/python -m unittest tests.test_single_arm_contract tests.test_sa03_prototype
+.venv-rolling-sample/bin/python scripts/check_sa03_prototype.py \
+  --prototype-dir .worktrees/controller-c07-c10/arm_assets \
+  --output-dir results/single-arm/sa03-prototype
+```
+
+The checker verifies asset hashes, preserves fixed links and visuals, and compares MuJoCo link poses with independent URDF forward kinematics. Generated imports and reports stay under ignored `results/`. A pass covers provenance and kinematics only. Placeholder inertias, missing collisions, and unfinished tool, camera, and marker definitions keep SA03 incomplete. The offline baseline skips the simulator-dependent unit cases when that separate environment is absent.
 
 ## Place changes with their owner
 

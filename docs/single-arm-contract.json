@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "contract_id": "sa01-single-arm-contract-v1",
+  "recorded_on": "2026-10-20",
+  "profiles": {
+    "selected": "sim_prototype_3",
+    "prototype": {
+      "id": "sim_prototype_3",
+      "status": "contract frozen; physics validation pending SA03",
+      "asset": {
+        "kind": "local controller checkout; not shipped in this repository",
+        "cleaned_urdf": {
+          "file": "arm.urdf",
+          "sha256": "72444bc6efafed2118ee5757f533ab1480e4beeb9b28765d4b3050d7445eef8f"
+        },
+        "model_json": {
+          "file": "model.json",
+          "sha256": "b61487771bac01ec92550c1c8a85a32c057e710e3e8ae7fba1ba0ccad0112d35"
+        },
+        "source_urdf": {
+          "file": "mainassem.urdf",
+          "sha256": "8c3b60f2bc8c19b6843143f491b92fe4365a9ce9928f39e3566ae3903b05666c"
+        },
+        "source_archive": {
+          "file": "mainAssem (3).zip",
+          "sha256": "ebb0777628e318e27eca25686adefed16dabc92daec44229f51913b915d6cd72"
+        }
+      },
+      "moving_coordinate_count": 3
+    },
+    "final": {
+      "id": "sim_final_rolling",
+      "status": "identity reserved; RC01 owns geometry, independent coordinates, and drive relation",
+      "moving_coordinate_count": null,
+      "geometry": null
+    },
+    "illustrative_sample": {
+      "id": "sim_rolling_sample",
+      "status": "RC00 locally verified; not this contract",
+      "moving_coordinate_count": 2
+    }
+  },
+  "joints": [
+    {
+      "index": 0,
+      "name": "J1",
+      "urdf_joint": "revolute_2",
+      "role": "base",
+      "motor_id": 0,
+      "unit": "rad",
+      "positive_direction": "right-hand rotation about the URDF joint axis",
+      "zero": "URDF q=0; physical zero is uncommissioned",
+      "limits_rad": [
+        -1.5707963267948966,
+        1.5707963267948966
+      ],
+      "limit_provenance": "provisional display bound centered on an uncommissioned zero; not physical clearance"
+    },
+    {
+      "index": 1,
+      "name": "J2",
+      "urdf_joint": "revolute_1",
+      "role": "shoulder",
+      "motor_id": 1,
+      "unit": "rad",
+      "positive_direction": "right-hand rotation about the URDF joint axis",
+      "zero": "URDF q=0; physical zero is uncommissioned",
+      "limits_rad": null,
+      "limit_provenance": "continuous CAD joint; physical travel and simulation envelope are not commissioned"
+    },
+    {
+      "index": 2,
+      "name": "J3",
+      "urdf_joint": "revolute_3",
+      "role": "elbow",
+      "motor_id": 2,
+      "unit": "rad",
+      "positive_direction": "right-hand rotation about the URDF joint axis",
+      "zero": "URDF q=0; physical zero is uncommissioned",
+      "limits_rad": null,
+      "limit_provenance": "continuous CAD joint; physical travel and simulation envelope are not commissioned"
+    }
+  ],
+  "excluded_coordinates": [
+    {
+      "urdf_joint": "revolute_4",
+      "reason": "passive joint fixed in the generated prototype; no policy coordinate"
+    }
+  ],
+  "policy": {
+    "model_revision": "prototype-cad-v1",
+    "model_revision_provenance": "label assigned by this contract to the cleaned URDF hash 72444bc6; the CAD input has no revision field",
+    "embodiment": {
+      "state": {
+        "arm": [
+          0,
+          3
+        ]
+      },
+      "action": {
+        "arm": [
+          0,
+          3
+        ]
+      },
+      "video": {
+        "overhead": "observation.images.overhead"
+      },
+      "parts": {
+        "state": {
+          "arm": {
+            "kind": "arm",
+            "side": "single"
+          }
+        },
+        "action": {
+          "arm": {
+            "kind": "arm",
+            "side": "single"
+          }
+        }
+      },
+      "actions": "absolute"
+    },
+    "state_order": [
+      "J1",
+      "J2",
+      "J3"
+    ],
+    "action_order": [
+      "J1",
+      "J2",
+      "J3"
+    ],
+    "state_units": "rad",
+    "action_units": "rad",
+    "action_meaning": "absolute joint targets for the next control interval",
+    "internal_mapping": {
+      "public_state_key": "state.arm",
+      "public_action_key": "per_key.action.arm",
+      "training_slot": "right_arm",
+      "note": "The internal right-arm slot is a client mapping. It does not add a left-arm observation or action."
+    }
+  },
+  "camera": {
+    "name": "overhead",
+    "role": "overhead",
+    "count": 1,
+    "modality": "RGB",
+    "encoding": "JPEG",
+    "resolution_px": [
+      320,
+      240
+    ],
+    "rate_hz": 30,
+    "history_frames": 1,
+    "mount": "fixed scene camera; exact pose frozen by SA03",
+    "pose_extrinsics": null,
+    "policy_visible": true,
+    "provenance": "contract value; sample rendering established 320x240 support only"
+  },
+  "timing": {
+    "timebase": "simulation monotonic clock",
+    "control_rate_hz": 100,
+    "policy_rate_hz": 30,
+    "camera_rate_hz": 30,
+    "dataset_fps": 30,
+    "observation_history_frames": 1,
+    "max_observation_age_ms": 250,
+    "action_chunk_rows": 1,
+    "execution_prefix_rows": 1,
+    "task_timeout_sim_s": 30.0
+  },
+  "task": {
+    "id": "reach_marker_v1",
+    "name": "Fixed-tool reaching",
+    "instruction": "Reach the red marker with the fixed tool.",
+    "tool": {
+      "kind": "fixed, non-gripper tool",
+      "frame": null,
+      "provenance": "SA03 freezes the tool reference point after the prototype import"
+    },
+    "marker": {
+      "appearance": "red circle on the tabletop",
+      "geometry": null,
+      "policy_sees_image": true,
+      "policy_sees_coordinates": false,
+      "geometry_frozen_by": "SA03"
+    },
+    "success": {
+      "metric": "distance from the frozen tool reference point to the marker center",
+      "threshold_m": 0.02,
+      "required_settle_s": 1.0,
+      "requires_no_human_intervention": true,
+      "requires_reobservation": true,
+      "count_all_attempts": true
+    },
+    "training_budget": {
+      "successful_episodes": 20,
+      "validation_episodes": 5,
+      "starts": "multiple distinct reachable start poses",
+      "marker_locations": "multiple reachable tabletop locations",
+      "scene_set_frozen_by": "SA05"
+    },
+    "evaluation": {
+      "held_out_scenes": 10,
+      "static_scenes": 6,
+      "target_shift_scenes": 4,
+      "successes_required": 8,
+      "shifted_successes_required": 3,
+      "frozen_before_training": true,
+      "frozen_by": "SA10",
+      "scripted_paths_allowed": false,
+      "hidden_coordinates_outside_policy": true
+    }
+  },
+  "exclusions": {
+    "passive_coordinates_as_policy_actions": false,
+    "left_arm_channels": false,
+    "absent_gripper_channels": false,
+    "wrist_camera": false,
+    "eef_actions": false,
+    "evaluator_coordinates_in_policy": false,
+    "scripted_task_paths_in_policy": false,
+    "cross_machine_monotonic_comparison": false
+  },
+  "evidence_limits": {
+    "contract_only": true,
+    "simulation_validated": false,
+    "hosted_validated": false,
+    "physical_validated": false,
+    "note": "This contract freezes intent and interfaces. It does not establish physics, model behavior, or hardware readiness."
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "recorded_at_utc": "2026-10-20T23:07:44+00:00",
+  "verdict": "PASS for installed client and offline schema only",
+  "scope": "no hosted model, no cloud call, no motor call, no SA03 physics",
+  "python": "3.14.6",
+  "executable": "/home/sid/Documents/code/im6014Development/.venv-rolling-sample/bin/python",
+  "packages": {
+    "mujoco": "3.16.0",
+    "yourdfpy": "0.0.60",
+    "numpy": "2.5.4",
+    "Pillow": "13.0.0",
+    "dreamlabs-client": "1.0.3",
+    "av": "19.0.1",
+    "pyarrow": "26.0.0"
+  },
+  "pip_check": "No broken requirements found.",
+  "requirements": {
+    "path": "examples/rolling_contact_arm/requirements.txt",
+    "sha256": "01572b7206fa8e3965a2e15146a8c43e57cc7b34ca03bffbe67ea971ef889c9e"
+  },
+  "contract": {
+    "path": "docs/single-arm-contract.json",
+    "sha256": "af5cc2aea60709f4351b7854e4306ea7693789d26be8e00250f01b366803c3f7"
+  },
+  "registration": {
+    "state_slots": [
+      {
+        "name": "right_arm",
+        "part": "arm",
+        "width": 3
+      }
+    ],
+    "action_slots": [
+      {
+        "name": "right_arm",
+        "part": "arm",
+        "width": 3
+      }
+    ],
+    "use_eef": false,
+    "video": {
+      "overhead": "observation.images.overhead"
+    },
+    "head_camera": null,
+    "joints_checked": true
+  },
+  "joint_action": {
+    "checkpoint": "offline-sa01-contract",
+    "state_width": 3,
+    "action_width": 3,
+    "public_action_key": "per_key.action.arm",
+    "wire_state_key": "state.right_arm",
+    "wire_video_key": "video.overhead",
+    "response_rows": 2,
+    "negative_checks": [
+      "SDK rejects two-wide state before transport",
+      "SDK rejects two-wide action after transport"
+    ]
+  },
+  "dreamlabs_client_version": "1.0.3",
+  "hosted_calls": 0,
+  "motor_calls": 0,
+  "hosted_model_behavior_verified": false
+}

@@ -25,7 +25,7 @@ Local `.worktrees/controller-*` folders belong to independent checkouts associat
 
 ## Model assets
 
-The public example is self-contained. The CAD-derived prototype URDF currently exists only in a local development checkout and is not shipped here. SA03 must acquire a reviewed asset bundle, hash its provenance, and validate physics. Do not substitute the two-coordinate sample for the three-coordinate prototype. Final rolling geometry is a separate RC01-RC04 revision.
+The public example is self-contained. The CAD-derived prototype URDF currently exists only in a local development checkout and is not shipped here. The [SA01 contract](single-arm-contract.json) freezes the selected prototype interfaces; SA03 must acquire a reviewed asset bundle, hash its provenance, and validate physics. Do not substitute the two-coordinate sample for the three-coordinate prototype. Final rolling geometry is a separate RC01-RC04 revision.
 
 ## Results and history
 
