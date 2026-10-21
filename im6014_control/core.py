@@ -10,7 +10,6 @@ import math
 import time
 from typing import Literal
 
-from .codec import command
 from .mapping import JointSample, JointTarget
 from .records import (
     ArmDecision,
@@ -21,6 +20,7 @@ from .records import (
     JointSpec,
     JointStatus,
     MotorHealth,
+    NativePositionServo,
     Ownership,
     Reference,
     Snapshot,
@@ -31,6 +31,7 @@ from .records import (
 from .reference import (
     _applied_reference,
     _predicted_effort,
+    _seed_reference,
     plan_reference,
     position_rates_at_release,
     project_joint_target,
@@ -214,6 +215,10 @@ class JointCore:
             return self._rejected(DecisionCode.INVALID_STATE)
         if not isinstance(source, SourceIdentity):
             return self._rejected(DecisionCode.INVALID_SOURCE)
+        if source.backend == "physical" and any(
+            isinstance(spec.drive, NativePositionServo) for spec in self._specs
+        ):
+            return self._rejected(DecisionCode.INVALID_SOURCE)
         self._clear_observations()
         self._source = source
         self._state = State.CONNECTED
@@ -329,20 +334,10 @@ class JointCore:
             for spec, joint in zip(self._specs, self._observations)
         ):
             return self._arm_rejected(DecisionCode.POSITION_LIMIT)
+        seeds: list[JointTarget] = []
         try:
             for spec, joint in zip(self._specs, self._observations):
-                seed = JointTarget(joint.sample.q_rad, 0.0, 0.0, 0.0, 0.0)
-                output = spec.mapping.to_output(seed)
-                command(
-                    spec.motor_id,
-                    mode=1,
-                    rpm=output.rpm,
-                    kd=output.kd,
-                    torque=output.tau_nm,
-                    watchdog=True,
-                    position=output.q_rad,
-                    kp=output.kp,
-                )
+                seed = _seed_reference(spec, joint.sample)
                 project_joint_target(
                     spec,
                     seed,
@@ -351,13 +346,21 @@ class JointCore:
                     -spec.max_velocity_rad_s,
                     spec.max_velocity_rad_s,
                 )
+                effort = _predicted_effort(
+                    _applied_reference(spec, seed),
+                    joint.sample.q_rad,
+                    joint.sample.dq_rad_s,
+                )
+                if abs(effort) > spec.max_effort_nm:
+                    return self._arm_rejected(DecisionCode.EFFORT_LIMIT)
+                seeds.append(seed)
         except (ArithmeticError, ValueError):
             return self._arm_rejected(DecisionCode.INVALID_ARGUMENT)
         self._state = State.ARMED
         self._ownership_generation += 1
         self._ownership = Ownership(owner, self._ownership_generation)
         self._history = _ReferenceHistory(
-            joints=tuple(JointTarget(joint.sample.q_rad, 0.0, 0.0, 0.0, 0.0) for joint in self._observations),
+            joints=tuple(seeds),
             issued_at_s=now,
             kind="seed",
             position_rates_rad_s=tuple(0.0 for _ in self._specs),
@@ -421,9 +424,15 @@ class JointCore:
 
         try:
             for spec, joint_target in zip(self._specs, target.joints):
+                if isinstance(spec.drive, NativePositionServo):
+                    applied = _applied_reference(spec, joint_target)
+                else:
+                    applied = None
                 if abs(joint_target.tau_nm) > spec.max_effort_nm:
                     return self._rejected(DecisionCode.EFFORT_LIMIT)
-                if abs(_applied_reference(spec, joint_target).tau_nm) > spec.max_effort_nm:
+                if applied is None:
+                    applied = _applied_reference(spec, joint_target)
+                if abs(applied.tau_nm) > spec.max_effort_nm:
                     return self._rejected(DecisionCode.EFFORT_LIMIT)
         except (ArithmeticError, ValueError):
             return self._rejected(DecisionCode.INVALID_ARGUMENT)

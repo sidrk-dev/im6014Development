@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-21",
+  "baseline": "fb38291",
+  "profile": "sim_rolling_reach_v1",
+  "scope": "native position drive representation and connected joint-goal software/simulation checks; not station,SA04,hosted,learned or physical acceptance",
+  "controller_tests": {
+    "passed": 159,
+    "physical_regressions": 130,
+    "new_native_tests": 29,
+    "inherited_test_modules_byte_identical": 8
+  },
+  "loaded_contract_sdk_drive_tests": {
+    "passed": 51,
+    "new_native_loaded_tests": 10,
+    "transport": "SDK mocked; no hosted calls"
+  },
+  "offline": {
+    "script": "scripts/check_offline.sh",
+    "passed": true,
+    "bench_groups": 18,
+    "controller_tests": 159,
+    "contract_tests": 26,
+    "simulator_cases_skipped_in_bench_environment": 4,
+    "skipped_cases_covered_by_pinned_suite": true
+  },
+  "regression": {
+    "failure_before": "rounded native pacing endpoint yieldsNone;actualsteppingissues8/1000refs",
+    "fix": "one representable ULP inward only for out-of-corridor clamps; strict bounds retained",
+    "pure_red_before": true,
+    "pure_green_after": true,
+    "connected_green_after": {
+      "scope": "parent closed-loop probe,not station acceptance",
+      "control_ticks": 1000,
+      "issued": 999,
+      "initial": [
+        0.0,
+        0.0,
+        -0.9
+      ],
+      "goal": [
+        0.05,
+        0.04,
+        -0.87
+      ],
+      "last_reference": [
+        0.05,
+        0.04,
+        -0.87
+      ],
+      "final_measured": [
+        0.050000000000000586,
+        0.030388033088321102,
+        -0.8716082893089757
+      ],
+      "maximum_actual_effort_nm": [
+        0.8560228522872055,
+        5.3626286818379185,
+        1.9298145768702852
+      ]
+    }
+  },
+  "drive": {
+    "logical_coordinates": [
+      "base_yaw",
+      "shoulder_bend",
+      "elbow_bend"
+    ],
+    "internal_hinges": 5,
+    "kp": [
+      180,
+      420,
+      420
+    ],
+    "kd": [
+      18,
+      38,
+      38
+    ],
+    "force_limits_nm": [
+      14,
+      25,
+      25
+    ],
+    "desired_velocity_rad_s": 0,
+    "feedforward_nm": 0,
+    "physics_steps_in_closed_loop": 30000
+  },
+  "review": {
+    "status": "complete; no actionable defects reported",
+    "provider": "antigravity",
+    "requested_model": "gemini-3.8-flash-high",
+    "model_evidence": "pinned-argv; returned model not verified",
+    "scope": "complete implementation and new tests inline; no reviewer runtime tests"
+  },
+  "remaining": [
+    "simulator station and multi-rate operation during policy delay",
+    "full scene/camera/profile identity and post-factory mutation checks",
+    "stale-camera,expiry,takeover and full C14-C16 integration acceptance",
+    "hosted checkpoint and learned behavior",
+    "physical mechanism and thermal qualification"
+  ],
+  "source_sha256": {
+    "im6014_control/core.py": "2b6b4495749f9ce9e2dfd709941528e1f26c699c119940cdc960d6edaae017ae",
+    "im6014_control/records.py": "69bcb3fd5d5ecb82d20c8204599ed2bc0dddca2ce5b38c3a36c13371b7fc384a",
+    "im6014_control/reference.py": "a60683a871284b3b96fbff2b20d98957ddad9d7d21d23113b5a71a5a434e50f9",
+    "im6014_control/mapping.py": "a39502e207e9dac4f9dae1827ba4dacd4b9e835633ea11d738834e3be152fd0b",
+    "im6014_control/codec.py": "82aed0838cc0a9d8d63ab2065aea786893ade405f55e5a0b7c895eacf2197af9",
+    "examples/rolling_reach_arm/drive.py": "8d4bb530c789bf5635ff2f21028d72031f09a253b6f48db45f5e68e4c7ad4dca",
+    "tests/control/test_controller_native.py": "b71187a0b1cd53773020ad611553d09d8953bff79afc4e741dba7c54dbfea8db",
+    "tests/test_rolling_native_drive.py": "c358898593fdf6b2a1b230fae746c77785b78ee7975aed7a5615eff4537ba29c",
+    "examples/rolling_reach_arm/scene.py": "779c901b145e534c27c2b44cfeeafa4ed35893f0496b5be21d3f389d22201970",
+    "examples/rolling_contact_arm/requirements.txt": "01572b7206fa8e3965a2e15146a8c43e57cc7b34ca03bffbe67ea971ef889c9e"
+  }
+}

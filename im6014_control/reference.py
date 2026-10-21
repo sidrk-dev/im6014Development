@@ -15,8 +15,8 @@ from .codec import (
     raw_to_position,
     raw_to_rpm,
 )
-from .mapping import JointTarget, OutputSample
-from .records import JointSpec
+from .mapping import JointSample, JointTarget, OutputSample
+from .records import JointSpec, NativePositionServo
 
 
 @dataclass(frozen=True)
@@ -28,7 +28,23 @@ class _AppliedJointReference:
     kd: float
 
 
+def _seed_reference(spec: JointSpec, sample: JointSample) -> JointTarget:
+    if isinstance(spec.drive, NativePositionServo):
+        return spec.drive.target(sample.q_rad)
+    return JointTarget(sample.q_rad, 0.0, 0.0, 0.0, 0.0)
+
+
 def _applied_reference(spec: JointSpec, target: JointTarget) -> _AppliedJointReference:
+    if isinstance(spec.drive, NativePositionServo):
+        drive = spec.drive
+        if target.kp != drive.kp or target.kd != drive.kd:
+            raise ValueError("native target gains must match the fixed drive")
+        if target.dq_rad_s != 0.0 or target.tau_nm != 0.0:
+            raise ValueError("native desired velocity and feedforward must be zero")
+        return _AppliedJointReference(
+            target.q_rad, 0.0, 0.0, drive.kp, drive.kd,
+        )
+
     output = spec.mapping.to_output(target)
     decoded = decode_command(command(
         spec.motor_id, mode=1, position=output.q_rad, rpm=output.rpm,
@@ -43,6 +59,19 @@ def _applied_reference(spec: JointSpec, target: JointTarget) -> _AppliedJointRef
     if not math.isfinite(kp) or not math.isfinite(kd):
         raise ValueError("applied gains must be finite")
     return _AppliedJointReference(sample.q_rad, sample.dq_rad_s, sample.tau_nm, kp, kd)
+
+
+def _reference_key(
+    spec: JointSpec, target: JointTarget
+) -> tuple[int, int] | tuple[float, float]:
+    if isinstance(spec.drive, NativePositionServo):
+        return target.q_rad, 0.0
+    output = spec.mapping.to_output(target)
+    decoded = decode_command(command(
+        spec.motor_id, mode=1, rpm=output.rpm, kd=output.kd,
+        torque=output.tau_nm, watchdog=True, position=output.q_rad, kp=output.kp,
+    ))
+    return decoded["raw_position"], decoded["raw_rpm"]
 
 
 def _predicted_effort(applied: _AppliedJointReference, q_rad: float, dq_rad_s: float) -> float:
@@ -61,7 +90,29 @@ def project_joint_target(
     dq_min: float,
     dq_max: float,
 ) -> JointTarget:
-    """Project requested joint values inward to representable codec grid values."""
+    """Project requested joint values into the representation's closed corridor."""
+    if isinstance(spec.drive, NativePositionServo):
+        applied = _applied_reference(spec, target)
+        for value in (q_min, q_max, dq_min, dq_max):
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise ValueError("native projection bounds must be finite")
+            try:
+                finite = math.isfinite(value)
+            except OverflowError as exc:
+                raise ValueError("native projection bounds must be finite") from exc
+            if not finite:
+                raise ValueError("native projection bounds must be finite")
+        if q_min > q_max:
+            raise ValueError("native position corridor is empty")
+        if dq_min > dq_max or not dq_min <= 0.0 <= dq_max:
+            raise ValueError("native desired velocity corridor must contain zero")
+        q_rad = applied.q_rad
+        if q_rad < q_min:
+            q_rad = math.nextafter(q_min, q_max)
+        elif q_rad > q_max:
+            q_rad = math.nextafter(q_max, q_min)
+        return JointTarget(q_rad, 0.0, 0.0, applied.kp, applied.kd)
+
     mapping = spec.mapping
     direction = mapping.direction
     wanted_speed = max(dq_min, min(dq_max, target.dq_rad_s))
@@ -125,9 +176,11 @@ def plan_reference(
 
     Computes independent dq and q corridors, intersects with position limits,
     velocity caps, acceleration rate bounds, and measured-position lead limits.
-    Projects to inward representable codec values, validates roundtrip and closed
-    bounds, and checks progress against static nearest-grid goals.
-    A candidate still needs final release validation; a tick need not progress.
+    Projects to inward representation-specific values, validates closed bounds,
+    and checks progress against the static bounded goal. Physical joints also
+    retain codec roundtrip and raw-grid checks; native joints use the exact
+    continuous reference key. A candidate still needs final release validation;
+    a tick need not progress.
     """
     if (
         isinstance(elapsed_s, bool)
@@ -269,64 +322,49 @@ def plan_reference(
         if abs(cand.q_rad - q_meas) > lead:
             return None
 
-        try:
-            cand_output = mapping.to_output(cand)
-            cand_frame = command(
-                spec.motor_id,
-                mode=1,
-                rpm=cand_output.rpm,
-                kd=cand_output.kd,
-                torque=cand_output.tau_nm,
-                watchdog=True,
-                position=cand_output.q_rad,
-                kp=cand_output.kp,
-            )
-            cand_decoded = decode_command(cand_frame)
-            cand_pos_raw = cand_decoded["raw_position"]
-            cand_speed_raw = cand_decoded["raw_rpm"]
-
-            prev_output = mapping.to_output(prev)
-            prev_frame = command(
-                spec.motor_id,
-                mode=1,
-                rpm=prev_output.rpm,
-                kd=prev_output.kd,
-                torque=prev_output.tau_nm,
-                watchdog=True,
-                position=prev_output.q_rad,
-                kp=prev_output.kp,
-            )
-            prev_decoded = decode_command(prev_frame)
-            prev_pos_raw = prev_decoded["raw_position"]
-            prev_speed_raw = prev_decoded["raw_rpm"]
-        except (ArithmeticError, ValueError):
-            return None
-
-        def position_to_joint(output_rad: float) -> float:
-            return mapping.from_output(OutputSample(output_rad, 0.0, 0.0)).q_rad
-
-        def speed_to_joint(output_rpm: float) -> float:
-            return mapping.from_output(OutputSample(0.0, output_rpm, 0.0)).dq_rad_s
-
-        try:
-            static_pos_raw = project_position_raw(
-                req.q_rad, L, U, position_to_joint, direction
-            )
-            wanted_static_speed = max(-V, min(V, req.dq_rad_s))
-            static_speed_raw = project_speed_raw(
-                wanted_static_speed, -V, V, speed_to_joint, direction
-            )
-        except (ArithmeticError, ValueError):
-            return None
-
-        if static_pos_raw is None or static_speed_raw is None:
-            return None
-
-        if not allow_bootstrap:
-            if static_pos_raw != prev_pos_raw and cand_pos_raw == prev_pos_raw:
+        if isinstance(spec.drive, NativePositionServo):
+            try:
+                static_goal = project_joint_target(spec, req, L, U, -V, V)
+                candidate_key = _reference_key(spec, cand)
+                previous_key = _reference_key(spec, prev)
+                static_key = _reference_key(spec, static_goal)
+            except (ArithmeticError, ValueError):
                 return None
-            if static_speed_raw != prev_speed_raw and cand_speed_raw == prev_speed_raw:
+            if not allow_bootstrap:
+                if static_key[0] != previous_key[0] and candidate_key[0] == previous_key[0]:
+                    return None
+        else:
+            try:
+                candidate_key = _reference_key(spec, cand)
+                previous_key = _reference_key(spec, prev)
+            except (ArithmeticError, ValueError):
                 return None
+
+            def position_to_joint(output_rad: float) -> float:
+                return mapping.from_output(OutputSample(output_rad, 0.0, 0.0)).q_rad
+
+            def speed_to_joint(output_rpm: float) -> float:
+                return mapping.from_output(OutputSample(0.0, output_rpm, 0.0)).dq_rad_s
+
+            try:
+                static_pos_raw = project_position_raw(
+                    req.q_rad, L, U, position_to_joint, direction
+                )
+                wanted_static_speed = max(-V, min(V, req.dq_rad_s))
+                static_speed_raw = project_speed_raw(
+                    wanted_static_speed, -V, V, speed_to_joint, direction
+                )
+            except (ArithmeticError, ValueError):
+                return None
+
+            if static_pos_raw is None or static_speed_raw is None:
+                return None
+
+            if not allow_bootstrap:
+                if static_pos_raw != previous_key[0] and candidate_key[0] == previous_key[0]:
+                    return None
+                if static_speed_raw != previous_key[1] and candidate_key[1] == previous_key[1]:
+                    return None
 
         try:
             effort = _predicted_effort(

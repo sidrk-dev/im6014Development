@@ -43,9 +43,11 @@ remain open. No physical drive or thermal qualification follows from these
 checks; the package adds no transport owner.
 
 Accepted C12 behavior is preserved, including one-shot reference consumption,
-codec quantization and gain/torque caps, and release-time vetoes. A future station
-must define a reviewed backend/drive/gain relation and measure multi-rate
-behavior before integration.
+codec quantization and gain/torque caps, and release-time vetoes. The [native drive unit](../reports/native-drive/README.md) adds a closed drive
+variant and loaded-model factory for fixed MuJoCo position servos. Native targets
+require the declared gains, zero desired velocity/feedforward, and an explicit
+logical identity map. A future station must still enforce model/camera identity
+and measure multi-rate behavior before integration.
 
 ## Tests
 
