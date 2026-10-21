@@ -3,6 +3,7 @@ set -eu
 repo_dir="$(cd -- "$(dirname -- "$0")/.." && pwd)"
 cd -- "$repo_dir"
 python -m tests.bench.test_motor
+python -m unittest discover -s tests/control -t .
 QT_QPA_PLATFORM=offscreen python -m tests.bench.test_dashboard
 python -m im6014_bench.motor --help >/dev/null
 python scripts/check_single_arm_contract.py

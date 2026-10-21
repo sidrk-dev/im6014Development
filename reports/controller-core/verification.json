@@ -1,0 +1,54 @@
+{
+  "verdict": "PASS",
+  "source_commit": "227ec4ecc712c0cee48a50c9e234e70dd065b8e3",
+  "modules": [
+    {
+      "upstream": "joint_controller.py",
+      "destination": "im6014_control/core.py",
+      "source_sha256": "b98425f65216eb44e655ce3d845f8aa7aec982c341ac0c2868aceedad66d5586",
+      "ported_sha256": "d346da2b409e2f824bd2c0ade851af0b24e48bf8be689b3555b0346c09e26cbd",
+      "normalized_ast_identical": true
+    },
+    {
+      "upstream": "joint_records.py",
+      "destination": "im6014_control/records.py",
+      "source_sha256": "7cd1f6a473f59023d2006b67240cee6a4597063a5ffb628ed93e9c706ed974b6",
+      "ported_sha256": "4cc06852bbb1e83c6b462395e02a1242ae003e4291719d46c0a6711ae743bddd",
+      "normalized_ast_identical": true
+    },
+    {
+      "upstream": "joint_reference.py",
+      "destination": "im6014_control/reference.py",
+      "source_sha256": "3030bc235c008a833d4f6c7c4a8de7934e70e202e2b52d90b5eb47a97941277b",
+      "ported_sha256": "5985aff799d24632dd819629b564ff9b204fd6c559c6cc2960ac75b664417a88",
+      "normalized_ast_identical": true
+    },
+    {
+      "upstream": "joint_mapping.py",
+      "destination": "im6014_control/mapping.py",
+      "source_sha256": "a39502e207e9dac4f9dae1827ba4dacd4b9e835633ea11d738834e3be152fd0b",
+      "ported_sha256": "a39502e207e9dac4f9dae1827ba4dacd4b9e835633ea11d738834e3be152fd0b",
+      "normalized_ast_identical": true
+    },
+    {
+      "upstream": "im6014_codec.py",
+      "destination": "im6014_control/codec.py",
+      "source_sha256": "82aed0838cc0a9d8d63ab2065aea786893ade405f55e5a0b7c895eacf2197af9",
+      "ported_sha256": "82aed0838cc0a9d8d63ab2065aea786893ade405f55e5a0b7c895eacf2197af9",
+      "normalized_ast_identical": true
+    }
+  ],
+  "scope": "behavior-preserving committed C12 package migration only",
+  "regressions": {
+    "command": "python -m unittest discover -s tests/control -t .",
+    "tests": 108,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "parent_run": true
+  },
+  "test_bodies": "All seven original test bodies match after import and module-alias normalization.",
+  "hardware_io": false,
+  "simulator_station_verified": false,
+  "effort_and_remaining_controller_gates_accepted": false
+}

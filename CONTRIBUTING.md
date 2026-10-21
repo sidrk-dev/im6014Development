@@ -9,7 +9,7 @@ source .venv/bin/activate
 scripts/check_offline.sh
 ```
 
-This checks packet encoding, fake serial behavior, Qt lifecycle/UI behavior, CLI help, the frozen single-arm contract and its mutation regressions, roadmap consistency, and active documentation links. It performs no physical motor communication. Screenshots and the UI summary go to `results/bench/`.
+This checks the 108 portable controller regressions, packet encoding, fake serial behavior, Qt lifecycle/UI behavior, CLI help, the frozen single-arm contract and its mutation regressions, roadmap consistency, and active documentation links. It performs no physical motor communication. Screenshots and the UI summary go to `results/bench/`.
 
 Use a separate environment for the [rolling sample](examples/rolling_contact_arm/README.md). Its checks exercise MuJoCo, the actual Dream SDK with mocked transport, and local dataset upload validation. They make no hosted calls and require no API key.
 
@@ -46,6 +46,14 @@ MUJOCO_GL=egl .venv-rolling/bin/python examples/rolling_reach_arm/reach.py --epi
 ```
 
 Use `MUJOCO_GL=osmesa` with libOSMesa on machines without EGL. These checks need no hardware, private CAD, API key, or hosted call. They verify a hand-coded RGB reference baseline and the installed SDK with mocked transport. The [example guide](examples/rolling_reach_arm/README.md) documents assumptions and the generated manifest. Earlier prototype checks above retain their own evidence; they do not block this assumed simulator.
+
+## Portable controller checks
+
+```bash
+python -m unittest discover -s tests/control -t .
+```
+
+This standard-library suite imports `im6014_control` directly. It preserves the reviewed C12 software behavior; it does not connect the simulator station, accept unfinished effort/timing gates, or open a motor port. See the [port record](reports/controller-core/README.md).
 
 ## Place changes with their owner
 
