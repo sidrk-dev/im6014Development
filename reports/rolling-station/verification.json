@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-21",
+  "baseline": "7169773",
+  "profile": "sim_rolling_reach_v1",
+  "scope": "partial SA04 simulator station; not hosted,wall-time,learned,task or physical acceptance",
+  "controller_tests_passed": 159,
+  "pinned_combined_tests_passed": 76,
+  "station_tests_passed": 25,
+  "inherited_pinned_tests_passed": 51,
+  "offline_bench_groups_passed": 18,
+  "sdk_transport": "mocked",
+  "parent_connected_probe": {
+    "scope": "parent final connected joint-goal probe; explicit initial capture echo and later 50ms delays; not learned task acceptance",
+    "steps": 30000,
+    "control_ticks": 1000,
+    "camera_ticks": 300,
+    "captures": 300,
+    "accepted_replies": 299,
+    "issued": 998,
+    "state": "moving",
+    "measured_q": [
+      0.05000000000000059,
+      0.03038803308832341,
+      -0.8716082893089753
+    ],
+    "last_issued_q": [
+      0.05,
+      0.04,
+      -0.87
+    ],
+    "fault_latched": false
+  },
+  "parent_terminal_owner_regression": {
+    "scope": "parent final actual core-owner change after consume; same source; no old-grant release",
+    "events": [
+      {
+        "different_actual_grant": true,
+        "same_source": true
+      }
+    ],
+    "actuation_enabled": false,
+    "issued": 0,
+    "core_owner_is_station_grant": true
+  },
+  "station_assumptions": {
+    "physics_hz": 3000,
+    "control_hz": 100,
+    "camera_hz": 30,
+    "capture_intent_ttl_ms": 250,
+    "feedback_max_age_ms": 50,
+    "max_reference_step_ms": 10,
+    "max_measured_lead_rad": 0.1
+  },
+  "review": {
+    "status": "complete; no actionable defects reported",
+    "provider": "antigravity",
+    "requested_model": "gemini-3.8-flash-high",
+    "model_evidence": "pinned-argv; returned model not verified",
+    "scope": "full implementation and tests inline; source opinion only, no reviewer runtime tests"
+  },
+  "remaining": [
+    "actual hosted-worker/wall-time timing and telemetry",
+    "dashboard failure integration and remaining C14-C16",
+    "hosted checkpoint and learned task evaluation",
+    "physical mechanism,thermal qualification and calibration"
+  ],
+  "source_sha256": {
+    "examples/rolling_reach_arm/station.py": "8f20d6021afba97d142332a360484302751a7682803e0bad9ca8ce0ec08de68b",
+    "tests/test_rolling_station.py": "63a553484f7c1c36156c19bef2028fa1744e97018079397a0d0a3d47226da685",
+    "examples/rolling_reach_arm/drive.py": "8d4bb530c789bf5635ff2f21028d72031f09a253b6f48db45f5e68e4c7ad4dca",
+    "examples/rolling_reach_arm/scene.py": "779c901b145e534c27c2b44cfeeafa4ed35893f0496b5be21d3f389d22201970",
+    "im6014_control/core.py": "2b6b4495749f9ce9e2dfd709941528e1f26c699c119940cdc960d6edaae017ae",
+    "im6014_control/records.py": "69bcb3fd5d5ecb82d20c8204599ed2bc0dddca2ce5b38c3a36c13371b7fc384a",
+    "im6014_control/reference.py": "a60683a871284b3b96fbff2b20d98957ddad9d7d21d23113b5a71a5a434e50f9"
+  }
+}
