@@ -1,0 +1,57 @@
+{
+  "upstream_url": "https://github.com/sidrk-dev/im6014-arm-control",
+  "source_commit": "227ec4ecc712c0cee48a50c9e234e70dd065b8e3",
+  "source_snapshot": "Committed C12 pure controller closure only; unaccepted C13 edits excluded.",
+  "sources": {
+    "joint_controller.py": {
+      "destination": "im6014_control/core.py",
+      "sha256": "b98425f65216eb44e655ce3d845f8aa7aec982c341ac0c2868aceedad66d5586"
+    },
+    "joint_records.py": {
+      "destination": "im6014_control/records.py",
+      "sha256": "7cd1f6a473f59023d2006b67240cee6a4597063a5ffb628ed93e9c706ed974b6"
+    },
+    "joint_reference.py": {
+      "destination": "im6014_control/reference.py",
+      "sha256": "3030bc235c008a833d4f6c7c4a8de7934e70e202e2b52d90b5eb47a97941277b"
+    },
+    "joint_mapping.py": {
+      "destination": "im6014_control/mapping.py",
+      "sha256": "a39502e207e9dac4f9dae1827ba4dacd4b9e835633ea11d738834e3be152fd0b"
+    },
+    "im6014_codec.py": {
+      "destination": "im6014_control/codec.py",
+      "sha256": "82aed0838cc0a9d8d63ab2065aea786893ade405f55e5a0b7c895eacf2197af9"
+    }
+  },
+  "tests": {
+    "test_controller.py": {
+      "destination": "tests/control/test_controller.py",
+      "sha256": "1b5445ee20424d074f963edbb1432a760cffe049e499eddcebba9fdeb72cac87"
+    },
+    "test_controller_targets.py": {
+      "destination": "tests/control/test_controller_targets.py",
+      "sha256": "5f4baeac73c4ffc75beb8f914b69f578b27923609b7d042d0892c011827c1608"
+    },
+    "test_controller_ownership.py": {
+      "destination": "tests/control/test_controller_ownership.py",
+      "sha256": "35260de8aae284d86a92129aa3f3c9144992bc64b5af2e0d4b68139677f3b856"
+    },
+    "test_controller_limits.py": {
+      "destination": "tests/control/test_controller_limits.py",
+      "sha256": "67b305ef443772fbe911ee33dae199e1151c2446b150fefc5a72c98a1e10ddd5"
+    },
+    "test_controller_velocity.py": {
+      "destination": "tests/control/test_controller_velocity.py",
+      "sha256": "dfc87880f3550fb7579e5f6c1c48761f679944370b9404c1b4c295f049360eef"
+    },
+    "test_controller_acceleration.py": {
+      "destination": "tests/control/test_controller_acceleration.py",
+      "sha256": "35f160eb9fa5078c1f52a3bfa19360371b3f566d79be9647a34f13f1d67b10e0"
+    },
+    "test_controller_lead.py": {
+      "destination": "tests/control/test_controller_lead.py",
+      "sha256": "3d101327b11b8cd47721bc4151de22e8ea7d8218d8ffdf6e74f5f6705797373a"
+    }
+  }
+}

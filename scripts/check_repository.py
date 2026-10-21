@@ -73,7 +73,7 @@ def render_roadmap(rows):
 def check_links():
     files = [ROOT/'README.md', ROOT/'CONTRIBUTING.md', ROOT/'AGENTS.md']
     files += list((ROOT/'docs').rglob('*.md'))
-    files += [ROOT/'examples/rolling_contact_arm/README.md', ROOT/'examples/rolling_reach_arm/README.md']
+    files += [ROOT/'examples/rolling_contact_arm/README.md', ROOT/'examples/rolling_reach_arm/README.md', ROOT/'im6014_control/README.md']
     files += list((ROOT/'reports').rglob('README.md'))
     count = 0
     for path in files:

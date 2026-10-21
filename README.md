@@ -36,7 +36,9 @@ The [GitHub work queue](https://github.com/sidrk-dev/im6014Development/issues) g
 
 | Path | Ownership |
 | --- | --- |
+| `im6014_control/` | Portable C12 joint state machine, records, mapping, reference planning and codec; no transport. |
 | `im6014_bench/` | Protocol/bench CLI, serial-session owner, and Qt dashboard. |
+| `tests/control/` | 108 preserved committed-controller regressions. |
 | `tests/bench/` | Packet, fake transport, lifecycle, and UI checks. |
 | `examples/rolling_reach_arm/` | Selected three-coordinate rolling-arm scene and RGB reference baseline. |
 | `examples/rolling_contact_arm/` | Illustrative MuJoCo/URDF model and Dream adapter. |

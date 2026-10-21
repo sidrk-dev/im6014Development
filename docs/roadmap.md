@@ -14,7 +14,7 @@ Source inspection and local fixture verification retain their limited meaning. H
 | SA01 | simulation contract frozen | DL00 | None | Freeze the selected one-arm model and reaching task |
 | SA02 | selected client verified | SA01 | None | Install an isolated client and validate the schema |
 | SA03 | simulation verified | SA01 | None | Validate the self-contained rolling-arm reaching simulator |
-| SA04 | pending | SA02;SA03 | None | Connect the single-arm loop through the shared controller |
+| SA04 | in progress | SA02;SA03 | None | Connect the single-arm loop through the shared controller |
 | SA05 | pending | SA04 | RC03 | Record synchronized simulated demonstrations |
 | SA06 | pending | SA05 | None | Validate and freeze the dataset |
 | SA07 | pending | SA02;SA06 | RC04 | Establish account access and process the dataset |

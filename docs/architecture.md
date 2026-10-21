@@ -21,7 +21,9 @@ The package is checkout-runnable. There is no library distribution or extra pack
 
 The future runtime sends images, measured independent state, and task text to a hosted joint-action fine-tune. Targets pass through shared-controller timing, ownership, faults, position, velocity, acceleration, lead, and effort checks. Physics and local control continue during network delay.
 
-Local `.worktrees/controller-*` folders belong to independent checkouts associated with a separate workbench repository. This cleanup preserves them unchanged. Their accepted code and ledger must be reconciled at SA04; they are not in a fresh public clone. Unaccepted C13-C16 requirements remain explicit in the roadmap checklist.
+`im6014_control` contains the reviewed committed C12 pure controller closure from the independent public arm-control repository. `core.py` owns the ordered joint lifecycle, ownership, target and fault state machine; `records.py`, `mapping.py`, `reference.py`, and `codec.py` own records and pure transformations. [Provenance and imports](../im6014_control/README.md) and [port verification](../reports/controller-core/README.md) describe its scope. It imports no serial transport and does not replace the bench session owner.
+
+Independent local checkouts and their unfinished C13 edits remain untouched. The portable C12 source is a verified foundation for SA04; a simulator station, actual drive/gain mapping, continued local timing during inference, effort checks and remaining C13-C16 obligations are still required. The reference example governor does not accept those gates.
 
 ## Selected simulation
 
