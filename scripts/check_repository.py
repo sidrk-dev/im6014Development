@@ -51,7 +51,7 @@ def render_roadmap(rows):
     lines.extend(['', '## Apply the gates to the selected profile', '',
                   'Every profile obeys `depends_on`. Hardware-matched final revisions additionally obey `final_profile_requires`.',
                   'RC03 precedes hardware-matched SA05 demonstrations; RC04 precedes that profile’s SA07 uploads. The selected assumed simulator does not wait for final CAD.', '',
-                  'SA01 freezes the selected model/task contract. SA02 must revalidate the selected profile with the pinned client. SA03 validates the self-contained rolling reaching scene.',
+                  'SA01 freezes the selected model/task contract. SA02 verifies the selected profile with the pinned client using mocked transport. SA03 validates the self-contained rolling reaching scene.',
                   'Earlier CAD-prototype and two-coordinate sample results remain scoped to those profiles. The reference reacher is not learned-policy or shared-controller acceptance.', '',
                   'Read [Dream integration](dream-integration.md), [rolling joints](rolling-joints.md), and [architecture](architecture.md) for ownership and interface details.', '',
                   '## Preserve acceptance while trimming legacy planning', '',
@@ -130,6 +130,10 @@ def check():
     reaching = json.loads((ROOT/'reports/rolling-reach/verification.json').read_text())
     for name, digest in reaching['sha256'].items():
         assert hashlib.sha256((ROOT/'examples/rolling_reach_arm'/name).read_bytes()).hexdigest() == digest, f'Reaching evidence stale: {name}'
+    client = json.loads((ROOT/'reports/rolling-reach/sa02-client.json').read_text())
+    for source in client['hashes']['sources'].values():
+        path = ROOT/source['path']
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == source['sha256'], f"Selected SDK evidence stale: {source['path']}"
     print(f'PASS: {len(rows)} gates, both dependency graphs, 195 legacy mappings, archive and simulator hashes, {check_links()} portable links')
 
 

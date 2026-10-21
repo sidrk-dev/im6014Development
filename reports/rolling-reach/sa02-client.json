@@ -1,0 +1,378 @@
+{
+  "recorded_at_utc": "2026-10-21T13:00:20+00:00",
+  "verdict": "PASS for the frozen local selected profile, installed SDK, and simulator boundary",
+  "scope": "no hosted model, no cloud call, no motor call, no learned-behavior claim",
+  "python": "3.14.6",
+  "packages": {
+    "mujoco": "3.16.0",
+    "yourdfpy": "0.0.60",
+    "numpy": "2.5.4",
+    "Pillow": "13.0.0",
+    "dreamlabs-client": "1.0.3",
+    "av": "19.0.1",
+    "pyarrow": "26.0.0"
+  },
+  "pip_check": "No broken requirements found.",
+  "profile": {
+    "model": "sim_rolling_reach_v1",
+    "model_revision": "rolling-reach-reference-v1",
+    "checkpoint_label": "offline-sim-rolling-reach-v1",
+    "logical_coordinates": [
+      "base_yaw",
+      "shoulder_bend",
+      "elbow_bend"
+    ],
+    "internal_coordinates": [
+      "yaw",
+      "shoulder_a",
+      "shoulder_b",
+      "elbow_a",
+      "elbow_b"
+    ],
+    "units": "rad",
+    "action_semantics": "absolute logical joint targets in radians",
+    "state_part": "arm",
+    "action_part": "arm",
+    "wire_state_key": "state.right_arm",
+    "public_action_key": "per_key.action.arm",
+    "camera": {
+      "role": "overhead",
+      "name": "overhead",
+      "width": 320,
+      "height": 240,
+      "hz": 30,
+      "history": 1
+    },
+    "timing": {
+      "physics_hz": 3000,
+      "local_control_hz": 100,
+      "action_row_hz": 30,
+      "note": "action_hz is 30, not the 100 Hz local control rate",
+      "history": 1,
+      "chunk_rows": 1
+    }
+  },
+  "registration": {
+    "state_slots": [
+      {
+        "name": "right_arm",
+        "part": "arm",
+        "width": 3
+      }
+    ],
+    "action_slots": [
+      {
+        "name": "right_arm",
+        "part": "arm",
+        "width": 3
+      }
+    ],
+    "use_eef": false,
+    "video": {
+      "overhead": "observation.images.overhead"
+    },
+    "head_camera": null,
+    "joints_checked": true
+  },
+  "hashes": {
+    "sources": {
+      "fixture": {
+        "path": "scripts/dream_client_fixture.py",
+        "sha256": "bd9082fb545e15ba3b7dcb307b62324d3e2f09d19989a21a8e1c8fc38780ab4d"
+      },
+      "verifier": {
+        "path": "examples/rolling_reach_arm/verify_dream.py",
+        "sha256": "9f1e20a8d1b769330ca099074779be2e3ef7a9fc78d7019329412862f5e1a7b4"
+      },
+      "scene": {
+        "path": "examples/rolling_reach_arm/scene.py",
+        "sha256": "779c901b145e534c27c2b44cfeeafa4ed35893f0496b5be21d3f389d22201970"
+      },
+      "reach": {
+        "path": "examples/rolling_reach_arm/reach.py",
+        "sha256": "4d1e951eb14c63420f68a703eeee724e21df5846266a0c2d0a063f40fe6ea38d"
+      },
+      "model": {
+        "path": "examples/rolling_contact_arm/model.py",
+        "sha256": "678c1e5840d16a027edc187f1fe6e55f6777eacd5ffbfe6998a24c892e4701c8"
+      },
+      "requirements": {
+        "path": "examples/rolling_contact_arm/requirements.txt",
+        "sha256": "01572b7206fa8e3965a2e15146a8c43e57cc7b34ca03bffbe67ea971ef889c9e"
+      }
+    },
+    "manifest_sha256": "a7d6f12acc94a5788da0e35565381d42976ca3c922016b6030e7797f65074cf8"
+  },
+  "evidence": {
+    "simulated_seconds": 0.5333333333328082,
+    "physics_steps": 1600,
+    "first_measured_state_rad": [
+      0.11373950348895649,
+      0.16164311731201209,
+      -0.5697218641776647
+    ],
+    "second_measured_state_rad": [
+      0.195689176115489,
+      0.33158264149296945,
+      -0.457886291537034
+    ],
+    "measured_state_changed": true,
+    "rendered_frames_distinct": true,
+    "jpeg_size": [
+      320,
+      240
+    ],
+    "jpeg_mode": "RGB",
+    "jpeg_format": "JPEG",
+    "jpeg_sha256": {
+      "first": "d278a22502b7d1d04f1baeeb6ede9b30d4d07a8a21a4f0fd9a7cd5cc2a2063e7",
+      "second": "a308d5d047c7990705ed035ec73f2f7bbe2f4918edd5ac43aa44d5cd64baef19"
+    },
+    "image_bytes_omitted": true,
+    "wire_state_keys": [
+      "prompt",
+      "video.overhead",
+      "state.right_arm"
+    ],
+    "decoded_action_rows": [
+      [
+        0.2,
+        0.35,
+        -0.45
+      ]
+    ],
+    "session_continued": true,
+    "session_reset": true,
+    "session_closed": true
+  },
+  "negative_checks": [
+    {
+      "check": "wrong local model",
+      "layer": "local contract",
+      "detail": "manifest model changed"
+    },
+    {
+      "check": "wrong local model revision",
+      "layer": "local contract",
+      "detail": "manifest model revision changed"
+    },
+    {
+      "check": "reordered same-width logical names",
+      "layer": "local contract",
+      "detail": "manifest logical coordinate order changed"
+    },
+    {
+      "check": "reordered same-width internal names",
+      "layer": "local contract",
+      "detail": "manifest internal coordinate order changed"
+    },
+    {
+      "check": "wrong action semantics",
+      "layer": "local contract",
+      "detail": "manifest action semantics changed"
+    },
+    {
+      "check": "wrong units",
+      "layer": "local contract",
+      "detail": "manifest units changed"
+    },
+    {
+      "check": "five internal coordinates with passive part",
+      "layer": "local contract",
+      "detail": "manifest internal coordinate order changed"
+    },
+    {
+      "check": "wrong camera role",
+      "layer": "local contract",
+      "detail": "manifest camera changed"
+    },
+    {
+      "check": "wrong camera dimensions",
+      "layer": "local contract",
+      "detail": "manifest camera changed"
+    },
+    {
+      "check": "action_hz drifted to local control 100",
+      "layer": "local contract",
+      "detail": "selected profile differs from the frozen contract"
+    },
+    {
+      "check": "history drifted to two frames",
+      "layer": "local contract",
+      "detail": "selected profile differs from the frozen contract"
+    },
+    {
+      "check": "action chunk drifted to two rows",
+      "layer": "local contract",
+      "detail": "selected profile differs from the frozen contract"
+    },
+    {
+      "check": "two-wide state/action",
+      "layer": "SDK registration/local plan",
+      "detail": "state plan is not one three-wide single arm"
+    },
+    {
+      "check": "renamed same-width action part",
+      "layer": "SDK registration/local plan",
+      "detail": "action plan is not one three-wide single arm"
+    },
+    {
+      "check": "five-wide state/action with passive part",
+      "layer": "SDK registration/local plan",
+      "detail": "state plan is not one three-wide single arm"
+    },
+    {
+      "check": "extra left-arm part",
+      "layer": "SDK registration/local plan",
+      "detail": "parts: one part is on a single arm and another on the left or right; a one-arm robot's parts are all single, a two-arm robot's left or right."
+    },
+    {
+      "check": "extra gripper part",
+      "layer": "SDK registration/local plan",
+      "detail": "state plan is not one three-wide single arm"
+    },
+    {
+      "check": "head camera role",
+      "layer": "SDK registration/local plan",
+      "detail": "selected registration must not name a head camera"
+    },
+    {
+      "check": "extra EEF part",
+      "layer": "SDK registration/local plan",
+      "detail": "parts: one part is on a single arm and another on the left or right; a one-arm robot's parts are all single, a two-arm robot's left or right."
+    },
+    {
+      "check": "two-wide state",
+      "layer": "local contract",
+      "detail": "state must contain three real numbers"
+    },
+    {
+      "check": "five-wide internal state",
+      "layer": "local contract",
+      "detail": "state must contain three real numbers"
+    },
+    {
+      "check": "nonfinite measured state",
+      "layer": "local contract",
+      "detail": "state must be finite measured joints"
+    },
+    {
+      "check": "out-of-range measured state",
+      "layer": "local contract",
+      "detail": "state is outside the logical joint limits"
+    },
+    {
+      "check": "float frame instead of uint8 RGB",
+      "layer": "local contract",
+      "detail": "frame must be uint8 RGB"
+    },
+    {
+      "check": "blank constant frame",
+      "layer": "local contract",
+      "detail": "frame must show a nonconstant scene"
+    },
+    {
+      "check": "wrong frame shape",
+      "layer": "local contract",
+      "detail": "frame must be 240x320x3 RGB"
+    },
+    {
+      "check": "nonfinite timestamp",
+      "layer": "local contract",
+      "detail": "timestamp must be finite, nonnegative seconds"
+    },
+    {
+      "check": "negative timestamp",
+      "layer": "local contract",
+      "detail": "timestamp must be finite, nonnegative seconds"
+    },
+    {
+      "check": "wrong task text",
+      "layer": "local contract",
+      "detail": "task text changed"
+    },
+    {
+      "check": "extra left-arm action key",
+      "layer": "local contract",
+      "detail": "per_key must be exactly ['action.arm'], got ['action.arm', 'action.left_arm']"
+    },
+    {
+      "check": "wrong action width",
+      "layer": "local contract",
+      "detail": "action row must be three wide"
+    },
+    {
+      "check": "empty action rows",
+      "layer": "local contract",
+      "detail": "action must be 1 row"
+    },
+    {
+      "check": "multirow action chunk",
+      "layer": "local contract",
+      "detail": "action must be 1 row"
+    },
+    {
+      "check": "nonfinite action",
+      "layer": "local contract",
+      "detail": "action row must be finite"
+    },
+    {
+      "check": "out-of-range action",
+      "layer": "local contract",
+      "detail": "action row is outside the logical joint limits"
+    },
+    {
+      "check": "ragged action rows",
+      "layer": "local contract",
+      "detail": "action must be 1 row"
+    },
+    {
+      "check": "SDK rejects two-wide state before transport",
+      "layer": "SDK observation check",
+      "detail": "DreamObservationError"
+    },
+    {
+      "check": "SDK rejects two-wide action row",
+      "layer": "SDK action check",
+      "detail": "DreamActionError"
+    },
+    {
+      "check": "SDK rejects empty action chunk",
+      "layer": "SDK action check",
+      "detail": "DreamActionError"
+    },
+    {
+      "check": "SDK rejects ragged action chunk",
+      "layer": "SDK action check",
+      "detail": "DreamActionError"
+    },
+    {
+      "check": "SDK rejects nonnumeric action row",
+      "layer": "SDK action check",
+      "detail": "DreamActionError"
+    },
+    {
+      "check": "local finite check rejects NaN action",
+      "layer": "local action check",
+      "detail": "action row must be finite"
+    },
+    {
+      "check": "local range check rejects out-of-range action",
+      "layer": "local action check",
+      "detail": "action row is outside the logical joint limits"
+    },
+    {
+      "check": "local chunk check rejects multirow action",
+      "layer": "local action check",
+      "detail": "action must be 1 row"
+    }
+  ],
+  "negative_count": 44,
+  "hosted_calls": 0,
+  "motor_calls": 0,
+  "hosted_model_behavior_verified": false,
+  "learned_behavior_verified": false,
+  "checkpoint_label_proves_local_serialization_only": true,
+  "vector_semantic_limitation": "A mocked SDK vector cannot prove hosted checkpoint training identity or learned semantics; local metadata/order/units checks bind this profile only.",
+  "report_selection": "Parent-run selected-profile SDK verification; machine-specific executable path omitted; rendered image bytes remain excluded."
+}

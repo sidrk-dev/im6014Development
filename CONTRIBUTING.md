@@ -41,10 +41,11 @@ Use the same pinned simulation requirements in a separate environment:
 python3.14 -m venv .venv-rolling
 .venv-rolling/bin/python -m pip install -r examples/rolling_contact_arm/requirements.txt
 MUJOCO_GL=egl .venv-rolling/bin/python examples/rolling_reach_arm/verify.py --render
+MUJOCO_GL=egl .venv-rolling/bin/python examples/rolling_reach_arm/verify_dream.py
 MUJOCO_GL=egl .venv-rolling/bin/python examples/rolling_reach_arm/reach.py --episodes 4 --seed 0
 ```
 
-Use `MUJOCO_GL=osmesa` with libOSMesa on machines without EGL. These checks need no hardware, private CAD, API key, or hosted call. They verify a hand-coded RGB reference baseline. The [example guide](examples/rolling_reach_arm/README.md) documents assumptions and the generated manifest. Earlier prototype checks above retain their own evidence; they do not block this assumed simulator.
+Use `MUJOCO_GL=osmesa` with libOSMesa on machines without EGL. These checks need no hardware, private CAD, API key, or hosted call. They verify a hand-coded RGB reference baseline and the installed SDK with mocked transport. The [example guide](examples/rolling_reach_arm/README.md) documents assumptions and the generated manifest. Earlier prototype checks above retain their own evidence; they do not block this assumed simulator.
 
 ## Place changes with their owner
 

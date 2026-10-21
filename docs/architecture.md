@@ -25,7 +25,7 @@ Local `.worktrees/controller-*` folders belong to independent checkouts associat
 
 ## Selected simulation
 
-`examples/rolling_reach_arm` selects `sim_rolling_reach_v1`: three logical coordinates (base yaw and two rolling bends), five internal hinges, a payload, table, red marker, and overhead RGB camera. `scene.py` owns the assumed model and generated manifest; `reach.py` owns the hand-coded image-feedback baseline; `verify.py` checks loaded mechanics, import, and reaching. Its governor is a reference-test component and does not accept SA04 shared-controller obligations.
+`examples/rolling_reach_arm` selects `sim_rolling_reach_v1`: three logical coordinates (base yaw and two rolling bends), five internal hinges, a payload, table, red marker, and overhead RGB camera. `scene.py` owns the assumed model and generated manifest; `reach.py` owns the hand-coded image-feedback baseline; `verify.py` checks loaded mechanics, import, and reaching. `verify_dream.py` binds the selected profile and validates rendered/measured observations with the real pinned SDK through mocked transport. Shared fixture mechanics live in `scripts/dream_client_fixture.py`; older profile checks retain their own evidence. Its governor is a reference-test component and does not accept SA04 shared-controller obligations.
 
 This independently designed simulation needs no private CAD, measured hardware masses, or motor port. It models ideal no-slip circular rolling and assumed tendon actuation. It is not a calibrated digital twin.
 
