@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-23",
+  "baseline": "db83147",
+  "scope": "C14 pure software fault retention with two-joint fixture and fake byte sink; no production controller changes, motor I/O, measured temperature or physical thermal protection",
+  "controller_tests_passed": 160,
+  "new_tests": 1,
+  "subcases": 14,
+  "conditions": [
+    "thermal error bit4",
+    "thermal error bit5",
+    "thermal error bit6",
+    "thermal error bit8",
+    "thermal error bit9",
+    "repeated measured over-effort",
+    "combined thermal bits and over-effort"
+  ],
+  "affected_motor_ids": [
+    0,
+    1
+  ],
+  "assertions": [
+    "pending target evicted and grant revoked",
+    "fresh distinct targets rejected INVALID_STATE without snapshot change",
+    "fault cause attributed and retained",
+    "nominal feedback, Stop and reconnect cannot clear latch",
+    "unacknowledged or persistently unhealthy check cannot recover",
+    "acknowledged healthy check reaches READY without owner or dispatch",
+    "explicit rearm issues new grant; old grant rejected; fresh fake-sink command allowed"
+  ],
+  "parent_mutation_experiments": {
+    "scope": "in-memory isolated method mutations against public observable regression; original methods restored after each; no source edit or motor I/O",
+    "mutants": [
+      {
+        "mutant": "target-silently-clears-fault",
+        "subcase_failures": 14,
+        "errors": 0,
+        "caught": true
+      },
+      {
+        "mutant": "fault-retains-pending",
+        "subcase_failures": 14,
+        "errors": 0,
+        "caught": true
+      },
+      {
+        "mutant": "fault-retains-grant",
+        "subcase_failures": 14,
+        "errors": 0,
+        "caught": true
+      },
+      {
+        "mutant": "healthy-check-autoarms",
+        "subcase_failures": 14,
+        "errors": 0,
+        "caught": true
+      }
+    ]
+  },
+  "offline_bench_groups_passed": 18,
+  "review": {
+    "provider": "antigravity",
+    "requested_model": "gemini-3.8-flash-high",
+    "status": "complete; no findings",
+    "model_evidence": "pinned-argv; returned identity not independently verified",
+    "scope": "entire new test and relevant existing core/fake fixtures inline; no reviewer runtime tests"
+  },
+  "source_sha256": {
+    "tests/control/test_controller_fault_latch.py": "ff263641fe7fae8c9ff44f79b78f67cde501267c33dc4412ad68aab0f571c99b",
+    "im6014_control/core.py": "2b6b4495749f9ce9e2dfd709941528e1f26c699c119940cdc960d6edaae017ae",
+    "im6014_control/records.py": "69bcb3fd5d5ecb82d20c8204599ed2bc0dddca2ce5b38c3a36c13371b7fc384a",
+    "tests/control/test_controller.py": "654ea21fd2f5cd3c778f7dc68ac2710d39b1eb01addbc1148fed5f26657b8488",
+    "tests/control/test_controller_effort.py": "d1e800954c79cf218a9d0e762e9110f5ae6761a356bda7cd685b02c5ee6fcaf9"
+  },
+  "remaining": [
+    "simulation station process/dashboard failure integration",
+    "actual hosted-worker transaction timing",
+    "physical thermal measurement, rating and protection acceptance"
+  ]
+}
