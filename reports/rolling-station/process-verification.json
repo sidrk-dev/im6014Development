@@ -1,0 +1,52 @@
+{
+  "scope": "local simulation process fixture only",
+  "tests": {
+    "pinned_combined": 116,
+    "process_cases": 19,
+    "offline": "passed"
+  },
+  "reviews": {
+    "gemini": "complete, no material findings",
+    "glm": "complete, no material findings",
+    "deepseek": "malformed-output dropout"
+  },
+  "source_sha256": {
+    "examples/rolling_reach_arm/process_runtime.py": "e791333c8dd921a77924df3ab571d0b52186e3700f9fd5450cf31d1d9a7e5028",
+    "tests/fixtures/rolling_process_client.py": "f2783bd18751e4ec0907ca1d42460abc0932f8f882bf55f5b6430dc72a0599fe",
+    "tests/test_rolling_station_process.py": "62ad20eef7b3e724e8569739bad847efccbab8447e734d2f7e2f68613f66fc1d"
+  },
+  "independent_probes": {
+    "scope": "parent actual Popen children and real socket with forced short-write wrapper; private instrumentation only in ignored probe; no source or motor I/O changes",
+    "cases": [
+      {
+        "case": "unhashable-message-type",
+        "error": null,
+        "connected": false,
+        "state": "disconnected",
+        "steps": 870,
+        "protocol_faults": 1
+      },
+      {
+        "case": "partial-send-replacement",
+        "pending_before_loss": 120,
+        "pending_after_loss": 0,
+        "replacement_handshaken": true,
+        "error": null
+      },
+      {
+        "case": "ignoreterm-reaping",
+        "elapsed_s": 0.8501479659971665,
+        "termination_requested": true,
+        "advances_while_terminating_child_alive": 26,
+        "steps": 2550,
+        "connected": false,
+        "lease_expirations": 1
+      }
+    ]
+  },
+  "remaining": [
+    "actual Qt integration",
+    "hosted-worker transaction timing",
+    "learned and physical outcomes"
+  ]
+}
