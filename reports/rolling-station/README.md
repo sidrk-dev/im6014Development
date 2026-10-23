@@ -37,7 +37,7 @@ probe explicitly returned the first captured measured pose at the next boundary
 (10 ms), then delayed later fresh replies by 50 ms. That bounded local startup
 hold passed normal release and retained its original deadline.
 
-## Parent verification
+## 2026-10-21 parent verification
 
 - Full offline suite: 159 controller tests and 18 bench groups passed, with no
   motor I/O. The bench environment skipped four simulator-dependent contract
@@ -61,9 +61,10 @@ Selected results and source hashes are in [verification.json](verification.json)
 ## Remaining gates
 
 SA04 remains in progress. Injected delays establish simulated scheduling only.
-Actual hosted-worker timing, transaction latency, overruns, feedback-age
-telemetry, dashboard-failure integration, and remaining C14-C16 acceptance still
-need evidence. Thermal fault injection is state-machine evidence, not a thermal
+[Local timing diagnostics](timing.md) now report measured advance/control scopes,
+local reply turnaround, overruns and core feedback ages. Actual hosted-worker
+transaction latency, dashboard-failure integration and remaining C14-C16
+acceptance still need their own evidence. Thermal fault injection is state-machine evidence, not a thermal
 model or physical drive rating. No learned marker-reaching, dataset, hosted
 checkpoint, or physical outcome is established by these joint-goal probes.
 

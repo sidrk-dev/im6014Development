@@ -1,0 +1,495 @@
+{
+  "date": "2026-10-23",
+  "baseline": "660fc5bcf1c95b5483855de39b488d758e6f34a4",
+  "scope": "partial SA04 local diagnostic timing; no hosted/learned/realtime/physical acceptance",
+  "parent_pinned_tests_passed": 97,
+  "new_timing_tests_passed": 21,
+  "controller_tests_passed": 159,
+  "offline_bench_groups_passed": 18,
+  "sdk_transport": "mocked",
+  "clock_conversion_regression": {
+    "before": [
+      {
+        "behavior": "stop",
+        "state": "stopped",
+        "steps": 30,
+        "error": null,
+        "clock_errors": 0
+      },
+      {
+        "behavior": "throw",
+        "state": "armed",
+        "steps": 0,
+        "error": "diagnostic conversion failed",
+        "clock_errors": 0
+      }
+    ],
+    "after": [
+      {
+        "behavior": "stop",
+        "state": "armed",
+        "steps": 30,
+        "error": null,
+        "clock_errors": 5
+      },
+      {
+        "behavior": "throw",
+        "state": "armed",
+        "steps": 30,
+        "error": null,
+        "clock_errors": 5
+      }
+    ]
+  },
+  "local_probe": {
+    "runs": 5,
+    "excluded": "constructor and one warmup run; no profile run included",
+    "pacing": "unpaced caller loop",
+    "steps_per_run": 1200,
+    "control_ticks_per_run": 40,
+    "captures_per_run": 12,
+    "accepted_replies_per_run": 12,
+    "issued_references_per_run": 38,
+    "advance_mean_wall_ms_range": [
+      10.856980149856096,
+      11.38932800031398
+    ],
+    "control_mean_wall_ms_range": [
+      0.9243082750799659,
+      1.0264222251862523
+    ],
+    "advance_overruns_per_run": [
+      12,
+      12,
+      12,
+      12,
+      12
+    ],
+    "overrun_denominator_per_run": 40,
+    "budget_wall_s": 0.01,
+    "overrun_predicate": "completed valid advance duration > budget; not capture expiry",
+    "reply_scope": "local original capture available after render to next admitted reply-call entry; no network transaction measurement",
+    "runs_telemetry": [
+      {
+        "callback_period_wall_s": {
+          "count": 39,
+          "missing": 0,
+          "last_s": 0.0013893270006519742,
+          "min_s": 0.000816055999166565,
+          "max_s": 0.17454786799862632,
+          "mean_s": 0.01156008002568015
+        },
+        "advance_wall_s": {
+          "count": 40,
+          "missing": 0,
+          "last_s": 0.0014683269982924685,
+          "min_s": 0.0008123879997583572,
+          "max_s": 0.17453637799917487,
+          "mean_s": 0.01129938635012877
+        },
+        "control_wall_s": {
+          "count": 40,
+          "missing": 0,
+          "last_s": 0.001247457999852486,
+          "min_s": 0.00046437300261459313,
+          "max_s": 0.0019854389975080267,
+          "mean_s": 0.001024203575343563
+        },
+        "accepted_reply_sim_s": {
+          "count": 12,
+          "missing": 0,
+          "last_s": 0.0033333333333333335,
+          "min_s": 0.0033333333333333335,
+          "max_s": 0.01,
+          "mean_s": 0.006666666666666666
+        },
+        "rejected_reply_sim_s": {
+          "count": 0,
+          "missing": 0,
+          "last_s": null,
+          "min_s": null,
+          "max_s": null,
+          "mean_s": null
+        },
+        "accepted_reply_wall_s": {
+          "count": 12,
+          "missing": 0,
+          "last_s": 0.00017381900033797137,
+          "min_s": 0.0001344599986623507,
+          "max_s": 0.0006086159992264584,
+          "mean_s": 0.0002287842498844839
+        },
+        "rejected_reply_wall_s": {
+          "count": 0,
+          "missing": 0,
+          "last_s": null,
+          "min_s": null,
+          "max_s": null,
+          "mean_s": null
+        },
+        "advances_started": 40,
+        "advances_completed": 40,
+        "advances_failed": 0,
+        "replies_offered": 12,
+        "replies_unprocessed": 0,
+        "clock_errors": 0,
+        "advance_overruns": 12,
+        "advance_budget_wall_s": 0.01,
+        "feedback_age_sim_s": [
+          0.010000000000000009,
+          0.010000000000000009,
+          0.010000000000000009
+        ],
+        "feedback_peak_observed_sim_s": 0.010000000000000009
+      },
+      {
+        "callback_period_wall_s": {
+          "count": 39,
+          "missing": 0,
+          "last_s": 0.0009142929993686266,
+          "min_s": 0.0008725819971004967,
+          "max_s": 0.17009891199995764,
+          "mean_s": 0.01153649446160461
+        },
+        "advance_wall_s": {
+          "count": 40,
+          "missing": 0,
+          "last_s": 0.0008923399982450064,
+          "min_s": 0.0008676939978613518,
+          "max_s": 0.17008850700221956,
+          "mean_s": 0.011262978649938306
+        },
+        "control_wall_s": {
+          "count": 40,
+          "missing": 0,
+          "last_s": 0.0007480120002583135,
+          "min_s": 0.00044908600102644414,
+          "max_s": 0.0017226019990630448,
+          "mean_s": 0.000924308275079966
+        },
+        "accepted_reply_sim_s": {
+          "count": 12,
+          "missing": 0,
+          "last_s": 0.0033333333333333335,
+          "min_s": 0.0033333333333333335,
+          "max_s": 0.01,
+          "mean_s": 0.006666666666666666
+        },
+        "rejected_reply_sim_s": {
+          "count": 0,
+          "missing": 0,
+          "last_s": null,
+          "min_s": null,
+          "max_s": null,
+          "mean_s": null
+        },
+        "accepted_reply_wall_s": {
+          "count": 12,
+          "missing": 0,
+          "last_s": 0.0001280899996345397,
+          "min_s": 0.0001280899996345397,
+          "max_s": 0.0002706439991015941,
+          "mean_s": 0.00019979299971358463
+        },
+        "rejected_reply_wall_s": {
+          "count": 0,
+          "missing": 0,
+          "last_s": null,
+          "min_s": null,
+          "max_s": null,
+          "mean_s": null
+        },
+        "advances_started": 40,
+        "advances_completed": 40,
+        "advances_failed": 0,
+        "replies_offered": 12,
+        "replies_unprocessed": 0,
+        "clock_errors": 0,
+        "advance_overruns": 12,
+        "advance_budget_wall_s": 0.01,
+        "feedback_age_sim_s": [
+          0.010000000000000009,
+          0.010000000000000009,
+          0.010000000000000009
+        ],
+        "feedback_peak_observed_sim_s": 0.010000000000000009
+      },
+      {
+        "callback_period_wall_s": {
+          "count": 39,
+          "missing": 0,
+          "last_s": 0.0013048580003669485,
+          "min_s": 0.0009475519982515834,
+          "max_s": 0.1668752890000178,
+          "mean_s": 0.011112290769233367
+        },
+        "advance_wall_s": {
+          "count": 40,
+          "missing": 0,
+          "last_s": 0.0012472909984353464,
+          "min_s": 0.0009435760002816096,
+          "max_s": 0.1668627449980704,
+          "mean_s": 0.010856980149856095
+        },
+        "control_wall_s": {
+          "count": 40,
+          "missing": 0,
+          "last_s": 0.0010484010017535184,
+          "min_s": 0.00047285899927373976,
+          "max_s": 0.001593680997757474,
+          "mean_s": 0.0010122660496563187
+        },
+        "accepted_reply_sim_s": {
+          "count": 12,
+          "missing": 0,
+          "last_s": 0.0033333333333333335,
+          "min_s": 0.0033333333333333335,
+          "max_s": 0.01,
+          "mean_s": 0.006666666666666666
+        },
+        "rejected_reply_sim_s": {
+          "count": 0,
+          "missing": 0,
+          "last_s": null,
+          "min_s": null,
+          "max_s": null,
+          "mean_s": null
+        },
+        "accepted_reply_wall_s": {
+          "count": 12,
+          "missing": 0,
+          "last_s": 0.0001588850027474109,
+          "min_s": 0.00013123100143275224,
+          "max_s": 0.0002797880006255582,
+          "mean_s": 0.00021421441700416227
+        },
+        "rejected_reply_wall_s": {
+          "count": 0,
+          "missing": 0,
+          "last_s": null,
+          "min_s": null,
+          "max_s": null,
+          "mean_s": null
+        },
+        "advances_started": 40,
+        "advances_completed": 40,
+        "advances_failed": 0,
+        "replies_offered": 12,
+        "replies_unprocessed": 0,
+        "clock_errors": 0,
+        "advance_overruns": 12,
+        "advance_budget_wall_s": 0.01,
+        "feedback_age_sim_s": [
+          0.010000000000000009,
+          0.010000000000000009,
+          0.010000000000000009
+        ],
+        "feedback_peak_observed_sim_s": 0.010000000000000009
+      },
+      {
+        "callback_period_wall_s": {
+          "count": 39,
+          "missing": 0,
+          "last_s": 0.0011500949985929765,
+          "min_s": 0.0008693659983691759,
+          "max_s": 0.1648272070015082,
+          "mean_s": 0.011299040692299455
+        },
+        "advance_wall_s": {
+          "count": 40,
+          "missing": 0,
+          "last_s": 0.0011167439988639671,
+          "min_s": 0.0008650689997011796,
+          "max_s": 0.16481481499795336,
+          "mean_s": 0.011036493125084234
+        },
+        "control_wall_s": {
+          "count": 40,
+          "missing": 0,
+          "last_s": 0.0009373819993925281,
+          "min_s": 0.0004926649999106303,
+          "max_s": 0.001704820002487395,
+          "mean_s": 0.0010264222251862522
+        },
+        "accepted_reply_sim_s": {
+          "count": 12,
+          "missing": 0,
+          "last_s": 0.0033333333333333335,
+          "min_s": 0.0033333333333333335,
+          "max_s": 0.01,
+          "mean_s": 0.006666666666666666
+        },
+        "rejected_reply_sim_s": {
+          "count": 0,
+          "missing": 0,
+          "last_s": null,
+          "min_s": null,
+          "max_s": null,
+          "mean_s": null
+        },
+        "accepted_reply_wall_s": {
+          "count": 12,
+          "missing": 0,
+          "last_s": 0.0001467000001866836,
+          "min_s": 0.00012589400284923613,
+          "max_s": 0.0005000159981136676,
+          "mean_s": 0.00023404233373488145
+        },
+        "rejected_reply_wall_s": {
+          "count": 0,
+          "missing": 0,
+          "last_s": null,
+          "min_s": null,
+          "max_s": null,
+          "mean_s": null
+        },
+        "advances_started": 40,
+        "advances_completed": 40,
+        "advances_failed": 0,
+        "replies_offered": 12,
+        "replies_unprocessed": 0,
+        "clock_errors": 0,
+        "advance_overruns": 12,
+        "advance_budget_wall_s": 0.01,
+        "feedback_age_sim_s": [
+          0.010000000000000009,
+          0.010000000000000009,
+          0.010000000000000009
+        ],
+        "feedback_peak_observed_sim_s": 0.010000000000000009
+      },
+      {
+        "callback_period_wall_s": {
+          "count": 39,
+          "missing": 0,
+          "last_s": 0.0012918220018036664,
+          "min_s": 0.0008476389994029887,
+          "max_s": 0.16925156700017396,
+          "mean_s": 0.01165779407696951
+        },
+        "advance_wall_s": {
+          "count": 40,
+          "missing": 0,
+          "last_s": 0.0012344869974185713,
+          "min_s": 0.000843846002680948,
+          "max_s": 0.16923971100186463,
+          "mean_s": 0.01138932800031398
+        },
+        "control_wall_s": {
+          "count": 40,
+          "missing": 0,
+          "last_s": 0.0010303340022801422,
+          "min_s": 0.00048061499910545535,
+          "max_s": 0.0017235150007763878,
+          "mean_s": 0.0009419973249350734
+        },
+        "accepted_reply_sim_s": {
+          "count": 12,
+          "missing": 0,
+          "last_s": 0.0033333333333333335,
+          "min_s": 0.0033333333333333335,
+          "max_s": 0.01,
+          "mean_s": 0.006666666666666666
+        },
+        "rejected_reply_sim_s": {
+          "count": 0,
+          "missing": 0,
+          "last_s": null,
+          "min_s": null,
+          "max_s": null,
+          "mean_s": null
+        },
+        "accepted_reply_wall_s": {
+          "count": 12,
+          "missing": 0,
+          "last_s": 0.00015994600107660517,
+          "min_s": 0.0001398820022586733,
+          "max_s": 0.0002748549995885696,
+          "mean_s": 0.00021174025035482677
+        },
+        "rejected_reply_wall_s": {
+          "count": 0,
+          "missing": 0,
+          "last_s": null,
+          "min_s": null,
+          "max_s": null,
+          "mean_s": null
+        },
+        "advances_started": 40,
+        "advances_completed": 40,
+        "advances_failed": 0,
+        "replies_offered": 12,
+        "replies_unprocessed": 0,
+        "clock_errors": 0,
+        "advance_overruns": 12,
+        "advance_budget_wall_s": 0.01,
+        "feedback_age_sim_s": [
+          0.010000000000000009,
+          0.010000000000000009,
+          0.010000000000000009
+        ],
+        "feedback_peak_observed_sim_s": 0.010000000000000009
+      }
+    ]
+  },
+  "review": {
+    "status": "complete; no blocking findings in two final-source reviews",
+    "completed": [
+      {
+        "provider": "antigravity",
+        "requested_model": "gemini-3.8-flash-high",
+        "model_evidence": "pinned-argv; returned identity not independently verified"
+      },
+      {
+        "provider": "opencode",
+        "requested_model": "opencode/glm-5.3-flash-free",
+        "model_evidence": "pinned-argv; returned identity not independently verified"
+      }
+    ],
+    "dropouts": [
+      {
+        "provider": "opencode",
+        "model": "opencode/deepseek-v4.1-flash-free",
+        "status": "malformed-output",
+        "reason": "no final text and tool-free stop"
+      },
+      {
+        "provider": "antigravity",
+        "model": "gemini-3.8-flash-high",
+        "scope": "earlier larger pre-mean-fix review",
+        "status": "deadline-exceeded"
+      }
+    ],
+    "scope": "complete final implementation plus core snapshot excerpt and key regressions inline; source opinions only; no reviewer runtime tests",
+    "lead": "No actionable findings. Helper reuse noted; unchanged baseline identity duplication dismissed."
+  },
+  "remaining": [
+    "actual hosted-worker transaction latency",
+    "existing Qt dashboard failure integration",
+    "scoped local process isolation fixture",
+    "learned task and physical acceptance"
+  ],
+  "source_sha256": {
+    "examples/rolling_reach_arm/station.py": "05677701a618bf0b6fed99444968135f428464adc9564d7a171351d17932603f",
+    "examples/rolling_reach_arm/timing.py": "85dfcc7ff69c962486b5036732787566752462d96f5d870e6148f5db74a29977",
+    "tests/test_rolling_station_timing.py": "3c36c8d86683bec33d70d547ce3d88803181f0d81e0f69e7e4eed9748d82999d"
+  },
+  "finite_mean_regression": {
+    "before": {
+      "count": 2,
+      "missing": 1,
+      "min_s": 1e+308,
+      "max_s": 1e+308,
+      "mean_s": "Infinity (nonfinite defect)",
+      "mean_finite": false
+    },
+    "after": {
+      "count": 2,
+      "missing": 1,
+      "min_s": 1e+308,
+      "max_s": 1e+308,
+      "mean_s": 1e+308,
+      "mean_finite": true
+    }
+  }
+}
