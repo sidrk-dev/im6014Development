@@ -7,11 +7,13 @@ chunk.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 import copy
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import hashlib
 import math
 import os
+import time
 
 os.environ.setdefault("MUJOCO_GL", "egl")
 
@@ -33,6 +35,7 @@ from im6014_control.records import (  # noqa: E402
 )
 
 from . import drive, scene  # noqa: E402
+from .timing import StationTiming, _StationTimingState  # noqa: E402
 
 
 TICKS_PER_SECOND = 3000
@@ -128,6 +131,7 @@ class StationStatus:
     references_issued: int
     last_requested: RequestedReference | None
     last_issued: IssuedReference | None
+    timing: StationTiming = field(default_factory=StationTiming)
 
 
 @dataclass(frozen=True)
@@ -137,6 +141,7 @@ class _CaptureEntry:
     source: SourceIdentity
     tick: int
     expires_tick: int
+    wall_stamp: tuple[int, float] | None = None
 
     @property
     def created_at_s(self) -> float:
@@ -164,7 +169,16 @@ class _Issued:
 class RollingStation:
     """One writer for the canonical model, core, captures, and release."""
 
-    def __init__(self) -> None:
+    def __init__(self, *, wall_clock: Callable[[], float] = time.perf_counter) -> None:
+        if not callable(wall_clock):
+            raise ValueError("wall_clock must be callable")
+        self._wall_clock = wall_clock
+        self._clock_epoch = 0
+        self._last_clock_s: float | None = None
+        self._in_clock_callback = False
+        self._clock_reentry = False
+        self._timing = _StationTimingState()
+
         cfg = scene.SCENARIO
         self._closed = False
         self._model = mujoco.MjModel.from_xml_string(scene.generated_xml())
@@ -256,6 +270,52 @@ class RollingStation:
                 int(self._model.opt.disableflags) | self._actuation_bit
             )
 
+    def _reject_reentry(self) -> None:
+        if self._in_clock_callback:
+            self._clock_reentry = True
+            raise RuntimeError("station reentry during timing clock")
+
+    def _cancel_clock(self) -> None:
+        self._timing.clock_error()
+        self._clock_epoch += 1
+        self._last_clock_s = None
+
+    def _sample_wall(self) -> tuple[int, float] | None:
+        self._in_clock_callback = True
+        self._clock_reentry = False
+        failed = False
+        value = None
+        try:
+            value = self._wall_clock()
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                failed = True
+            else:
+                value = float(value)
+                if not math.isfinite(value) or value < 0.0:
+                    failed = True
+                elif (
+                    self._last_clock_s is not None
+                    and value < self._last_clock_s
+                ):
+                    failed = True
+        except Exception:
+            failed = True
+        finally:
+            reentry = self._clock_reentry
+            self._in_clock_callback = False
+        if failed or reentry:
+            self._cancel_clock()
+            return None
+        self._last_clock_s = value
+        return (self._clock_epoch, value)
+
+    def _observe_feedback_peak(
+        self, ages: tuple[float | None, ...] | None = None
+    ) -> None:
+        if ages is None:
+            ages = self._core.snapshot().feedback_ages_s
+        self._timing.observe_peak(ages)
+
     def _clear_work(self) -> None:
         self._captures.clear()
         self._intent = None
@@ -297,6 +357,7 @@ class RollingStation:
         return q, dq, tau
 
     def _receive_feedback(self) -> bool:
+        self._observe_feedback_peak()
         try:
             feedback = self._feedback()
         except (ArithmeticError, OverflowError, TypeError, ValueError):
@@ -380,14 +441,48 @@ class RollingStation:
             del self._captures[sequence]
             self._captures_dropped += 1
 
-    def _accept_reply(self, reply: Reply, tick: int) -> None:
+    def _reply_ages(
+        self,
+        entry: _CaptureEntry | None,
+        tick: int,
+        reply_stamp: tuple[int, float] | None,
+    ) -> tuple[float | None, float | None]:
+        if entry is None:
+            return None, None
+        sim_age = (tick - entry.tick) / TICKS_PER_SECOND
+        if not math.isfinite(sim_age) or sim_age < 0.0:
+            sim_age = None
+        wall_age = None
+        if entry.wall_stamp is not None and reply_stamp is not None:
+            if entry.wall_stamp[0] == reply_stamp[0]:
+                difference = reply_stamp[1] - entry.wall_stamp[1]
+                if math.isfinite(difference) and difference >= 0.0:
+                    wall_age = difference
+        return sim_age, wall_age
+
+    def _reject_reply(
+        self,
+        entry: _CaptureEntry | None,
+        tick: int,
+        reply_stamp: tuple[int, float] | None,
+    ) -> None:
+        self._replies_rejected += 1
+        sim_age, wall_age = self._reply_ages(entry, tick, reply_stamp)
+        self._timing.reply(False, sim_age, wall_age)
+
+    def _accept_reply(
+        self,
+        reply: Reply,
+        tick: int,
+        reply_stamp: tuple[int, float] | None,
+    ) -> None:
         capture = reply.capture
         if not isinstance(capture, Capture) or type(capture.sequence) is not int:
-            self._replies_rejected += 1
+            self._reject_reply(None, tick, reply_stamp)
             return
         entry = self._captures.get(capture.sequence)
         if entry is None or entry.capture is not capture:
-            self._replies_rejected += 1
+            self._reject_reply(None, tick, reply_stamp)
             return
         if (
             self._ownership is None
@@ -395,22 +490,22 @@ class RollingStation:
             or self._source is None
             or entry.source is not self._source
         ):
-            self._replies_rejected += 1
+            self._reject_reply(entry, tick, reply_stamp)
             return
         if tick >= entry.expires_tick:
             del self._captures[capture.sequence]
             self._captures_dropped += 1
-            self._replies_rejected += 1
+            self._reject_reply(entry, tick, reply_stamp)
             return
         if (
             self._intent is not None
             and capture.sequence <= self._intent.entry.capture.sequence
         ):
-            self._replies_rejected += 1
+            self._reject_reply(entry, tick, reply_stamp)
             return
         q = self._validated_vector(reply.q)
         if q is None:
-            self._replies_rejected += 1
+            self._reject_reply(entry, tick, reply_stamp)
             return
         self._intent = _Intent(q, entry)
         self._last_requested = RequestedReference(
@@ -422,6 +517,8 @@ class RollingStation:
             entry.expires_tick,
         )
         self._replies_accepted += 1
+        sim_age, wall_age = self._reply_ages(entry, tick, reply_stamp)
+        self._timing.reply(True, sim_age, wall_age)
 
     def _make_target(self, intent: _Intent) -> Target:
         sequence = self._next_issue_sequence
@@ -481,7 +578,13 @@ class RollingStation:
         self._authorized = True
         self._set_actuation(True)
 
-    def _control(self, tick: int, replies: tuple[Reply, ...]) -> None:
+    def _control(
+        self,
+        tick: int,
+        replies: tuple[Reply, ...],
+        reply_stamp: tuple[int, float] | None,
+        progress: list[int],
+    ) -> None:
         state = self._core.snapshot().state
         if state in (State.DISCONNECTED, State.CONNECTING):
             return
@@ -507,7 +610,8 @@ class RollingStation:
             return
 
         for reply in replies:
-            self._accept_reply(reply, tick)
+            self._accept_reply(reply, tick, reply_stamp)
+            progress[0] += 1
 
         intent = self._intent
         if intent is None:
@@ -552,6 +656,7 @@ class RollingStation:
         self._renderer.update_scene(self._data, camera="overhead")
         rgb = np.ascontiguousarray(self._renderer.render())
         q = tuple(float(value) for value in self._observer @ self._data.qpos)
+        wall_stamp = self._sample_wall()
         capture = Capture(
             self._next_capture_sequence,
             tick / TICKS_PER_SECOND,
@@ -565,6 +670,7 @@ class RollingStation:
             self._source,
             tick,
             tick + CAPTURE_TTL_TICKS,
+            wall_stamp,
         )
         if len(self._captures) >= CAPTURE_TABLE_SIZE:
             oldest = next(iter(self._captures))
@@ -575,6 +681,7 @@ class RollingStation:
         return capture
 
     def check(self, *, acknowledge_fault: bool = False) -> Decision:
+        self._reject_reentry()
         if self._closed:
             raise RuntimeError("station is closed")
         if type(acknowledge_fault) is not bool:
@@ -618,6 +725,7 @@ class RollingStation:
         return decision
 
     def arm(self, *, owner: str) -> Decision:
+        self._reject_reentry()
         if self._closed:
             raise RuntimeError("station is closed")
         if self._core.snapshot().state is State.READY:
@@ -635,6 +743,7 @@ class RollingStation:
     def advance_control_tick(
         self, *, replies: tuple[Reply, ...] = ()
     ) -> tuple[Capture, ...]:
+        self._reject_reentry()
         if self._closed:
             raise RuntimeError("station is closed")
         if not isinstance(replies, tuple):
@@ -644,33 +753,60 @@ class RollingStation:
         if any(not isinstance(reply, Reply) for reply in replies):
             raise ValueError("every reply must be a Reply")
 
+        entry_stamp = self._sample_wall()
+        self._timing.advance_started()
+        self._timing.callback_entry(entry_stamp)
+        self._timing.replies_offered(len(replies))
+        progress = [0]
         captures: list[Capture] = []
-        for _ in range(STEPS_PER_ADVANCE):
-            tick = self._n
-            if tick % CONTROL_DECIMATION == 0:
-                self._control_ticks += 1
-            if tick % CAMERA_DECIMATION == 0:
-                self._camera_ticks += 1
-            ready = self._enforce_authority_bit()
-            if ready:
-                ready = not self._enforce_deadlines(tick)
-            if ready and tick % CONTROL_DECIMATION == 0:
-                self._control(tick, replies)
-            if ready and tick % CAMERA_DECIMATION == 0:
-                capture = self._capture(tick)
-                if capture is not None:
-                    captures.append(capture)
-            self._enforce_authority_bit()
-            mujoco.mj_step(self._model, self._data)
-            self._n += 1
-        return tuple(captures)
+        failed = False
+        try:
+            for _ in range(STEPS_PER_ADVANCE):
+                tick = self._n
+                if tick % CONTROL_DECIMATION == 0:
+                    self._control_ticks += 1
+                if tick % CAMERA_DECIMATION == 0:
+                    self._camera_ticks += 1
+                ready = self._enforce_authority_bit()
+                if ready:
+                    ready = not self._enforce_deadlines(tick)
+                if ready and tick % CONTROL_DECIMATION == 0:
+                    control_start = self._sample_wall()
+                    control_failed = False
+                    try:
+                        self._control(tick, replies, entry_stamp, progress)
+                    except BaseException:
+                        control_failed = True
+                        raise
+                    finally:
+                        self._timing.control_finished(
+                            control_start, self._sample_wall(), control_failed
+                        )
+                if ready and tick % CAMERA_DECIMATION == 0:
+                    capture = self._capture(tick)
+                    if capture is not None:
+                        captures.append(capture)
+                self._enforce_authority_bit()
+                mujoco.mj_step(self._model, self._data)
+                self._n += 1
+            return tuple(captures)
+        except BaseException:
+            failed = True
+            raise
+        finally:
+            self._timing.advance_finished(
+                entry_stamp, self._sample_wall(), failed
+            )
+            self._timing.replies_unprocessed(len(replies) - progress[0])
 
     def stop(self) -> None:
+        self._reject_reentry()
         if self._closed:
             return
         self._halt()
 
     def disconnect(self) -> None:
+        self._reject_reentry()
         if self._closed:
             return
         self._core.disconnect()
@@ -681,6 +817,7 @@ class RollingStation:
         self._set_actuation(False)
 
     def set_marker(self, xy: tuple[float, float]) -> None:
+        self._reject_reentry()
         if self._closed:
             raise RuntimeError("station is closed")
         if not isinstance(xy, tuple) or len(xy) != 2:
@@ -702,7 +839,9 @@ class RollingStation:
         self._model.geom_pos[self._marker_id, 1] = values[1]
 
     def status(self) -> StationStatus:
+        self._reject_reentry()
         snapshot = self._core.snapshot()
+        self._observe_feedback_peak(snapshot.feedback_ages_s)
         mujoco.mj_forward(self._model, self._data)
         q = tuple(float(value) for value in self._observer @ self._data.qpos)
         dq = tuple(float(value) for value in self._observer @ self._data.qvel)
@@ -744,9 +883,11 @@ class RollingStation:
             self._references_issued,
             self._last_requested,
             last_issued,
+            timing=self._timing.snapshot(snapshot.feedback_ages_s),
         )
 
     def close(self) -> None:
+        self._reject_reentry()
         if self._closed:
             return
         self._core.disconnect()
